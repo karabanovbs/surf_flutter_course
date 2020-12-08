@@ -99,8 +99,9 @@ class _MySecondWidgetState extends State<MySecondWidget> {
   Widget build(BuildContext context) {
     print(_counter++);
     return Container(
-        child: Center(
-          child: Text('Hello!'),
-        ));
+      child: Center(
+        child: Text('Hello!'),
+      ),
+    );
   }
 }
