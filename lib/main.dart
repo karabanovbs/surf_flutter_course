@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(App());
 }
 
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'App title',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -68,6 +68,10 @@ class _MyHomePageState extends State<MyHomePage> {
 class MyFirstWidget extends StatelessWidget {
   int _counter = 0;
 
+  // Type getContextType() {
+  //   return context.runtimeType;
+  // }
+
   @override
   Widget build(BuildContext context) {
     print(_counter++);
@@ -86,12 +90,18 @@ class MySecondWidget extends StatefulWidget {
 
 class _MySecondWidgetState extends State<MySecondWidget> {
   int _counter = 0;
+
+  Type getContextType() {
+    return context.runtimeType;
+  }
+
   @override
   Widget build(BuildContext context) {
     print(_counter++);
     return Container(
-        child: Center(
-      child: Text('Hello!'),
-    ));
+      child: Center(
+        child: Text('Hello!'),
+      ),
+    );
   }
 }
