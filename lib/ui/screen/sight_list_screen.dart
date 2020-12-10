@@ -18,20 +18,26 @@ class _SightListScreenState extends State<SightListScreen> {
 
         /// Remove shadow
         elevation: 0,
+
         /// Set AppBar height
         toolbarHeight: 72,
-
-        /// Set title
-        title: Text(
-          'Список\nинтересных мест',
-          /// Set text align
-          textAlign: TextAlign.left,
+        title: RichText(
           maxLines: 2,
-          style: TextStyle(
-            color: AppColorsWhite.secondary,
-            fontSize: 32,
-            height: 36 / 32,
-            fontWeight: FontWeight.bold,
+          text: TextSpan(
+            style: TextStyle(
+              color: AppColorsWhite.secondary,
+              fontSize: 32,
+              height: 36 / 32,
+              fontWeight: FontWeight.bold,
+            ),
+            children: [
+              TextSpan(
+                  text: 'С', style: TextStyle(color: AppColorsWhite.green)),
+              TextSpan(text: 'писок\n'),
+              TextSpan(
+                  text: 'и', style: TextStyle(color: AppColorsWhite.yellow)),
+              TextSpan(text: 'нтересных мест'),
+            ],
           ),
         ),
       ),
