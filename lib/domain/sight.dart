@@ -1,7 +1,5 @@
 import 'package:flutter/foundation.dart';
 
-enum SightType { unknown }
-
 /// Sight model
 class Sight {
   final String name;
@@ -9,7 +7,7 @@ class Sight {
   final double lon;
   final String url;
   final String details;
-  final SightType type;
+  final String type;
 
   Sight(
       {@required this.name,
