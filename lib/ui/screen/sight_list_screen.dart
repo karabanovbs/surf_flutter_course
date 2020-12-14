@@ -37,6 +37,9 @@ class _SightListScreenState extends State<SightListScreen> {
 
           /// Remove shadow
           elevation: 0,
+
+          /// Set AppBar height
+          toolbarHeight: totalAppBarHeight,
           title: Padding(
             padding: const EdgeInsets.fromLTRB(appBarPaddingLeft,
                 appBarPaddingTop, appBarPaddingRight, appBarPaddingBottom),
