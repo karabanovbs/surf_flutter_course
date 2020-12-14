@@ -11,74 +11,86 @@ class SightCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            /// top half
-            Container(
-              height: 96,
+    return AspectRatio(
+      aspectRatio: 3 / 2,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              /// top half
+              Container(
+                height: 96,
 
-              /// TODO: replace with image
-              color: Color(0x55123123),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    /// sight type
-                    Text(
-                      sight.type,
-                      style: sightCardTypeTextStyle,
-                    ),
-
-                    /// TODO: replace with heart icon
-                    Container(
-                      height: 20,
-                      width: 18,
-                      color: Color(0x55FFFFFF),
-                    )
-                  ],
-                ),
-              ),
-            ),
-
-            /// bottom half
-            Container(
-              height: 92,
-              color: AppColorsWhite.background,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Container(
-                  width: double.infinity,
-                  child: Column(
+                /// TODO: replace with image
+                color: Color(0x55123123),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      /// sight name
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 2),
-                        child: Text(
-                          sight.name,
-                          maxLines: 2,
-                          style: sightCardNameTextStyle,
-                        ),
+                      /// sight type
+                      Text(
+                        sight.type,
+                        style: sightCardTypeTextStyle,
                       ),
 
-                      /// sight description
-                      Text(
-                        sight.details,
-                        style: sightCardDescriptionTextStyle,
-                      ),
+                      /// TODO: replace with heart icon
+                      Container(
+                        height: 20,
+                        width: 18,
+                        color: Color(0x55FFFFFF),
+                      )
                     ],
                   ),
                 ),
               ),
-            )
-          ],
+
+              /// bottom half
+              Expanded(
+                child: Container(
+                  height: double.infinity,
+                  color: AppColorsWhite.background,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Container(
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          /// sight name
+                          LayoutBuilder(builder: (context, constraints) {
+                            return ConstrainedBox(
+                              constraints: BoxConstraints(
+                                  maxWidth: constraints.maxWidth / 2),
+                              child: Container(
+                                color: Color(0xffC4C4C4),
+                                margin: const EdgeInsets.only(bottom: 2),
+                                child: Text(
+                                  sight.name,
+                                  maxLines: 3,
+                                  style: sightCardNameTextStyle,
+                                ),
+                              ),
+                            );
+                          }),
+
+                          /// sight description
+                          Text(
+                            sight.details,
+                            style: sightCardDescriptionTextStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

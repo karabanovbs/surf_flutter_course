@@ -29,39 +29,40 @@ class _SightListScreenState extends State<SightListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       /// Create AppBar
-      appBar: AppBar(
-        /// Set color by backgroundColor
-        backgroundColor: Theme.of(context).backgroundColor,
+      appBar: PreferredSize(
+        preferredSize: Size(double.infinity, totalAppBarHeight),
+        child: AppBar(
+          /// Set color by backgroundColor
+          backgroundColor: Theme.of(context).backgroundColor,
 
-        /// Remove shadow
-        elevation: 0,
-
-        /// Set AppBar height
-        toolbarHeight: totalAppBarHeight,
-        title: Padding(
-          padding: const EdgeInsets.fromLTRB(appBarPaddingLeft,
-              appBarPaddingTop, appBarPaddingRight, appBarPaddingBottom),
-          child: SizedBox(
-            height: appBarTitleHeight,
-            width: double.infinity,
-            child: RichText(
-              maxLines: 2,
-              text: TextSpan(
-                style: TextStyle(
-                  color: AppColorsWhite.secondary,
-                  fontSize: 32,
-                  height: 36 / 32,
-                  fontWeight: FontWeight.bold,
+          /// Remove shadow
+          elevation: 0,
+          title: Padding(
+            padding: const EdgeInsets.fromLTRB(appBarPaddingLeft,
+                appBarPaddingTop, appBarPaddingRight, appBarPaddingBottom),
+            child: SizedBox(
+              height: appBarTitleHeight,
+              width: double.infinity,
+              child: RichText(
+                maxLines: 2,
+                text: TextSpan(
+                  style: TextStyle(
+                    color: AppColorsWhite.secondary,
+                    fontSize: 32,
+                    height: 36 / 32,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  children: [
+                    TextSpan(
+                        text: 'С',
+                        style: TextStyle(color: AppColorsWhite.green)),
+                    TextSpan(text: 'писок\n'),
+                    TextSpan(
+                        text: 'и',
+                        style: TextStyle(color: AppColorsWhite.yellow)),
+                    TextSpan(text: 'нтересных мест'),
+                  ],
                 ),
-                children: [
-                  TextSpan(
-                      text: 'С', style: TextStyle(color: AppColorsWhite.green)),
-                  TextSpan(text: 'писок\n'),
-                  TextSpan(
-                      text: 'и',
-                      style: TextStyle(color: AppColorsWhite.yellow)),
-                  TextSpan(text: 'нтересных мест'),
-                ],
               ),
             ),
           ),
