@@ -7,7 +7,7 @@ import 'package:places/theme/typography.dart';
 class SightCard extends StatelessWidget {
   final Sight sight;
 
-  const SightCard({Key key, this.sight}) : super(key: key);
+  const SightCard({Key key, @required this.sight}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +20,7 @@ class SightCard extends StatelessWidget {
             /// top half
             Container(
               height: 96,
+
               /// TODO: replace with image
               color: Color(0x55123123),
               child: Padding(
@@ -33,6 +34,7 @@ class SightCard extends StatelessWidget {
                       sight.type,
                       style: sightCardTypeTextStyle,
                     ),
+
                     /// TODO: replace with heart icon
                     Container(
                       height: 20,
@@ -43,6 +45,7 @@ class SightCard extends StatelessWidget {
                 ),
               ),
             ),
+
             /// bottom half
             Container(
               height: 92,
@@ -64,6 +67,7 @@ class SightCard extends StatelessWidget {
                           style: sightCardNameTextStyle,
                         ),
                       ),
+
                       /// sight description
                       Text(
                         sight.details,
