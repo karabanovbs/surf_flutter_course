@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:places/mocks.dart';
 import 'package:places/theme/colors.dart';
+import 'package:places/ui/screen/sight_card.dart';
 
 /// Constants
+///   AppBar
 const double appBarPaddingTop = 40;
 const double appBarPaddingBottom = 16;
 const double appBarPaddingLeft = 16;
@@ -9,6 +12,11 @@ const double appBarPaddingRight = 16;
 const double appBarTitleHeight = 72;
 const double totalAppBarHeight =
     appBarPaddingTop + appBarTitleHeight + appBarPaddingBottom;
+
+///   Body
+const double bodyPaddingLeft = appBarPaddingLeft;
+const double bodyPaddingRight = appBarPaddingRight;
+const double cardPaddingBottom = appBarPaddingBottom;
 
 /// App home screen with list of sight
 class SightListScreen extends StatefulWidget {
@@ -57,6 +65,22 @@ class _SightListScreenState extends State<SightListScreen> {
               ),
             ),
           ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            for (var mock in mocks)
+              Padding(
+                padding: const EdgeInsets.only(
+                    right: bodyPaddingRight,
+                    left: bodyPaddingLeft,
+                    bottom: cardPaddingBottom),
+                child: SightCard(
+                  sight: mock,
+                ),
+              )
+          ],
         ),
       ),
     );
