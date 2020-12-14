@@ -62,21 +62,18 @@ class SightCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           /// sight name
-                          LayoutBuilder(builder: (context, constraints) {
-                            return ConstrainedBox(
-                              constraints: BoxConstraints(
-                                  maxWidth: constraints.maxWidth / 2),
-                              child: Container(
-                                color: Color(0xffC4C4C4),
-                                margin: const EdgeInsets.only(bottom: 2),
-                                child: Text(
-                                  sight.name,
-                                  maxLines: 3,
-                                  style: sightCardNameTextStyle,
-                                ),
+                          FractionallySizedBox(
+                            widthFactor: 0.5,
+                            child: Container(
+                              color: Color(0xffC4C4C4),
+                              margin: const EdgeInsets.only(bottom: 2),
+                              child: Text(
+                                sight.name,
+                                maxLines: 3,
+                                style: sightCardNameTextStyle,
                               ),
-                            );
-                          }),
+                            ),
+                          ),
 
                           /// sight description
                           Text(
