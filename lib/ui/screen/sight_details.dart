@@ -38,21 +38,19 @@ class SightDetails extends StatelessWidget {
         child: Column(
           children: [
             /// gallery
-            Container(
+            Padding(
               padding: const EdgeInsets.only(bottom: 24),
               child: AspectRatio(
                 aspectRatio: 1,
                 child: Container(
                   color: Color(0x55123123),
-                  child: Align(
-                    alignment: Alignment(-1.1, 1),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Container(
-                        color: AppColorsWhite.main,
-                        height: 8,
-                        width: 150,
-                      ),
+                  alignment: Alignment(-1.1, 1),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      color: AppColorsWhite.main,
+                      height: 8,
+                      width: 150,
                     ),
                   ),
                 ),
@@ -63,35 +61,33 @@ class SightDetails extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.only(bottom: 24),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      sight.name,
-                      style: sightDetailsNameTextStyle,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          sight.type,
-                          style: sightDetailsTypeTextStyle,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16),
-                          child: Text('закрыто до 09:00',
-                              style: sightDetailsTimeTextStyle),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24),
-                      child: Text(sight.details,
-                          style: sightDetailsDescriptionTextStyle),
-                    ),
-                  ],
-                ),
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    sight.name,
+                    style: sightDetailsNameTextStyle,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        sight.type,
+                        style: sightDetailsTypeTextStyle,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16),
+                        child: Text('закрыто до 09:00',
+                            style: sightDetailsTimeTextStyle),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24),
+                    child: Text(sight.details,
+                        style: sightDetailsDescriptionTextStyle),
+                  ),
+                ],
               ),
             ),
 
@@ -118,7 +114,10 @@ class SightDetails extends StatelessWidget {
                               width: 18,
                               color: Color(0xffffffffff),
                             ),
-                            Text('построить маршрут'.toUpperCase(), style: sightDetailsButtonTextStyle,),
+                            Text(
+                              'построить маршрут'.toUpperCase(),
+                              style: sightDetailsButtonTextStyle,
+                            ),
                           ],
                         ),
                       ),
