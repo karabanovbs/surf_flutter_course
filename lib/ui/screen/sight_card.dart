@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/theme/colors.dart';
 import 'package:places/theme/typography.dart';
+import 'package:places/widgets/image_loader.dart';
 import 'package:places/widgets/preload_images.dart';
 
 /// Sight card
@@ -27,28 +28,8 @@ class SightCard extends StatelessWidget {
                 child: Stack(
                   children: [
                     Positioned.fill(
-                      child: ImagePreloader(
-                        providers: {
-                          sight.url: NetworkImage(sight.url),
-                        },
-                        builder: (context, snapshot) {
-                          /// loading
-                          if (snapshot.connectionState !=
-                              ConnectionState.done) {
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-
-                          /// image
-                          if (snapshot.hasData) {
-                            return RawImage(
-                                image: snapshot.data[sight.url].image,
-                                fit: BoxFit.fitWidth,
-                                alignment: Alignment.topCenter);
-                          }
-                          return Container();
-                        },
+                      child: ImageLoader(
+                        url: sight.url,
                       ),
                     ),
                     Padding(
