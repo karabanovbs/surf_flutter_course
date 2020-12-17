@@ -3,8 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/theme/colors.dart';
 import 'package:places/theme/typography.dart';
-import 'package:places/widgets/image_loader.dart';
-import 'package:places/widgets/preload_images.dart';
 
 /// Sight card
 class SightCard extends StatelessWidget {
@@ -28,8 +26,18 @@ class SightCard extends StatelessWidget {
                 child: Stack(
                   children: [
                     Positioned.fill(
-                      child: ImageLoader(
-                        url: sight.url,
+                      child: Image.network(
+                        sight.url,
+                        fit: BoxFit.fitWidth,
+                        alignment: Alignment.topCenter,
+                        loadingBuilder:
+                            (context, child, ImageChunkEvent loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Align(
+                            alignment: Alignment.center,
+                            child: CircularProgressIndicator(),
+                          );
+                        },
                       ),
                     ),
                     Padding(
@@ -48,10 +56,8 @@ class SightCard extends StatelessWidget {
                             height: 24,
                             width: 24,
                             decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage('res/images/heart.png')
-                              )
-                            ),
+                                image: DecorationImage(
+                                    image: AssetImage('res/images/heart.png'))),
                           )
                         ],
                       ),

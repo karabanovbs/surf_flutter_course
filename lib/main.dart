@@ -15,9 +15,13 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'App title',
       theme: ThemeData(
-          scaffoldBackgroundColor: AppColorsWhite.white,
-          backgroundColor: AppColorsWhite.white,),
-      home: SightDetails(sight: mocks.first,),
+        scaffoldBackgroundColor: AppColorsWhite.white,
+        backgroundColor: AppColorsWhite.white,
+      ),
+      home: SightDetails(
+        sight: mocks.first,
+      ),
+      // home: SightListScreen(),
     );
   }
 }

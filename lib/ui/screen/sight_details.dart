@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/theme/colors.dart';
 import 'package:places/theme/typography.dart';
-import 'package:places/widgets/image_loader.dart';
 
 /// Sight details widget
 class SightDetails extends StatelessWidget {
@@ -59,8 +58,15 @@ class SightDetails extends StatelessWidget {
         aspectRatio: 1,
         child: Stack(
           children: [
-            ImageLoader(
-              url: sight.url,
+            Image.network(
+              sight.url,
+              loadingBuilder: (context, child, ImageChunkEvent loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Align(
+                  alignment: Alignment.center,
+                  child: CircularProgressIndicator(),
+                );
+              },
             ),
             Align(
               alignment: Alignment(-1.1, 1),
