@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/theme/colors.dart';
 import 'package:places/theme/typography.dart';
+import 'package:places/widgets/preload_images.dart';
 
 /// Sight card
 class SightCard extends StatelessWidget {
@@ -22,29 +24,58 @@ class SightCard extends StatelessWidget {
               /// top half
               Container(
                 height: 96,
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: ImagePreloader(
+                        providers: {
+                          sight.url: NetworkImage(sight.url),
+                        },
+                        builder: (context, snapshot) {
+                          /// loading
+                          if (snapshot.connectionState !=
+                              ConnectionState.done) {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
 
-                /// TODO: replace with image
-                color: Color(0x55123123),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      /// sight type
-                      Text(
-                        sight.type,
-                        style: sightCardTypeTextStyle,
+                          /// image
+                          if (snapshot.hasData) {
+                            return RawImage(
+                                image: snapshot.data[sight.url].image,
+                                fit: BoxFit.fitWidth,
+                                alignment: Alignment.topCenter);
+                          }
+                          return Container();
+                        },
                       ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          /// sight type
+                          Text(
+                            sight.type,
+                            style: sightCardTypeTextStyle,
+                          ),
 
-                      /// TODO: replace with heart icon
-                      Container(
-                        height: 20,
-                        width: 18,
-                        color: Color(0x55FFFFFF),
-                      )
-                    ],
-                  ),
+                          Container(
+                            height: 24,
+                            width: 24,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('res/images/heart.png')
+                              )
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
                 ),
               ),
 
