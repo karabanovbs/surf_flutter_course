@@ -52,14 +52,15 @@ class SightDetails extends StatelessWidget {
   }
 
   Widget _buildGallery() {
-    return Padding(
+    return Container(
+      height: 360,
       padding: const EdgeInsets.only(bottom: 24),
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: Stack(
-          children: [
-            Image.network(
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.network(
               sight.url,
+              fit: BoxFit.fitWidth,
               loadingBuilder: (context, child, ImageChunkEvent loadingProgress) {
                 if (loadingProgress == null) return child;
                 return Align(
@@ -68,19 +69,19 @@ class SightDetails extends StatelessWidget {
                 );
               },
             ),
-            Align(
-              alignment: Alignment(-1.1, 1),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Container(
-                  color: AppColorsWhite.main,
-                  height: 8,
-                  width: 150,
-                ),
+          ),
+          Align(
+            alignment: Alignment(-1.1, 1),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                color: AppColorsWhite.main,
+                height: 8,
+                width: 150,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

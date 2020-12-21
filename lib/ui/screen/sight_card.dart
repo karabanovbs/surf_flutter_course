@@ -56,8 +56,10 @@ class SightCard extends StatelessWidget {
                             height: 24,
                             width: 24,
                             decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage('res/images/heart.png'))),
+                              image: DecorationImage(
+                                image: AssetImage('res/images/heart.png'),
+                              ),
+                            ),
                           )
                         ],
                       ),
