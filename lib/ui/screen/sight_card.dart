@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/theme/colors.dart';
 import 'package:places/theme/typography.dart';
-import 'package:places/widgets/preload_images.dart';
 
 /// Sight card
 class SightCard extends StatelessWidget {
@@ -27,27 +26,17 @@ class SightCard extends StatelessWidget {
                 child: Stack(
                   children: [
                     Positioned.fill(
-                      child: ImagePreloader(
-                        providers: {
-                          sight.url: NetworkImage(sight.url),
-                        },
-                        builder: (context, snapshot) {
-                          /// loading
-                          if (snapshot.connectionState !=
-                              ConnectionState.done) {
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-
-                          /// image
-                          if (snapshot.hasData) {
-                            return RawImage(
-                                image: snapshot.data[sight.url].image,
-                                fit: BoxFit.fitWidth,
-                                alignment: Alignment.topCenter);
-                          }
-                          return Container();
+                      child: Image.network(
+                        sight.url,
+                        fit: BoxFit.fitWidth,
+                        alignment: Alignment.topCenter,
+                        loadingBuilder:
+                            (context, child, ImageChunkEvent loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Align(
+                            alignment: Alignment.center,
+                            child: CircularProgressIndicator(),
+                          );
                         },
                       ),
                     ),
@@ -68,8 +57,8 @@ class SightCard extends StatelessWidget {
                             width: 24,
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: AssetImage('res/images/heart.png')
-                              )
+                                image: AssetImage('res/images/heart.png'),
+                              ),
                             ),
                           )
                         ],

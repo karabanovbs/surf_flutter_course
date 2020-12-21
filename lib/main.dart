@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:places/mocks.dart';
 import 'package:places/theme/colors.dart';
+import 'package:places/ui/screen/sight_details.dart';
 import 'package:places/ui/screen/sight_list_screen.dart';
 
 void main() {
@@ -13,9 +15,13 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'App title',
       theme: ThemeData(
-          scaffoldBackgroundColor: AppColorsWhite.white,
-          backgroundColor: AppColorsWhite.white,),
-      home: SightListScreen(),
+        scaffoldBackgroundColor: AppColorsWhite.white,
+        backgroundColor: AppColorsWhite.white,
+      ),
+      home: SightDetails(
+        sight: mocks.first,
+      ),
+      // home: SightListScreen(),
     );
   }
 }
