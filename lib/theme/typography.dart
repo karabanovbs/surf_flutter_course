@@ -1,5 +1,6 @@
 import 'package:flutter/painting.dart';
 import 'package:places/theme/colors.dart';
+import 'package:places/ui/screen/visiting_screen.dart';
 
 /// SightCard
 
@@ -78,3 +79,17 @@ const sightDetailsTextButtonTextStyle = TextStyle(
     fontSize: 14,
     height: 18 / 14,
     color: AppColorsWhite.secondary);
+
+/// VisitingScreen - not found
+
+const visitingScreenEmptyLabel = TextStyle(
+  color: AppColorsWhite.inactiveBlack,
+  fontSize: 18,
+  fontWeight: FontWeight.w500,
+);
+
+const visitingScreenEmptyDescriptionLabel = TextStyle(
+  color: AppColorsWhite.inactiveBlack,
+  fontSize: 14,
+  fontWeight: FontWeight.w400,
+);
