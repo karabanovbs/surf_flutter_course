@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:places/mocks.dart';
 import 'package:places/theme/colors.dart';
 import 'package:places/ui/screen/sight_card.dart';
+import 'package:places/ui/screen/visiting_screen.dart';
 
 /// Constants
 ///   AppBar
@@ -46,10 +47,14 @@ class _SightListScreenState extends State<SightListScreen> {
           ],
         ),
       ),
+      bottomNavigationBar: AppBottomNavBar(
+        index: 0,
+      ),
     );
   }
 }
-class _AppBar extends StatelessWidget implements  PreferredSizeWidget {
+
+class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -62,8 +67,8 @@ class _AppBar extends StatelessWidget implements  PreferredSizeWidget {
       /// Set AppBar height
       toolbarHeight: totalAppBarHeight,
       title: Padding(
-        padding: const EdgeInsets.fromLTRB(appBarPaddingLeft,
-            appBarPaddingTop, appBarPaddingRight, appBarPaddingBottom),
+        padding: const EdgeInsets.fromLTRB(appBarPaddingLeft, appBarPaddingTop,
+            appBarPaddingRight, appBarPaddingBottom),
         child: SizedBox(
           height: appBarTitleHeight,
           width: double.infinity,
@@ -78,12 +83,10 @@ class _AppBar extends StatelessWidget implements  PreferredSizeWidget {
               ),
               children: [
                 TextSpan(
-                    text: 'С',
-                    style: TextStyle(color: AppColorsWhite.green)),
+                    text: 'С', style: TextStyle(color: AppColorsWhite.green)),
                 TextSpan(text: 'писок\n'),
                 TextSpan(
-                    text: 'и',
-                    style: TextStyle(color: AppColorsWhite.yellow)),
+                    text: 'и', style: TextStyle(color: AppColorsWhite.yellow)),
                 TextSpan(text: 'нтересных мест'),
               ],
             ),

@@ -11,36 +11,46 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.1+1
-  flutter_svg: ^0.19.2+1
+#  flutter_svg: ^0.19.2+1
+  svg_to_path_annotation:
+    git:
+      url: https://github.com/karabanovbs/svg_to_path_generator
+      path: packages/svg_to_path_annotation
+      ref: 0.0.2+4
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  build_runner: ^1.11.0
+  svg_to_path_generator:
+    git:
+      url: https://github.com/karabanovbs/svg_to_path_generator
+      path: packages/svg_to_path_generator
+      ref: 0.0.2+4
 flutter:
   uses-material-design: true
   fonts:
-   - family:  Roboto
-     fonts:
-       - asset: res/fonts/Roboto/Roboto-Light.ttf
-         weight: 300
-       - asset: res/fonts/Roboto/Roboto-LightItalic.ttf
-         weight: 300
-         style: italic
-       - asset: res/fonts/Roboto/Roboto-Regular.ttf
-         weight: 400
-       - asset: res/fonts/Roboto/Roboto-Italic.ttf
-         weight: 400
-         style: italic
-       - asset: res/fonts/Roboto/Roboto-Medium.ttf
-         weight: 500
-       - asset: res/fonts/Roboto/Roboto-MediumItalic.ttf
-         weight: 500
-         style: italic
-       - asset: res/fonts/Roboto/Roboto-Bold.ttf
-         weight: 700
-       - asset: res/fonts/Roboto/Roboto-BoldItalic.ttf
-         weight: 700
-         style: italic
+    - family: Roboto
+      fonts:
+        - asset: res/fonts/Roboto/Roboto-Light.ttf
+          weight: 300
+        - asset: res/fonts/Roboto/Roboto-LightItalic.ttf
+          weight: 300
+          style: italic
+        - asset: res/fonts/Roboto/Roboto-Regular.ttf
+          weight: 400
+        - asset: res/fonts/Roboto/Roboto-Italic.ttf
+          weight: 400
+          style: italic
+        - asset: res/fonts/Roboto/Roboto-Medium.ttf
+          weight: 500
+        - asset: res/fonts/Roboto/Roboto-MediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: res/fonts/Roboto/Roboto-Bold.ttf
+          weight: 700
+        - asset: res/fonts/Roboto/Roboto-BoldItalic.ttf
+          weight: 700
+          style: italic
   assets:
     - res/
     - res/images/
