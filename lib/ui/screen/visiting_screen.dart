@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/mocks.dart';
+import 'package:places/text_constans.dart';
 import 'package:places/theme/colors.dart';
 import 'package:places/theme/typography.dart';
 import 'package:places/ui/screen/sight_card.dart';
@@ -19,7 +20,7 @@ class VisitingScreen extends StatelessWidget {
           backgroundColor: AppColorsWhite.white,
           elevation: 0,
           title: Text(
-            'Избранное',
+            visitingScreenTitle,
             style: TextStyle(
               fontSize: 18,
               color: AppColorsWhite.main,
@@ -31,8 +32,8 @@ class VisitingScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: _VisitingTabBar(
                 tabs: [
-                  'Хочу посетить',
-                  'Посетил',
+                  visitingScreenFavTabLabel,
+                  visitingScreenFavHistoryTabLabel,
                 ],
               ),
             ),
@@ -40,12 +41,22 @@ class VisitingScreen extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            _FavoriteTab(
-                // sights: mocks,
-                ),
-            _FavoriteCompleteTab(
-                // sights: mocks,
-                ),
+            _TabCardsList(
+              // sights: mocks,
+              cardBuilder: (sight) {
+                return FavoriteSightCard(
+                  sight: sight,
+                );
+              },
+            ),
+            _TabCardsList(
+              // sights: mocks,
+              cardBuilder: (sight) {
+                return FavoriteHistorySightCard(
+                  sight: sight,
+                );
+              },
+            ),
           ],
         ),
         bottomNavigationBar: AppBottomNavBar(
@@ -135,12 +146,14 @@ class __VisitingTabBarState extends State<_VisitingTabBar> {
   }
 }
 
-class _FavoriteTab extends StatelessWidget {
+class _TabCardsList extends StatelessWidget {
   final List<Sight> sights;
+  final Widget Function(Sight sight) cardBuilder;
 
-  const _FavoriteTab({
+  const _TabCardsList({
     Key key,
     this.sights = const [],
+    @required this.cardBuilder,
   }) : super(key: key);
 
   @override
@@ -157,9 +170,7 @@ class _FavoriteTab extends StatelessWidget {
                       right: bodyPaddingRight,
                       left: bodyPaddingLeft,
                       bottom: cardPaddingBottom),
-                  child: FavoriteSightCard(
-                    sight: sight,
-                  ),
+                  child: cardBuilder(sight),
                 )
             ],
           ),
@@ -168,46 +179,7 @@ class _FavoriteTab extends StatelessWidget {
     }
     return _EmptyListPlaceholder(
       icon: CardIcon(),
-      message: 'Отмечайте понравившиеся места и они появиятся здесь.',
-    );
-  }
-}
-
-class _FavoriteCompleteTab extends StatelessWidget {
-  final List<Sight> sights;
-
-  const _FavoriteCompleteTab({
-    Key key,
-    this.sights = const [],
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    if (sights.length > 0) {
-      return SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 16),
-          child: Column(
-            children: [
-              for (var sight in sights)
-                Padding(
-                  padding: const EdgeInsets.only(
-                      right: bodyPaddingRight,
-                      left: bodyPaddingLeft,
-                      bottom: cardPaddingBottom),
-                  child: FavoriteHistorySightCard(
-                    sight: sight,
-                  ),
-                )
-            ],
-          ),
-        ),
-      );
-    }
-
-    return _EmptyListPlaceholder(
-      icon: GoIcon(),
-      message: 'Завершите маршрут, чтобы место попало сюда.',
+      message: visitingScreenFavNotFoundLabel,
     );
   }
 }
@@ -242,7 +214,7 @@ class _EmptyListPlaceholder extends StatelessWidget {
             height: 32,
           ),
           Text(
-            'Пусто',
+            empty,
             style: visitingScreenEmptyLabel,
           ),
           SizedBox(

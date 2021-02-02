@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+/// Widget for compatibility any drawing resources like Image or svg custom
+/// painter with [IconTheme]
 class IconWrapper extends StatelessWidget {
   final Widget child;
 

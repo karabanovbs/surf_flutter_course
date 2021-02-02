@@ -116,7 +116,6 @@ class SightCard extends StatelessWidget {
           FractionallySizedBox(
             widthFactor: 0.5,
             child: Container(
-              color: Color(0xffC4C4C4),
               margin: const EdgeInsets.only(bottom: 2),
               child: Text(
                 sight.name,
