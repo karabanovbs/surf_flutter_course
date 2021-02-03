@@ -58,7 +58,7 @@ class _BaseCard extends StatelessWidget {
                                 Theme.of(context).textTheme.subtitle1.copyWith(
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onBackground,
+                                          .onPrimary,
                                     ),
                           ),
                         ),
