@@ -7,6 +7,6 @@ const String empty = 'Пусто';
 
 const String visitingScreenTitle = 'Избранное';
 const String visitingScreenFavTabLabel = 'Хочу посетить';
-const String visitingScreenFavHistoryTabLabel = 'Хочу посетить';
+const String visitingScreenFavHistoryTabLabel = 'Посетил';
 const String visitingScreenFavNotFoundLabel = 'Отмечайте понравившиеся места и они появиятся здесь.';
 const String visitingScreenFavHistoryNotFoundLabel = 'Завершите маршрут, чтобы место попало сюда.';

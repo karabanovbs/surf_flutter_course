@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:places/mocks.dart';
-import 'package:places/theme/colors.dart';
 import 'package:places/ui/screen/sight_card.dart';
 import 'package:places/ui/screen/visiting_screen.dart';
 
@@ -76,17 +75,21 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
             maxLines: 2,
             text: TextSpan(
               style: TextStyle(
-                color: AppColorsWhite.secondary,
+                color: Theme.of(context).colorScheme.onSecondary,
                 fontSize: 32,
                 height: 36 / 32,
                 fontWeight: FontWeight.bold,
               ),
               children: [
                 TextSpan(
-                    text: 'С', style: TextStyle(color: AppColorsWhite.green)),
+                    text: 'С',
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary)),
                 TextSpan(text: 'писок\n'),
                 TextSpan(
-                    text: 'и', style: TextStyle(color: AppColorsWhite.yellow)),
+                    text: 'и',
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.primaryVariant)),
                 TextSpan(text: 'нтересных мест'),
               ],
             ),

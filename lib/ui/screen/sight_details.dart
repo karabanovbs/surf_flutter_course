@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:places/domain/sight.dart';
-import 'package:places/theme/colors.dart';
-import 'package:places/theme/typography.dart';
+import 'package:places/res/typography.dart';
 
 /// Sight details widget
 class SightDetails extends StatelessWidget {
@@ -27,7 +26,7 @@ class SightDetails extends StatelessWidget {
             child: Container(
               width: 32,
               height: 32,
-              color: AppColorsWhite.white,
+              color: Theme.of(context).backgroundColor,
             ),
           ),
         ),
@@ -38,20 +37,20 @@ class SightDetails extends StatelessWidget {
         child: Column(
           children: [
             /// gallery
-            _buildGallery(),
+            _buildGallery(context),
 
             /// description
-            _buildDescription(),
+            _buildDescription(context),
 
             /// controls
-            _buildControls()
+            _buildControls(context)
           ],
         ),
       ),
     );
   }
 
-  Widget _buildGallery() {
+  Widget _buildGallery(BuildContext context) {
     return Container(
       height: 360,
       padding: const EdgeInsets.only(bottom: 24),
@@ -61,7 +60,8 @@ class SightDetails extends StatelessWidget {
             child: Image.network(
               sight.url,
               fit: BoxFit.fitWidth,
-              loadingBuilder: (context, child, ImageChunkEvent loadingProgress) {
+              loadingBuilder:
+                  (context, child, ImageChunkEvent loadingProgress) {
                 if (loadingProgress == null) return child;
                 return Align(
                   alignment: Alignment.center,
@@ -75,7 +75,7 @@ class SightDetails extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Container(
-                color: AppColorsWhite.main,
+                color: Theme.of(context).colorScheme.onBackground,
                 height: 8,
                 width: 150,
               ),
@@ -86,7 +86,7 @@ class SightDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildDescription() {
+  Widget _buildDescription(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(bottom: 24),
@@ -96,31 +96,43 @@ class SightDetails extends StatelessWidget {
         children: [
           Text(
             sight.name,
-            style: sightDetailsNameTextStyle,
+            style: Theme.of(context).textTheme.headline2.copyWith(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
           ),
           Row(
             children: [
               Text(
                 sight.type,
-                style: sightDetailsTypeTextStyle,
+                style: Theme.of(context).textTheme.subtitle1.copyWith(),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 16),
-                child:
-                    Text('закрыто до 09:00', style: sightDetailsTimeTextStyle),
+                child: Text(
+                  'закрыто до 09:00',
+                  style: Theme.of(context).textTheme.bodyText2.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                ),
               ),
             ],
           ),
           Padding(
             padding: const EdgeInsets.only(top: 24),
-            child: Text(sight.details, style: sightDetailsDescriptionTextStyle),
+            child: Text(
+              sight.details,
+              style: Theme.of(context).textTheme.headline4.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildControls() {
+  Widget _buildControls(BuildContext context) {
+    print(Theme.of(context).primaryColor);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -130,7 +142,7 @@ class SightDetails extends StatelessWidget {
             child: Container(
               height: 48,
               width: double.infinity,
-              color: AppColorsWhite.green,
+              color: Theme.of(context).primaryColor,
               child: Center(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -143,15 +155,18 @@ class SightDetails extends StatelessWidget {
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           colorFilter: ColorFilter.mode(
-                              AppColorsWhite.white,
-                              BlendMode.srcIn),
+                            Theme.of(context).colorScheme.onPrimary,
+                            BlendMode.srcIn,
+                          ),
                           image: AssetImage('res/images/go.png'),
                         ),
                       ),
                     ),
                     Text(
                       'построить маршрут'.toUpperCase(),
-                      style: sightDetailsButtonTextStyle,
+                      style: Theme.of(context).textTheme.button.copyWith(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
                     ),
                   ],
                 ),
@@ -183,14 +198,22 @@ class SightDetails extends StatelessWidget {
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 colorFilter: ColorFilter.mode(
-                                    sightDetailsTextButtonTextStyle.color,
+                                    Theme.of(context).colorScheme.secondary,
                                     BlendMode.srcIn),
                                 image: AssetImage('res/images/calendar.png'),
                               ),
                             ),
                           ),
-                          Text('Запланировать',
-                              style: sightDetailsTextButtonTextStyle),
+                          Text(
+                            'Запланировать',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                ),
+                          ),
                         ],
                       ),
                     )),
@@ -210,7 +233,7 @@ class SightDetails extends StatelessWidget {
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               colorFilter: ColorFilter.mode(
-                                  sightDetailsTextButtonTextStyle.color,
+                                  Theme.of(context).colorScheme.secondary,
                                   BlendMode.srcIn),
                               image: AssetImage('res/images/heart.png'),
                             ),
@@ -218,7 +241,9 @@ class SightDetails extends StatelessWidget {
                         ),
                         Text(
                           'В избранное',
-                          style: sightDetailsTextButtonTextStyle,
+                          style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
                         ),
                       ],
                     ),

@@ -3,9 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/mocks.dart';
+import 'package:places/res/typography.dart';
 import 'package:places/text_constans.dart';
-import 'package:places/theme/colors.dart';
-import 'package:places/theme/typography.dart';
 import 'package:places/ui/screen/sight_card.dart';
 import 'package:places/ui/screen/sight_list_screen.dart';
 
@@ -17,13 +16,13 @@ class VisitingScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          backgroundColor: AppColorsWhite.white,
+          backgroundColor: Theme.of(context).colorScheme.background,
           elevation: 0,
           title: Text(
             visitingScreenTitle,
             style: TextStyle(
               fontSize: 18,
-              color: AppColorsWhite.main,
+              color: Theme.of(context).colorScheme.onBackground,
             ),
           ),
           bottom: PreferredSize(
@@ -42,7 +41,7 @@ class VisitingScreen extends StatelessWidget {
         body: TabBarView(
           children: [
             _TabCardsList(
-              // sights: mocks,
+              sights: mocks,
               cardBuilder: (sight) {
                 return FavoriteSightCard(
                   sight: sight,
@@ -98,7 +97,7 @@ class __VisitingTabBarState extends State<_VisitingTabBar> {
     return Container(
       height: 40,
       decoration: BoxDecoration(
-        color: AppColorsWhite.background,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
       child: Row(
@@ -109,7 +108,7 @@ class __VisitingTabBarState extends State<_VisitingTabBar> {
                 height: 40,
                 decoration: BoxDecoration(
                   color: widget.tabs.indexOf(tab) == _tabIndex
-                      ? AppColorsWhite.secondary
+                      ? Theme.of(context).colorScheme.onSecondary
                       : null,
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
@@ -117,11 +116,12 @@ class __VisitingTabBarState extends State<_VisitingTabBar> {
                   child: Text(
                     tab,
                     style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: widget.tabs.indexOf(tab) == _tabIndex
-                            ? AppColorsWhite.white
-                            : AppColorsWhite.inactiveBlack),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: widget.tabs.indexOf(tab) == _tabIndex
+                          ? Theme.of(context).colorScheme.onPrimary
+                          : Theme.of(context).colorScheme.onSurface,
+                    ),
                   ),
                 ),
               ),
@@ -206,7 +206,9 @@ class _EmptyListPlaceholder extends StatelessWidget {
             height: 64,
             child: ColorFiltered(
               colorFilter: ColorFilter.mode(
-                  AppColorsWhite.inactiveBlack, BlendMode.srcIn),
+                Theme.of(context).colorScheme.onSurface,
+                BlendMode.srcIn,
+              ),
               child: icon,
             ),
           ),
@@ -215,14 +217,18 @@ class _EmptyListPlaceholder extends StatelessWidget {
           ),
           Text(
             empty,
-            style: visitingScreenEmptyLabel,
+            style: Theme.of(context).textTheme.headline3.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
           ),
           SizedBox(
             height: 8,
           ),
           Text(
             message,
-            style: visitingScreenEmptyDescriptionLabel,
+            style: Theme.of(context).textTheme.bodyText2.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -312,8 +318,8 @@ class AppBottomNavBar extends StatelessWidget {
         ),
       ],
       currentIndex: index,
-      selectedItemColor: AppColorsWhite.main,
-      unselectedItemColor: AppColorsWhite.main,
+      selectedItemColor: Theme.of(context).colorScheme.onBackground,
+      unselectedItemColor: Theme.of(context).colorScheme.onBackground,
     );
   }
 }
