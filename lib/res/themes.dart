@@ -3,7 +3,7 @@ import 'package:places/res/typography.dart';
 
 import 'colors.dart';
 
-var lightTheme = ThemeData.from(
+final lightTheme = ThemeData.from(
   colorScheme: ColorScheme(
     primary: AppColorsWhite.green,
     primaryVariant: AppColorsWhite.yellow,
@@ -23,11 +23,7 @@ var lightTheme = ThemeData.from(
     bodyColor: AppColorsWhite.main,
     displayColor: AppColorsWhite.main,
   ),
-).copyWith(
-    // scaffoldBackgroundColor: AppColorsWhite.white,
-    // backgroundColor: AppColorsWhite.white,
-    // primaryColor: AppColorsWhite.green,
-    );
+);
 var darkTheme = ThemeData.from(
   colorScheme: ColorScheme(
     primary: AppColorsBlack.green,
@@ -52,8 +48,4 @@ var darkTheme = ThemeData.from(
         color: AppColorsBlack.secondary2
       ),
   ),
-).copyWith(
-    // scaffoldBackgroundColor: AppColorsBlack.main,
-    // backgroundColor: AppColorsBlack.main,
-    // primaryColor: AppColorsBlack.green,
-    );
+);
