@@ -106,21 +106,34 @@ class __VisitingTabBarState extends State<_VisitingTabBar> {
             Expanded(
               child: Container(
                 height: 40,
-                decoration: BoxDecoration(
-                  color: widget.tabs.indexOf(tab) == _tabIndex
-                      ? Theme.of(context).colorScheme.onSecondary
-                      : null,
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-                child: Center(
-                  child: Text(
-                    tab,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: widget.tabs.indexOf(tab) == _tabIndex
-                          ? Theme.of(context).colorScheme.onPrimary
-                          : Theme.of(context).colorScheme.onSurface,
+                child: TextButton(
+                  onPressed: () {
+                    print('select tab ${widget.tabs.indexOf(tab)}');
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith(
+                      (states) => widget.tabs.indexOf(tab) == _tabIndex
+                          ? Theme.of(context).colorScheme.onSecondary
+                          : null,
+                    ),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20),
+                        ),
+                      ),
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      tab,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: widget.tabs.indexOf(tab) == _tabIndex
+                            ? Theme.of(context).colorScheme.onPrimary
+                            : Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
                   ),
                 ),

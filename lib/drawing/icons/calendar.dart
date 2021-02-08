@@ -5,5 +5,5 @@ part 'calendar.g.dart';
 
 @SvgSource('res/svg/calendar.svg')
 class CalendarIcon extends _CalendarIcon {
-
+  const CalendarIcon();
 }
