@@ -28,6 +28,12 @@ var textTheme = TextTheme(
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
   ),
+  headline5: TextStyle(
+    fontSize: 16,
+    height: 20 / 16,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  ),
   subtitle1: TextStyle(
     fontSize: 14,
     height: 18 / 14,

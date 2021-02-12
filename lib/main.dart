@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:places/mocks.dart';
 import 'package:places/res/themes.dart';
+import 'package:places/ui/screen/filters_screen.dart';
 import 'package:places/ui/screen/sight_details.dart';
 import 'package:places/ui/screen/sight_list_screen.dart';
 import 'package:places/ui/screen/visiting_screen.dart';
@@ -18,11 +19,12 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'App title',
       theme: isDark ? darkTheme : lightTheme,
-      home: VisitingScreen(),
+      // home: VisitingScreen(),
       // home: SightDetails(
       //   sight: mocks.first,
       // ),
       // home: SightListScreen(),
+      home: FiltersScreen(),
     );
   }
 }
