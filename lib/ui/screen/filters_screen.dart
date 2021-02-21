@@ -181,9 +181,12 @@ class _FiltersScreenState extends State<FiltersScreen> {
                           ),
                           Text(
                             '$distanceFromLbl ${distanceStart.round()} $distanceToLbl ${distanceEnd.round()} $distanceUnitLbl',
-                            style: Theme.of(context).textTheme.headline5.copyWith(
-                              color: Theme.of(context).colorScheme.secondaryVariant,
-                            ),
+                            style:
+                                Theme.of(context).textTheme.headline5.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondaryVariant,
+                                    ),
                           )
                         ],
                       ),
@@ -337,7 +340,10 @@ class CheckMark extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(4),
                   child: Center(
-                    child: CheckIcon(),
+                    child: IconWrapper(
+                      color: Theme.of(context).colorScheme.surface,
+                      child: CheckIcon(),
+                    ),
                   ),
                 ),
               ),

@@ -68,4 +68,21 @@ var darkTheme = ThemeData.from(
         subtitle1:
             textTheme.subtitle1.copyWith(color: AppColorsBlack.secondary2),
       ),
+).copyWith(
+  dividerColor: AppColorsWhite.inactiveBlack,
+  sliderTheme: SliderThemeData(
+    trackHeight: 2,
+    inactiveTrackColor: AppColorsBlack.inactiveBlack,
+    activeTrackColor: AppColorsBlack.green,
+    thumbColor: AppColorsBlack.white,
+    rangeTrackShape: AppRangeSliderTrackShape(),
+    rangeThumbShape: RoundRangeSliderThumbShape(
+      elevation: 3,
+      enabledThumbRadius: 8,
+      disabledThumbRadius: 8,
+    ),
+    overlayShape: RoundSliderOverlayShape(
+      overlayRadius: 16,
+    ),
+  ),
 );

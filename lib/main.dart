@@ -67,8 +67,8 @@ class _AppState extends State<_App> {
       //   sight: mocks.first,
       // ),
       // home: SightListScreen(),
-      // home: FiltersScreen(),
-      home: SettingsScreen(),
+      home: FiltersScreen(),
+      // home: SettingsScreen(),
     );
   }
 
