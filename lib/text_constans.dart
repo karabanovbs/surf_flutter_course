@@ -27,3 +27,9 @@ const String categoryParticularPlaceLbl = 'Особое место';
 const String categoryParkLbl = 'Парк';
 const String categoryMuseumLbl = 'Музей';
 const String categoryCafeLbl = 'Кафе';
+
+/// Settings Screen
+
+const String settingsScreenTitle = 'Настройки';
+const String darkThemeSettingsLbl = 'Тёмная тема';
+const String watchTutorialLbl = 'Смотреть туториал';
