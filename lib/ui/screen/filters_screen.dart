@@ -5,6 +5,15 @@ import 'package:places/mocks.dart';
 import 'package:places/text_constans.dart';
 import 'package:places/ui/widgets/widgets.dart';
 
+enum FilterType {
+  hotel,
+  rest,
+  particularPlace,
+  park,
+  museum,
+  cafe,
+}
+
 /// Filter setup screen
 class FiltersScreen extends StatefulWidget {
   @override
@@ -181,9 +190,12 @@ class _FiltersScreenState extends State<FiltersScreen> {
                           ),
                           Text(
                             '$distanceFromLbl ${distanceStart.round()} $distanceToLbl ${distanceEnd.round()} $distanceUnitLbl',
-                            style: Theme.of(context).textTheme.headline5.copyWith(
-                              color: Theme.of(context).colorScheme.secondaryVariant,
-                            ),
+                            style:
+                                Theme.of(context).textTheme.headline5.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondaryVariant,
+                                    ),
                           )
                         ],
                       ),
