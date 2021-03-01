@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/res/typography.dart';
+import 'package:places/ui/widgets/widgets.dart';
 
 import 'colors.dart';
 
@@ -23,7 +24,24 @@ final lightTheme = ThemeData.from(
     bodyColor: AppColorsWhite.main,
     displayColor: AppColorsWhite.main,
   ),
+).copyWith(
+  sliderTheme: SliderThemeData(
+    trackHeight: 2,
+    inactiveTrackColor: AppColorsWhite.inactiveBlack,
+    activeTrackColor: AppColorsWhite.green,
+    thumbColor: AppColorsWhite.white,
+    rangeTrackShape: AppRangeSliderTrackShape(),
+    rangeThumbShape: RoundRangeSliderThumbShape(
+      elevation: 3,
+      enabledThumbRadius: 8,
+      disabledThumbRadius: 8,
+    ),
+    overlayShape: RoundSliderOverlayShape(
+      overlayRadius: 16,
+    ),
+  ),
 );
+
 var darkTheme = ThemeData.from(
   colorScheme: ColorScheme(
     primary: AppColorsBlack.green,
@@ -40,12 +58,13 @@ var darkTheme = ThemeData.from(
     onError: AppColorsBlack.white,
     brightness: Brightness.light,
   ),
-  textTheme: textTheme.apply(
-    bodyColor: AppColorsBlack.white,
-    displayColor: AppColorsBlack.white,
-  ).copyWith(
-      subtitle1: textTheme.subtitle1.copyWith(
-        color: AppColorsBlack.secondary2
+  textTheme: textTheme
+      .apply(
+        bodyColor: AppColorsBlack.white,
+        displayColor: AppColorsBlack.white,
+      )
+      .copyWith(
+        subtitle1:
+            textTheme.subtitle1.copyWith(color: AppColorsBlack.secondary2),
       ),
-  ),
 );
