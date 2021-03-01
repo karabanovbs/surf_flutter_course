@@ -5,6 +5,7 @@ import 'package:places/mocks.dart';
 import 'package:places/text_constans.dart';
 import 'package:places/ui/widgets/widgets.dart';
 
+// TODO user later
 enum FilterType {
   hotel,
   rest,
