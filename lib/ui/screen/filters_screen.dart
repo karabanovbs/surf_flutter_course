@@ -350,7 +350,10 @@ class CheckMark extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(4),
                   child: Center(
-                    child: CheckIcon(),
+                    child: IconWrapper(
+                      color: Theme.of(context).colorScheme.surface,
+                      child: CheckIcon(),
+                    ),
                   ),
                 ),
               ),

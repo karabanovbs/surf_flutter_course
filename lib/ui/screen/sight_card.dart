@@ -9,6 +9,8 @@ class _BaseCard extends StatelessWidget {
   final List<Widget> actions;
   final Widget content;
 
+  final double _imageSpace = 96;
+
   const _BaseCard({
     Key key,
     @required this.sight,
@@ -20,73 +22,91 @@ class _BaseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
-      child: Container(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            /// top half
-            Container(
-              height: 96,
-              child: Stack(
+      child: Stack(
+        fit: StackFit.passthrough,
+        children: [
+          /// Background
+          Positioned.fill(
+            child: Column(
+              children: [
+                Container(
+                  height: _imageSpace,
+                  width: double.infinity,
+                  child: Image.network(
+                    sight.url,
+                    fit: BoxFit.fitWidth,
+                    alignment: Alignment.topCenter,
+                    loadingBuilder:
+                        (context, child, ImageChunkEvent loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Align(
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(),
+                      );
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    color: Theme.of(context).colorScheme.surface,
+                  ),
+                )
+              ],
+            ),
+          ),
+
+          /// Content
+          Material(
+            type: MaterialType.transparency,
+            child: InkWell(
+              onTap: () {
+
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Positioned.fill(
-                    child: Image.network(
-                      sight.url,
-                      fit: BoxFit.fitWidth,
-                      alignment: Alignment.topCenter,
-                      loadingBuilder:
-                          (context, child, ImageChunkEvent loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Align(
-                          alignment: Alignment.center,
-                          child: CircularProgressIndicator(),
-                        );
-                      },
+                  Container(
+                    height: 96,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          /// sight type
+                          Expanded(
+                            child: Text(
+                              sight.type,
+                              style: Theme.of(context).textTheme.subtitle1.copyWith(
+                                    color: Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                            ),
+                          ),
+
+                          Row(
+                            children: actions,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        /// sight type
-                        Expanded(
-                          child: Text(
-                            sight.type,
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle1
-                                .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                ),
-                          ),
-                        ),
 
-                        Row(
-                          children: actions,
-                        ),
-                      ],
+                  /// bottom half
+                  Container(
+                    // color: Theme.of(context).colorScheme.surface,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Container(
+                        width: double.infinity,
+                        child: content,
+                      ),
                     ),
                   )
                 ],
               ),
             ),
-
-            /// bottom half
-            Container(
-              color: Theme.of(context).colorScheme.surface,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Container(
-                  width: double.infinity,
-                  child: content,
-                ),
-              ),
-            )
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
