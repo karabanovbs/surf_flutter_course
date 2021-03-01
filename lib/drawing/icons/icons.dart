@@ -15,3 +15,4 @@ export 'park.dart';
 export 'museum.dart';
 export 'cafe.dart';
 export 'arrow_left.dart';
+export 'info.dart';

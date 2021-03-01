@@ -25,6 +25,7 @@ final lightTheme = ThemeData.from(
     displayColor: AppColorsWhite.main,
   ),
 ).copyWith(
+  dividerColor: AppColorsWhite.inactiveBlack,
   sliderTheme: SliderThemeData(
     trackHeight: 2,
     inactiveTrackColor: AppColorsWhite.inactiveBlack,
