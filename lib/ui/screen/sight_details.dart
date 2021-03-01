@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:places/domain/sight.dart';
+import 'package:places/drawing/drawing.dart';
 import 'package:places/res/typography.dart';
 
 /// Sight details widget
@@ -21,12 +22,23 @@ class SightDetails extends StatelessWidget {
         /// back button
         leading: Container(
           padding: const EdgeInsets.all(16),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              width: 32,
-              height: 32,
-              color: Theme.of(context).backgroundColor,
+          child: Container(
+            width: 32,
+            height: 32,
+            child: ElevatedButton(
+              child: Container(),
+              onPressed: () {
+                print('back');
+              },
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                backgroundColor: MaterialStateProperty.all(
+                    Theme.of(context).backgroundColor),
+              ),
             ),
           ),
         ),
@@ -137,15 +149,24 @@ class SightDetails extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
+          ElevatedButton(
+            onPressed: () {
+              print('start navigation');
+            },
+            style: ButtonStyle(
+              elevation: MaterialStateProperty.all(0),
+              backgroundColor:
+                  MaterialStateProperty.all(Theme.of(context).primaryColor),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
             child: Container(
               height: 48,
-              width: double.infinity,
-              color: Theme.of(context).primaryColor,
               child: Center(
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
@@ -185,7 +206,18 @@ class SightDetails extends StatelessWidget {
             children: [
               Expanded(
                 child: Container(
-                    height: 40,
+                  height: 40,
+                  child: TextButton(
+                    onPressed: () {
+                      print('plan');
+                    },
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
                     child: Center(
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -195,13 +227,9 @@ class SightDetails extends StatelessWidget {
                             height: 24,
                             width: 24,
                             margin: const EdgeInsets.only(right: 8),
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                colorFilter: ColorFilter.mode(
-                                    Theme.of(context).colorScheme.secondary,
-                                    BlendMode.srcIn),
-                                image: AssetImage('res/images/calendar.png'),
-                              ),
+                            child: IconWrapper(
+                              color: Theme.of(context).colorScheme.secondary,
+                              child: const CalendarIcon(),
                             ),
                           ),
                           Text(
@@ -216,36 +244,50 @@ class SightDetails extends StatelessWidget {
                           ),
                         ],
                       ),
-                    )),
+                    ),
+                  ),
+                ),
               ),
               Expanded(
                 child: Container(
                   height: 40,
-                  child: Center(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 24,
-                          width: 24,
-                          margin: const EdgeInsets.only(right: 8),
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              colorFilter: ColorFilter.mode(
-                                  Theme.of(context).colorScheme.secondary,
-                                  BlendMode.srcIn),
-                              image: AssetImage('res/images/heart.png'),
+                  child: TextButton(
+                    onPressed: () {
+                      print('add to favorite');
+                    },
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    child: Center(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 24,
+                            width: 24,
+                            margin: const EdgeInsets.only(right: 8),
+                            child: IconWrapper(
+                              color: Theme.of(context).colorScheme.secondary,
+                              child: const HeartIcon(),
                             ),
                           ),
-                        ),
-                        Text(
-                          'В избранное',
-                          style: Theme.of(context).textTheme.bodyText2.copyWith(
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                        ),
-                      ],
+                          Text(
+                            'В избранное',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

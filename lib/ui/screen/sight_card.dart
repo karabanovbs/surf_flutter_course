@@ -54,12 +54,13 @@ class _BaseCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             sight.type,
-                            style:
-                                Theme.of(context).textTheme.subtitle1.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1
+                                .copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                ),
                           ),
                         ),
 
@@ -105,10 +106,15 @@ class SightCard extends StatelessWidget {
         Container(
           height: 24,
           width: 24,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('res/images/heart.png'),
+          child: TextButton(
+            onPressed: () {
+              print('like place');
+            },
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all(CircleBorder()),
+              padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
             ),
+            child: const HeartIcon(),
           ),
         )
       ],
@@ -157,7 +163,16 @@ class FavoriteSightCard extends StatelessWidget {
         SizedBox(
           height: 24,
           width: 24,
-          child: CalendarIcon(),
+          child: TextButton(
+            onPressed: () {
+              print('tap calendar');
+            },
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all(CircleBorder()),
+              padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+            ),
+            child: const CalendarIcon(),
+          ),
         ),
         SizedBox(
           width: 20,
@@ -165,7 +180,16 @@ class FavoriteSightCard extends StatelessWidget {
         SizedBox(
           height: 24,
           width: 24,
-          child: CloseIcon(),
+          child: TextButton(
+            onPressed: () {
+              print('tap close');
+            },
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all(CircleBorder()),
+              padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+            ),
+            child: const CloseIcon(),
+          ),
         ),
       ],
       content: Column(
@@ -245,7 +269,16 @@ class FavoriteHistorySightCard extends StatelessWidget {
         SizedBox(
           height: 24,
           width: 24,
-          child: ShareIcon(),
+          child: TextButton(
+            onPressed: () {
+              print('tap share');
+            },
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all(CircleBorder()),
+              padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+            ),
+            child: const ShareIcon(),
+          ),
         ),
         SizedBox(
           width: 20,
@@ -253,7 +286,16 @@ class FavoriteHistorySightCard extends StatelessWidget {
         SizedBox(
           height: 24,
           width: 24,
-          child: CloseIcon(),
+          child: TextButton(
+            onPressed: () {
+              print('tap close');
+            },
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all(CircleBorder()),
+              padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+            ),
+            child: const CloseIcon(),
+          ),
         ),
       ],
     );

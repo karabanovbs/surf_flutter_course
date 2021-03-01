@@ -4,14 +4,19 @@ import 'package:flutter/widgets.dart';
 /// painter with [IconTheme]
 class IconWrapper extends StatelessWidget {
   final Widget child;
+  final Color color;
 
-  const IconWrapper({Key key, this.child}) : super(key: key);
+  const IconWrapper({
+    Key key,
+    this.child,
+    this.color,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ColorFiltered(
       colorFilter: ColorFilter.mode(
-        IconTheme.of(context).color,
+        color ?? IconTheme.of(context).color,
         BlendMode.srcIn,
       ),
       child: child,
