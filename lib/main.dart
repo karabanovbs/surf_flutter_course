@@ -23,19 +23,19 @@ class ThemeSettings extends ChangeNotifier {
 
   ThemeData currentTheme = lightTheme;
 
-  setLightTheme() {
+  void setLightTheme() {
     currentTheme = lightTheme;
     notifyListeners();
   }
 
-  setDarkTheme() {
+  void setDarkTheme() {
     currentTheme = darkTheme;
     notifyListeners();
   }
 
   get isDark => currentTheme == darkTheme;
 
-  switchLightness() {
+  void switchLightness() {
     if (isDark) {
       setLightTheme();
     } else {
