@@ -76,7 +76,7 @@ class _BaseCard extends StatelessWidget {
                           /// sight type
                           Expanded(
                             child: Text(
-                              sight.type,
+                              sight.type.label.toLowerCase(),
                               style: Theme.of(context).textTheme.subtitle1.copyWith(
                                     color: Theme.of(context).colorScheme.onPrimary,
                                   ),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:places/drawing/drawing.dart';
 import 'package:places/mocks.dart';
+import 'package:places/text_constans.dart';
+import 'package:places/ui/screen/add_sight_screen.dart';
 import 'package:places/ui/screen/sight_card.dart';
 import 'package:places/ui/screen/visiting_screen.dart';
 
@@ -30,21 +33,82 @@ class _SightListScreenState extends State<SightListScreen> {
     return Scaffold(
       /// Create AppBar
       appBar: _AppBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            for (var mock in mocks)
-              Padding(
-                padding: const EdgeInsets.only(
-                    right: bodyPaddingRight,
-                    left: bodyPaddingLeft,
-                    bottom: cardPaddingBottom),
-                child: SightCard(
-                  sight: mock,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  for (var mock in mocks)
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          right: bodyPaddingRight,
+                          left: bodyPaddingLeft,
+                          bottom: cardPaddingBottom),
+                      child: SightCard(
+                        sight: mock,
+                      ),
+                    )
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 16,
+            right: 0,
+            left: 0,
+            child: Center(
+              child: TextButton(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all(StadiumBorder()),
+                  padding: MaterialStateProperty.all(EdgeInsets.zero),
                 ),
-              )
-          ],
-        ),
+                child: Ink(
+                  decoration: ShapeDecoration(
+                      shape: StadiumBorder(),
+                      gradient: LinearGradient(colors: [
+                        Color(0xFFFCDD3D),
+                        Color(0xFF4CAF50),
+                      ])),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 22, vertical: 15),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          width: 14,
+                          height: 14,
+                          child: PlusIcon(),
+                        ),
+                        SizedBox(
+                          width: 14,
+                        ),
+                        Text(
+                          SightListAddNewLbl.toUpperCase(),
+                          style: Theme.of(context).textTheme.subtitle1.copyWith(
+                                color: Theme.of(context).colorScheme.background,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => AddSightScreen(),
+                    ),
+                  ).then((value) {
+                    setState(() {
+
+                    });
+                  });
+                },
+              ),
+            ),
+          )
+        ],
       ),
       bottomNavigationBar: AppBottomNavBar(
         index: 0,

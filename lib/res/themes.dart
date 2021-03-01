@@ -26,6 +26,15 @@ final lightTheme = ThemeData.from(
   ),
 ).copyWith(
   dividerColor: AppColorsWhite.inactiveBlack,
+  appBarTheme: AppBarTheme(
+    backwardsCompatibility: false,
+    elevation: 0,
+    centerTitle: true,
+    titleTextStyle: TextStyle(
+      fontSize: 18,
+      color: AppColorsWhite.main,
+    ),
+  ),
   sliderTheme: SliderThemeData(
     trackHeight: 2,
     inactiveTrackColor: AppColorsWhite.inactiveBlack,
@@ -70,6 +79,15 @@ var darkTheme = ThemeData.from(
       ),
 ).copyWith(
   dividerColor: AppColorsWhite.inactiveBlack,
+  appBarTheme: AppBarTheme(
+    backwardsCompatibility: false,
+    elevation: 0,
+    centerTitle: true,
+    titleTextStyle: TextStyle(
+      fontSize: 18,
+      color: AppColorsBlack.main,
+    ),
+  ),
   sliderTheme: SliderThemeData(
     trackHeight: 2,
     inactiveTrackColor: AppColorsBlack.inactiveBlack,

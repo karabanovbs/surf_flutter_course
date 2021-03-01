@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:places/domain/sight_type.dart';
 
 /// Sight model
 class Sight {
@@ -7,7 +8,7 @@ class Sight {
   final double lon;
   final String url;
   final String details;
-  final String type;
+  final SightType type;
 
   Sight({
     @required this.name,

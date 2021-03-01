@@ -1,7 +1,23 @@
 /// Common
 
 const String empty = 'Пусто';
+const String cancel = 'Отмена';
+const String notSelect = 'Не выбрано';
+const String create = 'Создать';
+const String save = 'Сохранить';
 
+/// SightTypeName
+
+const String SightTypeCinema = 'Кинотеатр';
+const String SightTypeRestaurant = 'Ресторан';
+const String SightTypeSpecial = 'Особое место';
+const String SightTypeTheatre = 'Театр';
+const String SightTypeMuseum = 'Музей';
+const String SightTypeCafe = 'Кафе';
+
+/// SightList
+
+const String SightListAddNewLbl= 'Новое место';
 
 /// VisitingScreen
 
@@ -33,3 +49,18 @@ const String categoryCafeLbl = 'Кафе';
 const String settingsScreenTitle = 'Настройки';
 const String darkThemeSettingsLbl = 'Тёмная тема';
 const String watchTutorialLbl = 'Смотреть туториал';
+
+
+/// AddSightScreen
+
+const String addSightScreenTitle = 'Новое место';
+const String addSightScreenCategoryLbl = 'Категория';
+const String addSightScreenNameLbl = 'Название';
+const String addSightScreenNameHint = 'Введите название';
+const String addSightScreenLonLbl = 'Долгота';
+const String addSightScreenLonHint = 'Введите долготу';
+const String addSightScreenLatLbl = 'Широта';
+const String addSightScreenLatHint = 'Введите широту';
+const String addSightScreenOnMapSelectLbl = 'Указать на карте';
+const String addSightScreenDescriptionLbl = 'Описание';
+const String addSightScreenDescriptionHint = 'Введите текст';

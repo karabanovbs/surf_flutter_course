@@ -16,8 +16,11 @@ class PrimaryButton extends StatelessWidget {
       onPressed: onPressed,
       style: ButtonStyle(
         elevation: MaterialStateProperty.all(0),
-        backgroundColor:
-            MaterialStateProperty.all(Theme.of(context).primaryColor),
+        backgroundColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.disabled))
+            return Theme.of(context).colorScheme.surface;
+          return Theme.of(context).colorScheme.primary;
+        }),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
