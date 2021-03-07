@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 class AppRangeSlider extends StatelessWidget {
   final double min;
   final double max;
-  final int divisions;
-  final double start;
-  final double end;
-  final void Function(double start, double end) onChange;
+  final int? divisions;
+  final double? start;
+  final double? end;
+  final void Function(double start, double end)? onChange;
 
   const AppRangeSlider({
-    Key key,
-    @required this.min,
-    @required this.max,
+    Key? key,
+    required this.min,
+    required this.max,
     this.divisions,
     this.start,
     this.end,
@@ -39,14 +39,14 @@ class AppRangeSliderTrackShape extends RoundedRectRangeSliderTrackShape {
   void paint(
       PaintingContext context,
       Offset offset, {
-        RenderBox parentBox,
-        SliderThemeData sliderTheme,
-        Animation<double> enableAnimation,
-        Offset startThumbCenter,
-        Offset endThumbCenter,
+        required RenderBox parentBox,
+        required SliderThemeData sliderTheme,
+        required Animation<double> enableAnimation,
+        required Offset startThumbCenter,
+        required Offset endThumbCenter,
         bool isEnabled = false,
         bool isDiscrete = false,
-        TextDirection textDirection,
+        required TextDirection textDirection,
         double additionalActiveTrackHeight = 2,
       }) {
     super.paint(

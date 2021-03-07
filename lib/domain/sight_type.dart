@@ -28,7 +28,6 @@ class SightType {
       case ESightType.cafe:
         return SightType.cafe();
     }
-    return null;
   }
 
   SightType.cinema()

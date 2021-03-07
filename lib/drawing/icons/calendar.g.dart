@@ -125,11 +125,11 @@ class _CalendarIconPainter extends CustomPainter {
 }
 
 class _CalendarIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _CalendarIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);

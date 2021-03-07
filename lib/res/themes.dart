@@ -75,7 +75,7 @@ var darkTheme = ThemeData.from(
       )
       .copyWith(
         subtitle1:
-            textTheme.subtitle1.copyWith(color: AppColorsBlack.secondary2),
+            textTheme.subtitle1!.copyWith(color: AppColorsBlack.secondary2),
       ),
 ).copyWith(
   dividerColor: AppColorsWhite.inactiveBlack,

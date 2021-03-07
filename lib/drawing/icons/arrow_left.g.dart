@@ -42,11 +42,11 @@ class _ArrowLeftIconPainter extends CustomPainter {
 }
 
 class _ArrowLeftIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _ArrowLeftIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);

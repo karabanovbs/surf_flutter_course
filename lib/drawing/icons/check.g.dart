@@ -42,11 +42,11 @@ class _CheckIconPainter extends CustomPainter {
 }
 
 class _CheckIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _CheckIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);

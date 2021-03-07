@@ -99,11 +99,11 @@ class _ListIconPainter extends CustomPainter {
 }
 
 class _ListIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _ListIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);
@@ -203,11 +203,11 @@ class _ListFullIconPainter extends CustomPainter {
 }
 
 class _ListFullIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _ListFullIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);

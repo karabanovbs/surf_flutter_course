@@ -102,11 +102,11 @@ class _RestourantIconPainter extends CustomPainter {
 }
 
 class _RestourantIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _RestourantIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);

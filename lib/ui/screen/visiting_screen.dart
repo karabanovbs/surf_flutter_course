@@ -67,11 +67,11 @@ class VisitingScreen extends StatelessWidget {
 }
 
 class _VisitingTabBar extends StatefulWidget {
-  final TabController controller;
-  final List<String> tabs;
+  final TabController? controller;
+  final List<String>? tabs;
 
   const _VisitingTabBar({
-    Key key,
+    Key? key,
     this.controller,
     this.tabs,
   }) : super(key: key);
@@ -81,15 +81,15 @@ class _VisitingTabBar extends StatefulWidget {
 }
 
 class __VisitingTabBarState extends State<_VisitingTabBar> {
-  TabController _controller;
-  int _tabIndex;
+  TabController? _controller;
+  int? _tabIndex;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _controller ??= widget.controller ?? DefaultTabController.of(context);
-    _tabIndex = _controller.index;
-    _controller.addListener(_tabControllerListener);
+    _tabIndex = _controller!.index;
+    _controller!.addListener(_tabControllerListener);
   }
 
   @override
@@ -102,17 +102,17 @@ class __VisitingTabBarState extends State<_VisitingTabBar> {
       ),
       child: Row(
         children: [
-          for (var tab in widget.tabs)
+          for (var tab in widget.tabs!)
             Expanded(
               child: Container(
                 height: 40,
                 child: TextButton(
                   onPressed: () {
-                    print('select tab ${widget.tabs.indexOf(tab)}');
+                    print('select tab ${widget.tabs!.indexOf(tab)}');
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith(
-                      (states) => widget.tabs.indexOf(tab) == _tabIndex
+                      (states) => widget.tabs!.indexOf(tab) == _tabIndex
                           ? Theme.of(context).colorScheme.onSecondary
                           : null,
                     ),
@@ -130,7 +130,7 @@ class __VisitingTabBarState extends State<_VisitingTabBar> {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: widget.tabs.indexOf(tab) == _tabIndex
+                        color: widget.tabs!.indexOf(tab) == _tabIndex
                             ? Theme.of(context).colorScheme.onPrimary
                             : Theme.of(context).colorScheme.onSurface,
                       ),
@@ -145,16 +145,16 @@ class __VisitingTabBarState extends State<_VisitingTabBar> {
   }
 
   void _tabControllerListener() {
-    if (_controller.index != _tabIndex) {
+    if (_controller!.index != _tabIndex) {
       setState(() {
-        _tabIndex = _controller.index;
+        _tabIndex = _controller!.index;
       });
     }
   }
 
   @override
   void dispose() {
-    _controller.removeListener(_tabControllerListener);
+    _controller!.removeListener(_tabControllerListener);
     super.dispose();
   }
 }
@@ -164,9 +164,9 @@ class _TabCardsList extends StatelessWidget {
   final Widget Function(Sight sight) cardBuilder;
 
   const _TabCardsList({
-    Key key,
+    Key? key,
     this.sights = const [],
-    @required this.cardBuilder,
+    required this.cardBuilder,
   }) : super(key: key);
 
   @override
@@ -202,9 +202,9 @@ class _EmptyListPlaceholder extends StatelessWidget {
   final Widget icon;
 
   const _EmptyListPlaceholder({
-    Key key,
-    @required this.message,
-    @required this.icon,
+    Key? key,
+    required this.message,
+    required this.icon,
   }) : super(key: key);
 
   @override
@@ -230,7 +230,7 @@ class _EmptyListPlaceholder extends StatelessWidget {
           ),
           Text(
             empty,
-            style: Theme.of(context).textTheme.headline3.copyWith(
+            style: Theme.of(context).textTheme.headline3!.copyWith(
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
           ),
@@ -239,7 +239,7 @@ class _EmptyListPlaceholder extends StatelessWidget {
           ),
           Text(
             message,
-            style: Theme.of(context).textTheme.bodyText2.copyWith(
+            style: Theme.of(context).textTheme.bodyText2!.copyWith(
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
             textAlign: TextAlign.center,
@@ -251,9 +251,9 @@ class _EmptyListPlaceholder extends StatelessWidget {
 }
 
 class AppBottomNavBar extends StatelessWidget {
-  final int index;
+  final int? index;
 
-  const AppBottomNavBar({Key key, this.index}) : super(key: key);
+  const AppBottomNavBar({Key? key, this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -330,7 +330,7 @@ class AppBottomNavBar extends StatelessWidget {
           ),
         ),
       ],
-      currentIndex: index,
+      currentIndex: index!,
       selectedItemColor: Theme.of(context).colorScheme.onBackground,
       unselectedItemColor: Theme.of(context).colorScheme.onBackground,
     );

@@ -115,11 +115,11 @@ class _ShareIconPainter extends CustomPainter {
 }
 
 class _ShareIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _ShareIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);

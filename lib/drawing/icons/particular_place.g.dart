@@ -49,11 +49,11 @@ class _ParticularPlaceIconPainter extends CustomPainter {
 }
 
 class _ParticularPlaceIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _ParticularPlaceIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);

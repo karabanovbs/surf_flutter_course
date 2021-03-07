@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/domain/sight_type.dart';
 import 'package:places/drawing/drawing.dart';
@@ -13,11 +15,20 @@ class AddSightScreen extends StatefulWidget {
 }
 
 class _AddSightScreenState extends State<AddSightScreen> {
-  ESightType _selectedType;
-  String _name;
-  String _description;
-  double _long;
-  double _lat;
+  ESightType? _selectedType;
+  String? _name;
+  String? _description;
+  double? _long;
+  double? _lat;
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties.add(EnumProperty('selectedType', _selectedType));
+    properties.add(StringProperty('name', _name));
+    properties.add(StringProperty('description', _description));
+    properties.add(DoubleProperty('long', _long));
+    properties.add(DoubleProperty('lat', _lat));
+  }
 
   bool get canSave =>
       _selectedType != null && _name != null && _lat != null && _long != null;
@@ -36,7 +47,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
           ),
           child: Text(
             cancel,
-            style: Theme.of(context).textTheme.headline4.copyWith(
+            style: Theme.of(context).textTheme.headline4!.copyWith(
                   color: Theme.of(context).colorScheme.secondary,
                 ),
           ),
@@ -79,11 +90,12 @@ class _AddSightScreenState extends State<AddSightScreen> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      SightType(_selectedType)?.label ??
-                                          notSelect,
+                                      _selectedType != null
+                                          ? SightType(_selectedType!).label
+                                          : notSelect,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .headline5
+                                          .headline5!
                                           .copyWith(
                                             color: Theme.of(context)
                                                 .colorScheme
@@ -170,7 +182,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                                     height: 40,
                                     child: _PrimaryTextField(
                                       hintText: addSightScreenLatHint,
-                                      keyboardType: TextInputType.number,
+                                      numeric: true,
                                       onChanged: (value) {
                                         setState(() {
                                           _lat = double.parse(value);
@@ -194,7 +206,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                                     height: 40,
                                     child: _PrimaryTextField(
                                       hintText: addSightScreenLonHint,
-                                      keyboardType: TextInputType.number,
+                                      numeric: true,
                                       onChanged: (value) {
                                         setState(() {
                                           _long = double.parse(value);
@@ -273,7 +285,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                                   details: _description,
                                   lat: _lat,
                                   lon: _long,
-                                  type: SightType(_selectedType),
+                                  type: SightType(_selectedType!),
                                   url:
                                       'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
                                 ),
@@ -300,9 +312,9 @@ class _FormField extends StatelessWidget {
   final Widget child;
 
   const _FormField({
-    Key key,
-    @required this.label,
-    @required this.child,
+    Key? key,
+    required this.label,
+    required this.child,
   }) : super(key: key);
 
   @override
@@ -315,7 +327,7 @@ class _FormField extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             label.toUpperCase(),
-            style: Theme.of(context).textTheme.bodyText1.copyWith(
+            style: Theme.of(context).textTheme.bodyText1!.copyWith(
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
           ),
@@ -331,18 +343,18 @@ class _FormField extends StatelessWidget {
 
 /// Styled text input
 class _PrimaryTextField extends StatefulWidget {
-  final String hintText;
+  final String? hintText;
   final bool multiline;
-  final TextInputType keyboardType;
-  final TextEditingController controller;
-  final FocusNode focusNode;
-  final void Function(String value) onChanged;
+  final bool numeric;
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
+  final void Function(String value)? onChanged;
 
   const _PrimaryTextField({
-    Key key,
+    Key? key,
     this.hintText,
     this.multiline = false,
-    this.keyboardType,
+    this.numeric = false,
     this.controller,
     this.focusNode,
     this.onChanged,
@@ -353,16 +365,16 @@ class _PrimaryTextField extends StatefulWidget {
 }
 
 class __PrimaryTextFieldState extends State<_PrimaryTextField> {
-  TextEditingController _controller;
-  FocusNode _focusNode;
+  TextEditingController? _controller;
+  FocusNode? _focusNode;
 
   @override
   void initState() {
     super.initState();
     _controller = widget.controller ?? TextEditingController();
     _focusNode = widget.focusNode ?? FocusNode();
-    _focusNode.addListener(_focusListener);
-    _controller.addListener(_controllerListener);
+    _focusNode!.addListener(_focusListener);
+    _controller!.addListener(_controllerListener);
   }
 
   _focusListener() {
@@ -387,14 +399,17 @@ class __PrimaryTextFieldState extends State<_PrimaryTextField> {
     return TextFormField(
       controller: _controller,
       focusNode: _focusNode,
-      keyboardType: widget.keyboardType,
+      keyboardType: widget.numeric ? TextInputType.number : TextInputType.text,
+      inputFormatters: [
+        if (widget.numeric) FilteringTextInputFormatter.digitsOnly
+      ],
       textInputAction: TextInputAction.next,
       maxLines: widget.multiline ? 4 : null,
       style: Theme.of(context).textTheme.headline5,
       onChanged: widget.onChanged,
       decoration: InputDecoration(
-        hintText: widget.hintText.toLowerCase(),
-        hintStyle: Theme.of(context).textTheme.headline5.copyWith(
+        hintText: widget.hintText!.toLowerCase(),
+        hintStyle: Theme.of(context).textTheme.headline5!.copyWith(
               color: Theme.of(context).colorScheme.onSurface,
             ),
         contentPadding: const EdgeInsets.symmetric(
@@ -415,7 +430,7 @@ class __PrimaryTextFieldState extends State<_PrimaryTextField> {
             color: Theme.of(context).colorScheme.primary,
           ),
         ),
-        suffixIcon: _focusNode.hasFocus && _controller.text.isNotEmpty
+        suffixIcon: _focusNode!.hasFocus && _controller!.text.isNotEmpty
             ? Align(
                 widthFactor: 1,
                 heightFactor: 1,
@@ -436,7 +451,7 @@ class __PrimaryTextFieldState extends State<_PrimaryTextField> {
                           skipTraversal: true,
                         ),
                         onTap: () {
-                          _controller.clear();
+                          _controller!.clear();
                         },
                         child: Center(
                           child: SizedBox(
@@ -461,16 +476,16 @@ class __PrimaryTextFieldState extends State<_PrimaryTextField> {
 
 /// Select [SightType] sub screen
 class _SelectTypeScreen extends StatefulWidget {
-  final ESightType initialType;
+  final ESightType? initialType;
 
-  const _SelectTypeScreen({Key key, this.initialType}) : super(key: key);
+  const _SelectTypeScreen({Key? key, this.initialType}) : super(key: key);
 
   @override
   __SelectTypeScreenState createState() => __SelectTypeScreenState();
 }
 
 class __SelectTypeScreenState extends State<_SelectTypeScreen> {
-  SightType _selectedType;
+  SightType? _selectedType;
 
   final Set<SightType> _variants = {
     SightType.cinema(),
@@ -484,9 +499,12 @@ class __SelectTypeScreenState extends State<_SelectTypeScreen> {
   @override
   void initState() {
     super.initState();
-    this._selectedType = SightType(
-      widget.initialType,
-    );
+    var _initialType = widget.initialType;
+    if (_initialType != null) {
+      this._selectedType = SightType(
+        _initialType,
+      );
+    }
   }
 
   @override
@@ -550,7 +568,10 @@ class __SelectTypeScreenState extends State<_SelectTypeScreen> {
                             : null,
                         title: Text(
                           variant.label,
-                          style: Theme.of(context).textTheme.headline5.copyWith(
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline5!
+                              .copyWith(
                                 color:
                                     Theme.of(context).colorScheme.onBackground,
                               ),
@@ -580,7 +601,7 @@ class __SelectTypeScreenState extends State<_SelectTypeScreen> {
               ),
               onPressed: _selectedType != null
                   ? () {
-                      Navigator.of(context).pop(_selectedType.type);
+                      Navigator.of(context).pop(_selectedType!.type);
                     }
                   : null,
             ),

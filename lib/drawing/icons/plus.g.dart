@@ -47,11 +47,11 @@ class _PlusIconPainter extends CustomPainter {
 }
 
 class _PlusIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _PlusIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);

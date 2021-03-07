@@ -142,11 +142,11 @@ class _MuseumIconPainter extends CustomPainter {
 }
 
 class _MuseumIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _MuseumIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);

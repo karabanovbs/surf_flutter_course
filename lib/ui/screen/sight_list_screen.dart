@@ -86,7 +86,7 @@ class _SightListScreenState extends State<SightListScreen> {
                         ),
                         Text(
                           SightListAddNewLbl.toUpperCase(),
-                          style: Theme.of(context).textTheme.subtitle1.copyWith(
+                          style: Theme.of(context).textTheme.subtitle1!.copyWith(
                                 color: Theme.of(context).colorScheme.background,
                               ),
                         ),
