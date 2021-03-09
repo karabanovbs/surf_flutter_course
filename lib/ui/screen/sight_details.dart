@@ -107,7 +107,7 @@ class SightDetails extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            sight!.name!,
+            sight!.name,
             style: Theme.of(context).textTheme.headline2!.copyWith(
                   color: Theme.of(context).colorScheme.secondary,
                 ),

@@ -3,7 +3,7 @@ import 'package:places/domain/sight_type.dart';
 
 /// Sight model
 class Sight {
-  final String? name;
+  final String name;
   final double? lat;
   final double? lon;
   final String url;

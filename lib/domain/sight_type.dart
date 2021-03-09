@@ -1,4 +1,4 @@
-import 'package:places/text_constans.dart';
+import 'package:places/res/text_constants.dart';
 
 enum ESightType {
   cinema,
@@ -7,6 +7,8 @@ enum ESightType {
   theatre,
   museum,
   cafe,
+  hotel,
+  park,
 }
 
 class SightType {
@@ -27,6 +29,10 @@ class SightType {
         return SightType.museum();
       case ESightType.cafe:
         return SightType.cafe();
+      case ESightType.hotel:
+        return SightType.hotel();
+      case ESightType.park:
+        return SightType.park();
     }
   }
 
@@ -53,6 +59,14 @@ class SightType {
   SightType.cafe()
       : type = ESightType.cafe,
         label = SightTypeCafe;
+
+  SightType.hotel()
+      : type = ESightType.hotel,
+        label = SightTypeHotel;
+
+  SightType.park()
+      : type = ESightType.park,
+        label = SightTypePark;
 
   @override
   bool operator ==(Object other) {

@@ -148,7 +148,7 @@ class SightCard extends StatelessWidget {
             child: Container(
               margin: const EdgeInsets.only(bottom: 2),
               child: Text(
-                sight.name!,
+                sight.name,
                 maxLines: 3,
                 style: Theme.of(context).textTheme.headline4!.copyWith(
                       color: Theme.of(context).colorScheme.secondary,
@@ -217,7 +217,7 @@ class FavoriteSightCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            sight!.name!,
+            sight!.name,
             style: Theme.of(context).textTheme.subtitle1!.copyWith(
                   color: Theme.of(context).colorScheme.secondary,
                 ),
@@ -260,7 +260,7 @@ class FavoriteHistorySightCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            sight!.name!,
+            sight!.name,
             style: Theme.of(context).textTheme.subtitle1!.copyWith(
                   color: Theme.of(context).colorScheme.secondary,
                 ),

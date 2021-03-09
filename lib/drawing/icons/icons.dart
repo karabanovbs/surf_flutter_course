@@ -18,3 +18,6 @@ export 'arrow_left.dart';
 export 'arrow_right.dart';
 export 'info.dart';
 export 'plus.dart';
+export 'search.dart';
+export 'filters.dart';
+export 'delete.dart';
