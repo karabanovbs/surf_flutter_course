@@ -4,7 +4,7 @@ import 'package:places/domain/sight.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/mocks.dart';
 import 'package:places/res/typography.dart';
-import 'package:places/text_constans.dart';
+import 'package:places/res/text_constants.dart';
 import 'package:places/ui/screen/sight_card.dart';
 import 'package:places/ui/screen/sight_list_screen.dart';
 

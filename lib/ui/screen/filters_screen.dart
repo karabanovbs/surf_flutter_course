@@ -1,43 +1,92 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/sight.dart';
+import 'package:places/domain/sight_type.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/helpers/distance_helper.dart';
 import 'package:places/mocks.dart';
-import 'package:places/text_constans.dart';
+import 'package:places/res/text_constants.dart';
 import 'package:places/ui/widgets/widgets.dart';
 
-// TODO user later
-enum FilterType {
-  hotel,
-  rest,
-  particularPlace,
-  park,
-  museum,
-  cafe,
+class FiltersResult {
+  final Set<ESightType> typeFilters;
+  final double distanceStart;
+  final double distanceEnd;
+
+  FiltersResult(
+    this.typeFilters,
+    this.distanceStart,
+    this.distanceEnd,
+  );
+
+  bool filter(Sight sight) {
+    return arePointsBetween(
+          GeoPoint(
+            longitude: sight.lon,
+            latitude: sight.lat,
+          ),
+          const GeoPoint(
+            latitude: 58.006615,
+            longitude: 56.307513,
+          ),
+          distanceStart / 1000,
+          distanceEnd / 1000,
+        ) &&
+        (typeFilters.isEmpty || typeFilters.contains(sight.type));
+  }
 }
 
 /// Filter setup screen
 class FiltersScreen extends StatefulWidget {
+  final FiltersResult? filters;
+
+  FiltersScreen(this.filters);
+
   @override
   _FiltersScreenState createState() => _FiltersScreenState();
 }
 
 class _FiltersScreenState extends State<FiltersScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.filters != null) {
+      _typeFilters = widget.filters!.typeFilters;
+      distanceStart = widget.filters!.distanceStart;
+      distanceEnd = widget.filters!.distanceEnd;
+    }
+  }
+
   double distanceStart = 100;
   double distanceEnd = 10000;
 
-  bool hotelCheck = false;
-  bool restCheck = false;
-  bool particularPlaceCheck = false;
-  bool parkCheck = false;
-  bool museumCheck = false;
-  bool cafeCheck = false;
+  Set<ESightType> _typeFilters = {};
+  Set<ESightType> _filtersVariant = {
+    ESightType.hotel,
+    ESightType.restaurant,
+    ESightType.special,
+    ESightType.park,
+    ESightType.museum,
+    ESightType.cafe,
+  };
+
+  Map<ESightType, Widget> _filtersIconMap = {
+    ESightType.hotel: HotelIcon(),
+    ESightType.restaurant: RestourantIcon(),
+    ESightType.special: ParticularPlaceIcon(),
+    ESightType.park: ParkIcon(),
+    ESightType.museum: MuseumIcon(),
+    ESightType.cafe: CafeIcon(),
+  };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
           child: SizedBox(
             width: 7,
             height: 12,
@@ -53,12 +102,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
           TextButton(
             onPressed: () {
               setState(() {
-                hotelCheck = false;
-                restCheck = false;
-                particularPlaceCheck = false;
-                parkCheck = false;
-                museumCheck = false;
-                cafeCheck = false;
+                _typeFilters = {};
               });
             },
             child: Text(
@@ -96,78 +140,23 @@ class _FiltersScreenState extends State<FiltersScreen> {
                   runSpacing: 12,
                   spacing: 12,
                   children: [
-                    FilterCategory(
-                      button: FilterRoundButton(
-                        checked: hotelCheck,
-                        icon: HotelIcon(),
-                        onPressed: () {
-                          setState(() {
-                            hotelCheck = !hotelCheck;
-                          });
-                        },
+                    for (var _filter in _filtersVariant)
+                      FilterCategory(
+                        button: FilterRoundButton(
+                          checked: _typeFilters.contains(_filter),
+                          icon: _filtersIconMap[_filter],
+                          onPressed: () {
+                            setState(() {
+                              if (_typeFilters.contains(_filter)) {
+                                _typeFilters.remove(_filter);
+                              } else {
+                                _typeFilters.add(_filter);
+                              }
+                            });
+                          },
+                        ),
+                        label: SightType(_filter).label,
                       ),
-                      label: categoryHotelLbl,
-                    ),
-                    FilterCategory(
-                      button: FilterRoundButton(
-                        checked: restCheck,
-                        icon: RestourantIcon(),
-                        onPressed: () {
-                          setState(() {
-                            restCheck = !restCheck;
-                          });
-                        },
-                      ),
-                      label: categoryRestourantLbl,
-                    ),
-                    FilterCategory(
-                      button: FilterRoundButton(
-                        checked: particularPlaceCheck,
-                        icon: ParticularPlaceIcon(),
-                        onPressed: () {
-                          setState(() {
-                            particularPlaceCheck = !particularPlaceCheck;
-                          });
-                        },
-                      ),
-                      label: categoryParticularPlaceLbl,
-                    ),
-                    FilterCategory(
-                      button: FilterRoundButton(
-                        checked: parkCheck,
-                        icon: ParkIcon(),
-                        onPressed: () {
-                          setState(() {
-                            parkCheck = !parkCheck;
-                          });
-                        },
-                      ),
-                      label: categoryParkLbl,
-                    ),
-                    FilterCategory(
-                      button: FilterRoundButton(
-                        checked: museumCheck,
-                        icon: MuseumIcon(),
-                        onPressed: () {
-                          setState(() {
-                            museumCheck = !museumCheck;
-                          });
-                        },
-                      ),
-                      label: categoryMuseumLbl,
-                    ),
-                    FilterCategory(
-                      button: FilterRoundButton(
-                        checked: cafeCheck,
-                        icon: CafeIcon(),
-                        onPressed: () {
-                          setState(() {
-                            cafeCheck = !cafeCheck;
-                          });
-                        },
-                      ),
-                      label: categoryCafeLbl,
-                    ),
                   ],
                 ),
               ],
@@ -222,21 +211,22 @@ class _FiltersScreenState extends State<FiltersScreen> {
               child: PrimaryButton(
                 child: Center(
                   child: Text('$showLbl (${mocks.where(
-                        (element) => arePointsBetween(
-                          GeoPoint(
-                            longitude: element.lon,
-                            latitude: element.lat,
-                          ),
-                          const GeoPoint(
-                            latitude: 58.006615,
-                            longitude: 56.307513,
-                          ),
-                          distanceStart / 1000,
-                          distanceEnd / 1000,
-                        ),
+                        (element) => FiltersResult(
+                          _typeFilters,
+                          distanceStart,
+                          distanceEnd,
+                        ).filter(element),
                       ).length})'),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pop(
+                    FiltersResult(
+                      _typeFilters,
+                      distanceStart,
+                      distanceEnd,
+                    ),
+                  );
+                },
               ),
             ),
           ],

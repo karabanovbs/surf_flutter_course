@@ -5,8 +5,10 @@ import 'package:places/domain/sight.dart';
 import 'package:places/domain/sight_type.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/mocks.dart';
-import 'package:places/text_constans.dart';
+import 'package:places/res/text_constants.dart';
+import 'package:places/ui/screen/selec_type_screen.dart';
 import 'package:places/ui/widgets/primary_button.dart';
+import 'package:places/ui/widgets/widgets.dart';
 
 /// Add new [Sight] screen
 class AddSightScreen extends StatefulWidget {
@@ -23,6 +25,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
     properties.add(EnumProperty('selectedType', _selectedType));
     properties.add(StringProperty('name', _name));
     properties.add(StringProperty('description', _description));
@@ -120,7 +123,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) {
-                                    return _SelectTypeScreen();
+                                    return SelectSightTypeScreen();
                                   },
                                 ),
                               ).then((value) {
@@ -281,7 +284,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                           ? () {
                               mocks.add(
                                 Sight(
-                                  name: _name,
+                                  name: _name!,
                                   details: _description,
                                   lat: _lat,
                                   lon: _long,
@@ -365,7 +368,7 @@ class _PrimaryTextField extends StatefulWidget {
 }
 
 class __PrimaryTextFieldState extends State<_PrimaryTextField> {
-  TextEditingController? _controller;
+  late TextEditingController _controller;
   FocusNode? _focusNode;
 
   @override
@@ -374,7 +377,7 @@ class __PrimaryTextFieldState extends State<_PrimaryTextField> {
     _controller = widget.controller ?? TextEditingController();
     _focusNode = widget.focusNode ?? FocusNode();
     _focusNode!.addListener(_focusListener);
-    _controller!.addListener(_controllerListener);
+    _controller.addListener(_controllerListener);
   }
 
   _focusListener() {
@@ -387,10 +390,10 @@ class __PrimaryTextFieldState extends State<_PrimaryTextField> {
 
   @override
   void dispose() {
-    _controller?.removeListener(_controllerListener);
+    _controller.removeListener(_controllerListener);
     _focusNode?.removeListener(_focusListener);
     _focusNode?.dispose();
-    _controller?.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -430,7 +433,7 @@ class __PrimaryTextFieldState extends State<_PrimaryTextField> {
             color: Theme.of(context).colorScheme.primary,
           ),
         ),
-        suffixIcon: _focusNode!.hasFocus && _controller!.text.isNotEmpty
+        suffixIcon: _focusNode!.hasFocus && _controller.text.isNotEmpty
             ? Align(
                 widthFactor: 1,
                 heightFactor: 1,
@@ -439,174 +442,14 @@ class __PrimaryTextFieldState extends State<_PrimaryTextField> {
                   padding: const EdgeInsets.only(
                     right: 14,
                   ),
-                  child: SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: Material(
-                      color: Theme.of(context).colorScheme.onBackground,
-                      shape: CircleBorder(),
-                      clipBehavior: Clip.antiAlias,
-                      child: InkWell(
-                        focusNode: FocusNode(
-                          skipTraversal: true,
-                        ),
-                        onTap: () {
-                          _controller!.clear();
-                        },
-                        child: Center(
-                          child: SizedBox(
-                            width: 9,
-                            height: 9,
-                            child: IconWrapper(
-                              color: Theme.of(context).colorScheme.surface,
-                              child: CloseIcon(),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                  child: ClearInputButton(
+                    onPressed: () {
+                      _controller.clear();
+                    },
                   ),
                 ),
               )
             : null,
-      ),
-    );
-  }
-}
-
-/// Select [SightType] sub screen
-class _SelectTypeScreen extends StatefulWidget {
-  final ESightType? initialType;
-
-  const _SelectTypeScreen({Key? key, this.initialType}) : super(key: key);
-
-  @override
-  __SelectTypeScreenState createState() => __SelectTypeScreenState();
-}
-
-class __SelectTypeScreenState extends State<_SelectTypeScreen> {
-  SightType? _selectedType;
-
-  final Set<SightType> _variants = {
-    SightType.cinema(),
-    SightType.restaurant(),
-    SightType.special(),
-    SightType.theatre(),
-    SightType.museum(),
-    SightType.cafe(),
-  };
-
-  @override
-  void initState() {
-    super.initState();
-    var _initialType = widget.initialType;
-    if (_initialType != null) {
-      this._selectedType = SightType(
-        _initialType,
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).backgroundColor,
-        leading: TextButton(
-          onPressed: () {
-            Navigator.of(context).pop(null);
-          },
-          child: SizedBox(
-            height: 12,
-            child: IconWrapper(
-              child: ArrowLeftIcon(),
-              color: Theme.of(context).colorScheme.onBackground,
-            ),
-          ),
-        ),
-        title: Text(
-          addSightScreenCategoryLbl,
-        ),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              children: [
-                for (var variant in _variants)
-                  Column(
-                    children: [
-                      ListTile(
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 16),
-                        onTap: () {
-                          setState(() {
-                            _selectedType = variant;
-                          });
-                        },
-                        trailing: _selectedType == variant
-                            ? Padding(
-                                padding: const EdgeInsets.only(
-                                  right: 8,
-                                ),
-                                child: SizedBox(
-                                  width: 24,
-                                  height: 24,
-                                  child: Center(
-                                    child: SizedBox(
-                                      height: 9,
-                                      child: IconWrapper(
-                                        child: CheckIcon(),
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : null,
-                        title: Text(
-                          variant.label,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline5!
-                              .copyWith(
-                                color:
-                                    Theme.of(context).colorScheme.onBackground,
-                              ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Divider(
-                          height: 1,
-                        ),
-                      )
-                    ],
-                  ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 8,
-              horizontal: 16,
-            ),
-            child: PrimaryButton(
-              child: Center(
-                child: Text(
-                  save.toUpperCase(),
-                ),
-              ),
-              onPressed: _selectedType != null
-                  ? () {
-                      Navigator.of(context).pop(_selectedType!.type);
-                    }
-                  : null,
-            ),
-          )
-        ],
       ),
     );
   }
