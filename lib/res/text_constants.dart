@@ -9,14 +9,14 @@ const String search = 'Поиск';
 
 /// SightTypeName
 
-const String SightTypeCinema = 'Кинотеатр';
-const String SightTypeRestaurant = 'Ресторан';
-const String SightTypeSpecial = 'Особое место';
-const String SightTypeTheatre = 'Театр';
-const String SightTypeMuseum = 'Музей';
-const String SightTypeCafe = 'Кафе';
-const String SightTypeHotel = 'Отель';
-const String SightTypePark = 'Парк';
+const String sightTypeCinema = 'Кинотеатр';
+const String sightTypeRestaurant = 'Ресторан';
+const String sightTypeSpecial = 'Особое место';
+const String sightTypeTheatre = 'Театр';
+const String sightTypeMuseum = 'Музей';
+const String sightTypeCafe = 'Кафе';
+const String sightTypeHotel = 'Отель';
+const String sightTypePark = 'Парк';
 
 /// SightList
 

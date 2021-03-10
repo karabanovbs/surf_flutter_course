@@ -38,35 +38,35 @@ class SightType {
 
   SightType.cinema()
       : type = ESightType.cinema,
-        label = SightTypeCinema;
+        label = sightTypeCinema;
 
   SightType.restaurant()
       : type = ESightType.restaurant,
-        label = SightTypeRestaurant;
+        label = sightTypeRestaurant;
 
   SightType.special()
       : type = ESightType.special,
-        label = SightTypeSpecial;
+        label = sightTypeSpecial;
 
   SightType.theatre()
       : type = ESightType.theatre,
-        label = SightTypeTheatre;
+        label = sightTypeTheatre;
 
   SightType.museum()
       : type = ESightType.museum,
-        label = SightTypeMuseum;
+        label = sightTypeMuseum;
 
   SightType.cafe()
       : type = ESightType.cafe,
-        label = SightTypeCafe;
+        label = sightTypeCafe;
 
   SightType.hotel()
       : type = ESightType.hotel,
-        label = SightTypeHotel;
+        label = sightTypeHotel;
 
   SightType.park()
       : type = ESightType.park,
-        label = SightTypePark;
+        label = sightTypePark;
 
   @override
   bool operator ==(Object other) {
