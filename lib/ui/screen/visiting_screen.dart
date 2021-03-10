@@ -8,7 +8,12 @@ import 'package:places/res/text_constants.dart';
 import 'package:places/ui/screen/sight_card.dart';
 import 'package:places/ui/screen/sight_list_screen.dart';
 
-class VisitingScreen extends StatelessWidget {
+class VisitingScreen extends StatefulWidget {
+  @override
+  _VisitingScreenState createState() => _VisitingScreenState();
+}
+
+class _VisitingScreenState extends State<VisitingScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -45,6 +50,11 @@ class VisitingScreen extends StatelessWidget {
               cardBuilder: (sight) {
                 return FavoriteSightCard(
                   sight: sight,
+                  onRemove: () {
+                    setState(() {
+                      mocks.remove(sight);
+                    });
+                  },
                 );
               },
             ),
