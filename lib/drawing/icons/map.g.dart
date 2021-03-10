@@ -75,11 +75,11 @@ class _MapIconPainter extends CustomPainter {
 }
 
 class _MapIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _MapIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);
@@ -165,11 +165,11 @@ class _MapFullIconPainter extends CustomPainter {
 }
 
 class _MapFullIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _MapFullIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);

@@ -69,11 +69,11 @@ class _InfoIconPainter extends CustomPainter {
 }
 
 class _InfoIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _InfoIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);

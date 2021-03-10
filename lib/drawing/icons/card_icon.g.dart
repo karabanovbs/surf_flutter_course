@@ -87,11 +87,11 @@ class _CardIconPainter extends CustomPainter {
 }
 
 class _CardIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _CardIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);

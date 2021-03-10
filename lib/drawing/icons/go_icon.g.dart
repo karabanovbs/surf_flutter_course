@@ -73,11 +73,11 @@ class _GoIconPainter extends CustomPainter {
 }
 
 class _GoIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _GoIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);

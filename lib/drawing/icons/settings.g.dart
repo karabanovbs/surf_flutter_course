@@ -103,11 +103,11 @@ class _SettingsIconPainter extends CustomPainter {
 }
 
 class _SettingsIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _SettingsIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);
@@ -208,11 +208,11 @@ class _SettingsFullIconPainter extends CustomPainter {
 }
 
 class _SettingsFullIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _SettingsFullIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);

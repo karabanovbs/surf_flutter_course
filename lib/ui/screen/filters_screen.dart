@@ -63,7 +63,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
             },
             child: Text(
               clearLbl,
-              style: Theme.of(context).textTheme.headline4.copyWith(
+              style: Theme.of(context).textTheme.headline4!.copyWith(
                     color: Theme.of(context).colorScheme.primary,
                   ),
             ),
@@ -85,7 +85,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     categoryLbl,
-                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
                         color: Theme.of(context).colorScheme.onSurface),
                   ),
                 ),
@@ -192,7 +192,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                           Text(
                             '$distanceFromLbl ${distanceStart.round()} $distanceToLbl ${distanceEnd.round()} $distanceUnitLbl',
                             style:
-                                Theme.of(context).textTheme.headline5.copyWith(
+                                Theme.of(context).textTheme.headline5!.copyWith(
                                       color: Theme.of(context)
                                           .colorScheme
                                           .secondaryVariant,
@@ -247,11 +247,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
 }
 
 class FilterCategory extends StatelessWidget {
-  final Widget button;
-  final String label;
+  final Widget? button;
+  final String? label;
 
   const FilterCategory({
-    Key key,
+    Key? key,
     this.button,
     this.label,
   }) : super(key: key);
@@ -263,12 +263,12 @@ class FilterCategory extends StatelessWidget {
       width: 92,
       child: Column(
         children: [
-          button,
+          button!,
           SizedBox(
             height: 12,
           ),
           Text(
-            label,
+            label!,
             style: Theme.of(context).textTheme.bodyText1,
           ),
         ],
@@ -279,11 +279,11 @@ class FilterCategory extends StatelessWidget {
 
 class FilterRoundButton extends StatelessWidget {
   final bool checked;
-  final void Function() onPressed;
-  final Widget icon;
+  final void Function()? onPressed;
+  final Widget? icon;
 
   const FilterRoundButton({
-    Key key,
+    Key? key,
     this.checked = false,
     this.onPressed,
     this.icon,
@@ -323,10 +323,10 @@ class FilterRoundButton extends StatelessWidget {
 
 class CheckMark extends StatelessWidget {
   final bool checked;
-  final Widget child;
+  final Widget? child;
 
   const CheckMark({
-    Key key,
+    Key? key,
     this.checked = false,
     this.child,
   }) : super(key: key);
@@ -335,7 +335,7 @@ class CheckMark extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Positioned.fill(child: child),
+        Positioned.fill(child: child!),
         if (checked)
           Positioned.fill(
             child: Align(

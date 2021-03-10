@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
-  final void Function() onPressed;
-  final Widget child;
+  final void Function()? onPressed;
+  final Widget? child;
 
   const PrimaryButton({
-    Key key,
+    Key? key,
     this.onPressed,
     this.child,
   }) : super(key: key);
@@ -16,8 +16,11 @@ class PrimaryButton extends StatelessWidget {
       onPressed: onPressed,
       style: ButtonStyle(
         elevation: MaterialStateProperty.all(0),
-        backgroundColor:
-            MaterialStateProperty.all(Theme.of(context).primaryColor),
+        backgroundColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.disabled))
+            return Theme.of(context).colorScheme.surface;
+          return Theme.of(context).colorScheme.primary;
+        }),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),

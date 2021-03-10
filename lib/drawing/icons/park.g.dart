@@ -89,11 +89,11 @@ class _ParkIconPainter extends CustomPainter {
 }
 
 class _ParkIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _ParkIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);

@@ -83,11 +83,11 @@ class _CafeIconPainter extends CustomPainter {
 }
 
 class _CafeIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _CafeIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);

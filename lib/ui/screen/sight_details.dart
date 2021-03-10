@@ -6,9 +6,9 @@ import 'package:places/res/typography.dart';
 
 /// Sight details widget
 class SightDetails extends StatelessWidget {
-  final Sight sight;
+  final Sight? sight;
 
-  const SightDetails({Key key, this.sight}) : super(key: key);
+  const SightDetails({Key? key, this.sight}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,10 +70,10 @@ class SightDetails extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Image.network(
-              sight.url,
+              sight!.url,
               fit: BoxFit.fitWidth,
               loadingBuilder:
-                  (context, child, ImageChunkEvent loadingProgress) {
+                  (context, child, ImageChunkEvent? loadingProgress) {
                 if (loadingProgress == null) return child;
                 return Align(
                   alignment: Alignment.center,
@@ -107,22 +107,22 @@ class SightDetails extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            sight.name,
-            style: Theme.of(context).textTheme.headline2.copyWith(
+            sight!.name!,
+            style: Theme.of(context).textTheme.headline2!.copyWith(
                   color: Theme.of(context).colorScheme.secondary,
                 ),
           ),
           Row(
             children: [
               Text(
-                sight.type,
-                style: Theme.of(context).textTheme.subtitle1.copyWith(),
+                sight!.type.label.toLowerCase(),
+                style: Theme.of(context).textTheme.subtitle1!.copyWith(),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 16),
                 child: Text(
                   'закрыто до 09:00',
-                  style: Theme.of(context).textTheme.bodyText2.copyWith(
+                  style: Theme.of(context).textTheme.bodyText2!.copyWith(
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                 ),
@@ -132,8 +132,8 @@ class SightDetails extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 24),
             child: Text(
-              sight.details,
-              style: Theme.of(context).textTheme.headline4.copyWith(
+              sight!.details!,
+              style: Theme.of(context).textTheme.headline4!.copyWith(
                     color: Theme.of(context).colorScheme.secondary,
                   ),
             ),
@@ -185,7 +185,7 @@ class SightDetails extends StatelessWidget {
                     ),
                     Text(
                       'построить маршрут'.toUpperCase(),
-                      style: Theme.of(context).textTheme.button.copyWith(
+                      style: Theme.of(context).textTheme.button!.copyWith(
                             color: Theme.of(context).colorScheme.onPrimary,
                           ),
                     ),
@@ -236,7 +236,7 @@ class SightDetails extends StatelessWidget {
                             'Запланировать',
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText2
+                                .bodyText2!
                                 .copyWith(
                                   color:
                                       Theme.of(context).colorScheme.secondary,
@@ -280,7 +280,7 @@ class SightDetails extends StatelessWidget {
                             'В избранное',
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText2
+                                .bodyText2!
                                 .copyWith(
                                   color:
                                       Theme.of(context).colorScheme.secondary,

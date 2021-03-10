@@ -1,3 +1,5 @@
+import 'package:places/domain/sight_type.dart';
+
 import 'domain/sight.dart';
 
 final List<Sight> mocks = [
@@ -7,7 +9,7 @@ final List<Sight> mocks = [
     lon: 56.188620,
     url: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     details: 'How swashbuckling. You view like a mast.',
-    type: 'museum',
+    type: SightType.museum(),
   ),
   Sight(
     name: 'Daggers die with malaria!',
@@ -15,7 +17,7 @@ final List<Sight> mocks = [
     lon: 56.276140,
     url: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     details: 'Landlubbers hobble from urchins like proud winds.',
-    type: 'art',
+    type: SightType.theatre(),
   ),
   Sight(
     name: 'Moons scream on strength at tubbataha reef!',
@@ -23,7 +25,7 @@ final List<Sight> mocks = [
     lon: 56.237967,
     url: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     details: 'Well, endure me gold, ye mighty cloud!',
-    type: 'palace',
+    type: SightType.cinema(),
   ),
   Sight(
     name: 'Ho-ho-ho! urchin of halitosis!',
@@ -31,6 +33,6 @@ final List<Sight> mocks = [
     lon: 56.216981,
     url: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     details: 'Scabbards are the girls of the real endurance.',
-    type: 'my code',
+    type: SightType.cafe(),
   ),
 ];

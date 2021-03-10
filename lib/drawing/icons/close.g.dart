@@ -59,11 +59,11 @@ class _CloseIconPainter extends CustomPainter {
 }
 
 class _CloseIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _CloseIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);

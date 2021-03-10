@@ -70,11 +70,11 @@ class _HeartIconPainter extends CustomPainter {
 }
 
 class _HeartIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _HeartIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);
@@ -155,11 +155,11 @@ class _HeartFullIconPainter extends CustomPainter {
 }
 
 class _HeartFullIcon extends StatelessWidget {
-  final Widget child;
-  final Color color;
+  final Widget? child;
+  final Color? color;
 
   const _HeartFullIcon({
-    Key key,
+    Key? key,
     this.child,
     this.color,
   }) : super(key: key);
