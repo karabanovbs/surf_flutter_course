@@ -210,7 +210,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
               padding: const EdgeInsets.all(16),
               child: PrimaryButton(
                 child: Center(
-                  child: Text('$showLbl (${mocks.where(
+                  child: Text('$showLbl (${sights.where(
                         (element) => FiltersResult(
                           _typeFilters,
                           distanceStart,

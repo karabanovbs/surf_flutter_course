@@ -82,7 +82,7 @@ class _SightListScreenState extends State<SightListScreen> {
                     SizedBox(
                       height: 34,
                     ),
-                    for (var mock in mocks)
+                    for (var mock in sights)
                       Padding(
                         padding: const EdgeInsets.only(
                           bottom: cardPaddingBottom,

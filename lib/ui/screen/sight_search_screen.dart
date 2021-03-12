@@ -42,7 +42,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
       print('search: $search');
       setState(() {
         searchHistory.add(search);
-        searchResult = mocks
+        searchResult = sights
             .where(
               (element) =>
                   element.name.toLowerCase().contains(

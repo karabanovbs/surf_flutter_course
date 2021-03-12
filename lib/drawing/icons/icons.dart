@@ -21,3 +21,4 @@ export 'plus.dart';
 export 'search.dart';
 export 'filters.dart';
 export 'delete.dart';
+export 'remove.dart';
