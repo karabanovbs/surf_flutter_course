@@ -63,14 +63,14 @@ class _AppState extends State<_App> {
     return MaterialApp(
       title: 'App title',
       theme: ThemeSettings().currentTheme,
-      // home: VisitingScreen(),
+      home: VisitingScreen(),
       // home: SightDetails(
       //   sight: mocks.first,
       // ),
       // home: SightListScreen(),
       // home: FiltersScreen(),
       // home: SettingsScreen(),
-      home: AddSightScreen(),
+      // home: AddSightScreen(),
     );
   }
 
