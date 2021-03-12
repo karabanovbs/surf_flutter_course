@@ -59,9 +59,7 @@ class _BaseCard extends StatelessWidget {
           Material(
             type: MaterialType.transparency,
             child: InkWell(
-              onTap: () {
-
-              },
+              onTap: () {},
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -77,8 +75,12 @@ class _BaseCard extends StatelessWidget {
                           Expanded(
                             child: Text(
                               sight!.type.label.toLowerCase(),
-                              style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                                    color: Theme.of(context).colorScheme.onPrimary,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
                                   ),
                             ),
                           ),
@@ -172,8 +174,13 @@ class SightCard extends StatelessWidget {
 
 class FavoriteSightCard extends StatelessWidget {
   final Sight? sight;
+  final void Function() onRemove;
 
-  const FavoriteSightCard({Key? key, this.sight}) : super(key: key);
+  const FavoriteSightCard({
+    Key? key,
+    this.sight,
+    required this.onRemove,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -201,9 +208,7 @@ class FavoriteSightCard extends StatelessWidget {
           height: 24,
           width: 24,
           child: TextButton(
-            onPressed: () {
-              print('tap close');
-            },
+            onPressed: onRemove,
             style: ButtonStyle(
               shape: MaterialStateProperty.all(CircleBorder()),
               padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
