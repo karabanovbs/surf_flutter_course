@@ -91,8 +91,6 @@ class _AddSightScreenState extends State<AddSightScreen> {
                                 _photos.add(NetworkImage(
                                     'https://picsum.photos/id/${_photos.length}/200/300'));
                               });
-
-                              print('add photo');
                             },
                           );
                         }
@@ -103,8 +101,6 @@ class _AddSightScreenState extends State<AddSightScreen> {
                             setState(() {
                               _photos.remove(_photos[index - 1]);
                             });
-
-                            print('remove photo');
                           },
                         );
                       },

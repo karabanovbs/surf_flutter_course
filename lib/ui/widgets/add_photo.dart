@@ -52,6 +52,7 @@ class _AddPhotoState extends State<AddPhoto> {
               inkFeature = null;
             },
             onTap: widget.onPressed,
+            behavior: HitTestBehavior.opaque,
             child: Center(
               child: SizedBox(
                 height: 27,
