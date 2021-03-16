@@ -2,7 +2,7 @@ import 'package:places/domain/sight_type.dart';
 
 import 'domain/sight.dart';
 
-final List<Sight> mocks = [
+final List<Sight> sights = [
   Sight(
     name: 'Aw, shiny riddle!',
     lat: 58.00709,

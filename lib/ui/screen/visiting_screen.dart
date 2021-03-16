@@ -46,13 +46,13 @@ class _VisitingScreenState extends State<VisitingScreen> {
         body: TabBarView(
           children: [
             _TabCardsList(
-              sights: mocks,
+              sights: sights,
               cardBuilder: (sight) {
                 return FavoriteSightCard(
                   sight: sight,
                   onRemove: () {
                     setState(() {
-                      mocks.remove(sight);
+                      sights.remove(sight);
                     });
                   },
                 );

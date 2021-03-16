@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/domain/sight_type.dart';
 import 'package:places/drawing/drawing.dart';
-import 'package:places/mocks.dart';
+import 'package:places/mocks.dart' as mocks;
 import 'package:places/res/text_constants.dart';
 import 'package:places/ui/screen/selec_type_screen.dart';
 import 'package:places/ui/widgets/primary_button.dart';
@@ -23,6 +23,8 @@ class _AddSightScreenState extends State<AddSightScreen> {
   double? _long;
   double? _lat;
 
+  List<NetworkImage> _photos = [];
+
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
@@ -31,6 +33,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
     properties.add(StringProperty('description', _description));
     properties.add(DoubleProperty('long', _long));
     properties.add(DoubleProperty('lat', _lat));
+    properties.add(IterableProperty('lat', _photos));
   }
 
   bool get canSave =>
@@ -71,6 +74,47 @@ class _AddSightScreenState extends State<AddSightScreen> {
             child: IntrinsicHeight(
               child: Column(
                 children: [
+                  SizedBox(
+                    height: 72 + 24 * 2,
+                    child: ListView.separated(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 24,
+                      ),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _photos.length + 1,
+                      itemBuilder: (BuildContext context, int index) {
+                        if (index == 0) {
+                          return AddPhoto(
+                            onPressed: () {
+                              setState(() {
+                                _photos.add(NetworkImage(
+                                    'https://picsum.photos/id/${_photos.length}/200/300'));
+                              });
+
+                              print('add photo');
+                            },
+                          );
+                        }
+
+                        return RemovablePhoto(
+                          photo: _photos[index - 1],
+                          onRemove: () {
+                            setState(() {
+                              _photos.remove(_photos[index - 1]);
+                            });
+
+                            print('remove photo');
+                          },
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return SizedBox(
+                          width: 16,
+                        );
+                      },
+                    ),
+                  ),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,7 +326,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                       ),
                       onPressed: canSave
                           ? () {
-                              mocks.add(
+                              mocks.sights.add(
                                 Sight(
                                   name: _name!,
                                   details: _description,
