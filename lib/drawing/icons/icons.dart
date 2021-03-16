@@ -22,3 +22,4 @@ export 'search.dart';
 export 'filters.dart';
 export 'delete.dart';
 export 'remove.dart';
+export 'trash.dart';

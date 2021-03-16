@@ -6,6 +6,7 @@ const String notSelect = 'Не выбрано';
 const String create = 'Создать';
 const String save = 'Сохранить';
 const String search = 'Поиск';
+const String delete = 'Удалить';
 
 /// SightTypeName
 

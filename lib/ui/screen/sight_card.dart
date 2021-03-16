@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/drawing/drawing.dart';
-import 'package:places/res/typography.dart';
+import 'package:places/res/text_constants.dart' as text_constants;
 
 class _BaseCard extends StatelessWidget {
   final Sight? sight;
@@ -32,6 +32,7 @@ class _BaseCard extends StatelessWidget {
                 Container(
                   height: _imageSpace,
                   width: double.infinity,
+                  color: Theme.of(context).colorScheme.surface,
                   child: Image.network(
                     sight!.url,
                     fit: BoxFit.fitWidth,
@@ -184,69 +185,125 @@ class FavoriteSightCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BaseCard(
-      sight: sight,
-      actions: [
-        SizedBox(
-          height: 24,
-          width: 24,
-          child: TextButton(
-            onPressed: () {
-              print('tap calendar');
-            },
-            style: ButtonStyle(
-              shape: MaterialStateProperty.all(CircleBorder()),
-              padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
-            ),
-            child: const CalendarIcon(),
-          ),
-        ),
-        SizedBox(
-          width: 20,
-        ),
-        SizedBox(
-          height: 24,
-          width: 24,
-          child: TextButton(
-            onPressed: onRemove,
-            style: ButtonStyle(
-              shape: MaterialStateProperty.all(CircleBorder()),
-              padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
-            ),
-            child: const CloseIcon(),
-          ),
-        ),
-      ],
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            sight!.name,
-            style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2),
-            child: SizedBox(
-              height: 28,
-              child: Text(
-                sight!.details!,
-                style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                      color: Theme.of(context).primaryColor,
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: Padding(
+            padding: const EdgeInsets.all(1),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                color: Theme.of(context).colorScheme.error,
+                padding: const EdgeInsets.all(16),
+                child: LayoutBuilder(builder: (context, constrains) {
+                  if (constrains.maxHeight < 50) {
+                    return Container();
+                  }
+                  return Align(
+                    alignment: Alignment.centerRight,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          width: 22,
+                          height: 20,
+                          child: TrashIcon(),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          text_constants.delete,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.background,
+                                fontWeight: FontWeight.w500,
+                              ),
+                        ),
+                      ],
                     ),
+                  );
+                }),
               ),
             ),
           ),
-          Text(
-            sight!.details!,
-            style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                  color: Theme.of(context).colorScheme.secondaryVariant,
+        ),
+        Dismissible(
+          key: ValueKey(sight),
+          direction: DismissDirection.endToStart,
+          onDismissed: (direction) {
+            onRemove.call();
+          },
+          child: _BaseCard(
+            sight: sight,
+            actions: [
+              SizedBox(
+                height: 24,
+                width: 24,
+                child: TextButton(
+                  onPressed: () {
+                    print('tap calendar');
+                  },
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all(CircleBorder()),
+                    padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+                  ),
+                  child: const CalendarIcon(),
                 ),
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              SizedBox(
+                height: 24,
+                width: 24,
+                child: TextButton(
+                  onPressed: onRemove,
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all(CircleBorder()),
+                    padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+                  ),
+                  child: const CloseIcon(),
+                ),
+              ),
+            ],
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  sight!.name,
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: SizedBox(
+                    height: 28,
+                    child: Text(
+                      sight!.details!,
+                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                    ),
+                  ),
+                ),
+                Text(
+                  sight!.details!,
+                  style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                        color: Theme.of(context).colorScheme.secondaryVariant,
+                      ),
+                ),
+              ],
+            ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
