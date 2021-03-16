@@ -36,21 +36,27 @@ class _SightListScreenState extends State<SightListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       /// Create AppBar
       appBar: _AppBar(),
       body: Stack(
         children: [
-          Positioned.fill(
-            child: SingleChildScrollView(
-              child: Padding(
+          CustomScrollView(
+            slivers: [
+              SliverPadding(
                 padding: const EdgeInsets.only(
                   right: bodyPaddingRight,
                   left: bodyPaddingLeft,
                 ),
-                child: Column(
-                  children: [
-                    SearchBar(
+                sliver: SliverAppBar(
+                  pinned: false,
+                  snap: true,
+                  floating: true,
+                  expandedHeight: 68,
+                  backgroundColor:
+                      Theme.of(context).colorScheme.background.withOpacity(0),
+                  elevation: 0,
+                  flexibleSpace: Center(
+                    child: SearchBar(
                       readonly: true,
                       onPressed: () {
                         Navigator.of(context).push(
@@ -69,32 +75,40 @@ class _SightListScreenState extends State<SightListScreen> {
                                 return FiltersScreen(filters);
                               },
                             ),
-                          ).then((value) {
-                            if(value is FiltersResult) {
-                              setState(() {
-                                filters = value;
-                              });
-                            }
-                          });
+                          ).then(
+                            (value) {
+                              if (value is FiltersResult) {
+                                setState(() {
+                                  filters = value;
+                                });
+                              }
+                            },
+                          );
                         },
                       ),
                     ),
-                    SizedBox(
-                      height: 34,
-                    ),
-                    for (var mock in sights)
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: cardPaddingBottom,
-                        ),
-                        child: SightCard(
-                          sight: mock,
-                        ),
-                      )
-                  ],
+                  ),
                 ),
               ),
-            ),
+              SliverPadding(
+                padding: const EdgeInsets.only(
+                  right: bodyPaddingRight,
+                  left: bodyPaddingLeft,
+                ),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: cardPaddingBottom,
+                      ),
+                      child: SightCard(
+                        sight: sights[index],
+                      ),
+                    );
+                  }, childCount: sights.length),
+                ),
+              )
+            ],
           ),
           Positioned(
             bottom: 16,
@@ -129,16 +143,12 @@ class _SightListScreenState extends State<SightListScreen> {
                         ),
                         Text(
                           sightListAddNewLbl.toUpperCase(),
-                          style: Theme
-                              .of(context)
+                          style: Theme.of(context)
                               .textTheme
                               .subtitle1!
                               .copyWith(
-                            color: Theme
-                                .of(context)
-                                .colorScheme
-                                .background,
-                          ),
+                                color: Theme.of(context).colorScheme.background,
+                              ),
                         ),
                       ],
                     ),
@@ -151,13 +161,15 @@ class _SightListScreenState extends State<SightListScreen> {
                       builder: (context) => AddSightScreen(),
                     ),
                   )
-                      .then((value) {
-                    setState(() {});
-                  });
+                      .then(
+                    (value) {
+                      setState(() {});
+                    },
+                  );
                 },
               ),
             ),
-          )
+          ),
         ],
       ),
       bottomNavigationBar: AppBottomNavBar(
@@ -171,11 +183,8 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-
       /// Set color by backgroundColor
-      backgroundColor: Theme
-          .of(context)
-          .backgroundColor,
+      backgroundColor: Theme.of(context).backgroundColor,
 
       /// Remove shadow
       elevation: 0,
@@ -192,10 +201,7 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
             maxLines: 2,
             text: TextSpan(
               style: TextStyle(
-                color: Theme
-                    .of(context)
-                    .colorScheme
-                    .onSecondary,
+                color: Theme.of(context).colorScheme.onSecondary,
                 fontSize: 32,
                 height: 36 / 32,
                 fontWeight: FontWeight.bold,
@@ -204,18 +210,12 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
                 TextSpan(
                     text: 'С',
                     style: TextStyle(
-                        color: Theme
-                            .of(context)
-                            .colorScheme
-                            .primary)),
+                        color: Theme.of(context).colorScheme.primary)),
                 TextSpan(text: 'писок\n'),
                 TextSpan(
                     text: 'и',
                     style: TextStyle(
-                        color: Theme
-                            .of(context)
-                            .colorScheme
-                            .primaryVariant)),
+                        color: Theme.of(context).colorScheme.primaryVariant)),
                 TextSpan(text: 'нтересных мест'),
               ],
             ),
