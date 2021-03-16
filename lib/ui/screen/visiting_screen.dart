@@ -14,6 +14,8 @@ class VisitingScreen extends StatefulWidget {
 }
 
 class _VisitingScreenState extends State<VisitingScreen> {
+  var _sights;
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -46,7 +48,15 @@ class _VisitingScreenState extends State<VisitingScreen> {
         body: TabBarView(
           children: [
             _TabCardsList(
-              sights: sights,
+              sights: _sights ?? sights,
+              onReorder: (orderedSights) {
+                setState(() {
+                  // тут можно убрать final c моков и писать туда
+                  // тогда будет работать сохранение в рамках приложения
+                  // но смысла в этом не много
+                  _sights = orderedSights;
+                });
+              },
               cardBuilder: (sight) {
                 return FavoriteSightCard(
                   sight: sight,
@@ -171,33 +181,74 @@ class __VisitingTabBarState extends State<_VisitingTabBar> {
 
 class _TabCardsList extends StatelessWidget {
   final List<Sight> sights;
+  final void Function(List<Sight> sights)? onReorder;
   final Widget Function(Sight sight) cardBuilder;
 
   const _TabCardsList({
     Key? key,
     this.sights = const [],
     required this.cardBuilder,
+    this.onReorder,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (sights.length > 0) {
-      return SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 16),
-          child: Column(
-            children: [
-              for (var sight in sights)
-                Padding(
-                  padding: const EdgeInsets.only(
-                      right: bodyPaddingRight,
-                      left: bodyPaddingLeft,
-                      bottom: cardPaddingBottom),
-                  child: cardBuilder(sight),
-                )
-            ],
-          ),
+      return ListView.separated(
+        padding: const EdgeInsets.only(
+          top: 16,
+          bottom: 16,
+          right: bodyPaddingRight,
+          left: bodyPaddingLeft,
         ),
+        itemCount: sights.length,
+        itemBuilder: (context, index) {
+          var sight = sights[index];
+          return LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              if (onReorder != null) {
+                return DragTarget<Sight>(
+                  onWillAccept: (data) {
+                    if (data != null) {
+                      var newPos = sights.indexOf(sight);
+                      var dragIndex = sights.indexOf(data);
+                      var tmp = sight;
+                      sights[newPos] = data;
+                      sights[dragIndex] = tmp;
+
+                      onReorder?.call(sights);
+                    }
+                    return true;
+                  },
+                  onAccept: (data) {},
+                  builder: (BuildContext context, List<Object?> candidateData,
+                      List<dynamic> rejectedData) {
+                    return LongPressDraggable(
+                      data: sight,
+                      feedback: ConstrainedBox(
+                        constraints: constraints,
+                        child: Transform.scale(
+                          scale: 1.05,
+                          child: cardBuilder(sight),
+                        ),
+                      ),
+                      child: Opacity(
+                        opacity: candidateData.contains(sight) ? 0 : 1,
+                        child: cardBuilder(sight),
+                      ),
+                    );
+                  },
+                );
+              }
+              return cardBuilder(sight);
+            },
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return SizedBox(
+            height: cardPaddingBottom,
+          );
+        },
       );
     }
     return _EmptyListPlaceholder(
