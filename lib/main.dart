@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/mocks.dart';
+import 'package:places/mocks.dart' as mocks;
 import 'package:places/res/themes.dart';
 import 'package:places/ui/screen/add_sight_screen.dart';
 import 'package:places/ui/screen/filters_screen.dart';
@@ -64,10 +64,10 @@ class _AppState extends State<_App> {
       title: 'App title',
       theme: ThemeSettings().currentTheme,
       // home: VisitingScreen(),
-      // home: SightDetails(
-      //   sight: mocks.first,
-      // ),
-      home: SightListScreen(),
+      home: SightDetails(
+        sight: mocks.sights.first,
+      ),
+      // home: SightListScreen(),
       // home: FiltersScreen(),
       // home: SettingsScreen(),
       // home: AddSightScreen(),

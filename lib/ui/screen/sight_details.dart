@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/res/typography.dart';
+import 'package:places/ui/widgets/widgets.dart';
 
 /// Sight details widget
 class SightDetails extends StatelessWidget {
@@ -26,11 +29,20 @@ class SightDetails extends StatelessWidget {
             width: 32,
             height: 32,
             child: ElevatedButton(
-              child: Container(),
+              child: Center(
+                child: SizedBox(
+                  height: 12,
+                  child: IconWrapper(
+                    color: Theme.of(context).colorScheme.onBackground,
+                    child: ArrowLeftIcon(),
+                  ),
+                ),
+              ),
               onPressed: () {
-                print('back');
+                Navigator.of(context).maybePop();
               },
               style: ButtonStyle(
+                padding: MaterialStateProperty.all(EdgeInsets.zero),
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -42,7 +54,7 @@ class SightDetails extends StatelessWidget {
             ),
           ),
         ),
-        backgroundColor: Color(0x00000000),
+        backgroundColor: Theme.of(context).backgroundColor.withOpacity(0),
         elevation: 0,
       ),
       body: Container(
@@ -63,38 +75,12 @@ class SightDetails extends StatelessWidget {
   }
 
   Widget _buildGallery(BuildContext context) {
-    return Container(
-      height: 360,
-      padding: const EdgeInsets.only(bottom: 24),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.network(
-              sight!.url,
-              fit: BoxFit.fitWidth,
-              loadingBuilder:
-                  (context, child, ImageChunkEvent? loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Align(
-                  alignment: Alignment.center,
-                  child: CircularProgressIndicator(),
-                );
-              },
-            ),
-          ),
-          Align(
-            alignment: Alignment(-1.1, 1),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Container(
-                color: Theme.of(context).colorScheme.onBackground,
-                height: 8,
-                width: 150,
-              ),
-            ),
-          ),
-        ],
-      ),
+    return GalleryViewer(
+      photos: Iterable.generate(
+              Random().nextInt(10) + 1,
+              (index) =>
+                  'https://picsum.photos/id/${Random().nextInt(99) + 1}/200/300')
+          .toList(),
     );
   }
 
