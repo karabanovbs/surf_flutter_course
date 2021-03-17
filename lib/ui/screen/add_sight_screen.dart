@@ -6,7 +6,7 @@ import 'package:places/domain/sight_type.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/mocks.dart' as mocks;
 import 'package:places/res/text_constants.dart';
-import 'package:places/ui/screen/selec_type_screen.dart';
+import 'package:places/ui/screen/select_type_screen.dart';
 import 'package:places/ui/widgets/primary_button.dart';
 import 'package:places/ui/widgets/widgets.dart';
 
