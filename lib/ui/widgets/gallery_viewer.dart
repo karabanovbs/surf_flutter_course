@@ -13,20 +13,7 @@ class GalleryViewer extends StatefulWidget {
 }
 
 class _GalleryViewerState extends State<GalleryViewer> {
-  // late PageController _pageController;
   int _currentPage = 0;
-
-  // @override
-  // void initState() {
-  //   // super.initState();
-  //   // _pageController = PageController();
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   // _pageController.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +24,6 @@ class _GalleryViewerState extends State<GalleryViewer> {
         children: [
           Positioned.fill(
             child: PageView.builder(
-              // controller: _pageController,
               onPageChanged: (value) {
                 setState(() {
                   _currentPage = value;
