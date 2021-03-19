@@ -16,58 +16,60 @@ class SightDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /// body under appbar
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        toolbarHeight: 64,
-        leadingWidth: 64,
+      body: Container(
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              toolbarHeight: 64,
+              leadingWidth: 64,
+              pinned: true,
 
-        /// back button
-        leading: Container(
-          padding: const EdgeInsets.all(16),
-          child: Container(
-            width: 32,
-            height: 32,
-            child: ElevatedButton(
-              child: Center(
-                child: SizedBox(
-                  height: 12,
-                  child: IconWrapper(
-                    color: Theme.of(context).colorScheme.onBackground,
-                    child: ArrowLeftIcon(),
+              /// back button
+              leading: Container(
+                padding: const EdgeInsets.all(16),
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  child: ElevatedButton(
+                    child: Center(
+                      child: SizedBox(
+                        height: 12,
+                        child: IconWrapper(
+                          color: Theme.of(context).colorScheme.onBackground,
+                          child: ArrowLeftIcon(),
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).maybePop();
+                    },
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all(EdgeInsets.zero),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).backgroundColor),
+                    ),
                   ),
                 ),
               ),
-              onPressed: () {
-                Navigator.of(context).maybePop();
-              },
-              style: ButtonStyle(
-                padding: MaterialStateProperty.all(EdgeInsets.zero),
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                backgroundColor: MaterialStateProperty.all(
-                    Theme.of(context).backgroundColor),
+              backgroundColor: Theme.of(context).backgroundColor.withOpacity(0),
+              elevation: 0,
+              expandedHeight: 360,
+              flexibleSpace: FlexibleSpaceBar(
+                collapseMode: CollapseMode.pin,
+                background: _buildGallery(context),
               ),
             ),
-          ),
-        ),
-        backgroundColor: Theme.of(context).backgroundColor.withOpacity(0),
-        elevation: 0,
-      ),
-      body: Container(
-        child: Column(
-          children: [
-            /// gallery
-            _buildGallery(context),
-
-            /// description
-            _buildDescription(context),
-
-            /// controls
-            _buildControls(context)
+            SliverToBoxAdapter(
+              child: _buildDescription(context),
+            ),
+            SliverToBoxAdapter(
+              child: _buildControls(context),
+            ),
           ],
         ),
       ),
