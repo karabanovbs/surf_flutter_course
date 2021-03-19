@@ -166,6 +166,7 @@ class SightCard extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyText2!.copyWith(
                   color: Theme.of(context).colorScheme.secondaryVariant,
                 ),
+            maxLines: 4,
           ),
         ],
       ),
