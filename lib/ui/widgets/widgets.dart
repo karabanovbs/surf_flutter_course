@@ -5,3 +5,4 @@ export 'search_bar.dart';
 export 'search_bar_filters_acton_button.dart';
 export 'add_photo.dart';
 export 'removable_photo.dart';
+export 'gallery_viewer.dart';
