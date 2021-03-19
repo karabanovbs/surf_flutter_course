@@ -7,6 +7,7 @@ const String create = 'Создать';
 const String save = 'Сохранить';
 const String search = 'Поиск';
 const String delete = 'Удалить';
+const String skip = 'Пропустить';
 
 /// SightTypeName
 
@@ -78,3 +79,13 @@ const String addSightScreenLatHint = 'Введите широту';
 const String addSightScreenOnMapSelectLbl = 'Указать на карте';
 const String addSightScreenDescriptionLbl = 'Описание';
 const String addSightScreenDescriptionHint = 'Введите текст';
+
+// OnboardingScreen
+
+const String onboardingScreenWelcomeTitle = 'Добро пожаловать в Путеводитель';
+const String onboardingScreenWelcomeDescription = 'Ищи новые локации и сохраняй самые любимые. ';
+const String onboardingScreenCreateTitle = 'Построй маршрут и отправляйся в путь';
+const String onboardingScreenCreateDescription = 'Достигай цели максимально быстро и комфортно.';
+const String onboardingScreenAddTitle = 'Добавляй места, которые нашёл сам';
+const String onboardingScreenAddDescription = 'Делись самыми интересными и помоги нам стать лучше!';
+const String onboardingScreenStartButtonLbl = 'На старт';
