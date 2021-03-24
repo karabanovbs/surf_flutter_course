@@ -65,10 +65,10 @@ class _AppState extends State<_App> {
       title: 'App title',
       theme: ThemeSettings().currentTheme,
       // home: VisitingScreen(),
-      home: SightDetails(
-        sight: mocks.sights.first,
-      ),
-      // home: SightListScreen(),
+      // home: SightDetails(
+      //   sight: mocks.sights.first,
+      // ),
+      home: SightListScreen(),
       // home: FiltersScreen(),
       // home: SettingsScreen(),
       // home: AddSightScreen(),

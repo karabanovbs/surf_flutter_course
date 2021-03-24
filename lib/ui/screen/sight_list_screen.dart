@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/mocks.dart';
@@ -37,140 +39,135 @@ class _SightListScreenState extends State<SightListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       /// Create AppBar
-      appBar: _AppBar(),
-      body: Stack(
-        children: [
-          CustomScrollView(
-            slivers: [
-              SliverPadding(
-                padding: const EdgeInsets.only(
-                  right: bodyPaddingRight,
-                  left: bodyPaddingLeft,
-                ),
-                sliver: SliverAppBar(
-                  pinned: false,
-                  snap: true,
+      // appBar: _AppBar(),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            CustomScrollView(
+              slivers: [
+                SliverPersistentHeader(
+                  pinned: true,
                   floating: true,
-                  expandedHeight: 68,
-                  backgroundColor:
-                      Theme.of(context).colorScheme.background.withOpacity(0),
-                  elevation: 0,
-                  flexibleSpace: Center(
-                    child: SearchBar(
-                      readonly: true,
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return SightSearchScreen(filters);
-                            },
-                          ),
-                        );
-                      },
-                      action: SearchBarFiltersActonButton(
+                  delegate: SliverSearchAppbar(
+                      SearchBar(
+                        readonly: true,
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) {
-                                return FiltersScreen(filters);
+                                return SightSearchScreen(filters);
                               },
                             ),
-                          ).then(
-                            (value) {
-                              if (value is FiltersResult) {
-                                setState(() {
-                                  filters = value;
-                                });
-                              }
-                            },
                           );
                         },
+                        action: SearchBarFiltersActonButton(
+                          onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return FiltersScreen(filters);
+                            },
+                          ),
+                        ).then(
+                          (value) {
+                            if (value is FiltersResult) {
+                              setState(() {
+                                filters = value;
+                              });
+                            }
+                          },
+                        );
+                      },
+                        ),
+                      )
+                  ),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.only(
+                    right: bodyPaddingRight,
+                    left: bodyPaddingLeft,
+                  ),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: cardPaddingBottom,
+                          ),
+                          child: SightCard(
+                            sight: sights[index],
+                          ),
+                        );
+                      },
+                      childCount: sights.length,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Positioned(
+              bottom: 16,
+              right: 0,
+              left: 0,
+              child: Center(
+                child: TextButton(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all(StadiumBorder()),
+                    padding: MaterialStateProperty.all(EdgeInsets.zero),
+                  ),
+                  child: Ink(
+                    decoration: ShapeDecoration(
+                        shape: StadiumBorder(),
+                        gradient: LinearGradient(colors: [
+                          Color(0xFFFCDD3D),
+                          Color(0xFF4CAF50),
+                        ])),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 22, vertical: 15),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            width: 14,
+                            height: 14,
+                            child: PlusIcon(),
+                          ),
+                          SizedBox(
+                            width: 14,
+                          ),
+                          Text(
+                            sightListAddNewLbl.toUpperCase(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1!
+                                .copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.background,
+                                ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ),
-              ),
-              SliverPadding(
-                padding: const EdgeInsets.only(
-                  right: bodyPaddingRight,
-                  left: bodyPaddingLeft,
-                ),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: cardPaddingBottom,
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(
+                      MaterialPageRoute(
+                        builder: (context) => AddSightScreen(),
                       ),
-                      child: SightCard(
-                        sight: sights[index],
-                      ),
+                    )
+                        .then(
+                      (value) {
+                        setState(() {});
+                      },
                     );
-                  }, childCount: sights.length),
+                  },
                 ),
-              )
-            ],
-          ),
-          Positioned(
-            bottom: 16,
-            right: 0,
-            left: 0,
-            child: Center(
-              child: TextButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(StadiumBorder()),
-                  padding: MaterialStateProperty.all(EdgeInsets.zero),
-                ),
-                child: Ink(
-                  decoration: ShapeDecoration(
-                      shape: StadiumBorder(),
-                      gradient: LinearGradient(colors: [
-                        Color(0xFFFCDD3D),
-                        Color(0xFF4CAF50),
-                      ])),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 22, vertical: 15),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(
-                          width: 14,
-                          height: 14,
-                          child: PlusIcon(),
-                        ),
-                        SizedBox(
-                          width: 14,
-                        ),
-                        Text(
-                          sightListAddNewLbl.toUpperCase(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .subtitle1!
-                              .copyWith(
-                                color: Theme.of(context).colorScheme.background,
-                              ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(context)
-                      .push(
-                    MaterialPageRoute(
-                      builder: (context) => AddSightScreen(),
-                    ),
-                  )
-                      .then(
-                    (value) {
-                      setState(() {});
-                    },
-                  );
-                },
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: AppBottomNavBar(
         index: 0,
@@ -227,4 +224,76 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size(double.infinity, totalAppBarHeight);
+}
+
+class SliverSearchAppbar extends SliverPersistentHeaderDelegate {
+  final Widget content;
+
+  SliverSearchAppbar(this.content);
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    print(shrinkOffset);
+    return Container(
+      color: Theme.of(context).colorScheme.background,
+      child: Padding(
+        padding: const EdgeInsets.only(
+          right: bodyPaddingRight,
+          left: bodyPaddingLeft,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              height: max(maxExtent - shrinkOffset - minExtent, minExtent),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: minExtent,
+                ),
+                child: Center(
+                  child: Text(
+                    sightListScreenTitle,
+                    style: TextStyleTween(
+                      begin: Theme.of(context).textTheme.headline1,
+                      end: Theme.of(context).textTheme.headline3,
+                    ).transform(shrinkOffset / maxExtent),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Stack(
+                // fit: StackFit.expand,
+                clipBehavior: Clip.antiAlias,
+                children: [
+                  Positioned(
+                    height: 68,
+                    bottom: 0,
+                    right: 0,
+                    left: 0,
+                    child: Center(
+                      child: content,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 188;
+
+  @override
+  double get minExtent => 56;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
+  }
 }

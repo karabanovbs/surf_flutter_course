@@ -6,7 +6,7 @@ import 'colors.dart';
 var textTheme = TextTheme(
   headline1: TextStyle(
     fontSize: 32,
-    height: 36 / 12,
+    height: 36 / 32,
     fontWeight: FontWeight.w700,
     fontStyle: FontStyle.normal,
   ),
