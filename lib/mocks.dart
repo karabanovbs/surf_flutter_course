@@ -8,7 +8,36 @@ final List<Sight> sights = [
     lat: 58.00709,
     lon: 56.188620,
     url: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
-    details: 'How swashbuckling. You view like a mast.',
+    details: '''How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+      How swashbuckling. You view like a mast.
+    ''',
     type: SightType.museum(),
   ),
   Sight(
