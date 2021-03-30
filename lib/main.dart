@@ -7,6 +7,7 @@ import 'package:places/ui/screen/onboarding_screen.dart';
 import 'package:places/ui/screen/settings_screen.dart';
 import 'package:places/ui/screen/sight_details.dart';
 import 'package:places/ui/screen/sight_list_screen.dart';
+import 'package:places/ui/screen/splash_screen.dart';
 import 'package:places/ui/screen/visiting_screen.dart';
 
 void main() {
@@ -68,11 +69,14 @@ class _AppState extends State<_App> {
       // home: SightDetails(
       //   sight: mocks.sights.first,
       // ),
-      home: SightListScreen(),
+      // home: SightListScreen(),
       // home: FiltersScreen(),
       // home: SettingsScreen(),
       // home: AddSightScreen(),
       // home: OnboardingScreen(),
+      home: SplashScreen(
+        isInitialized: Future.delayed(Duration(seconds: 2)),
+      ),
     );
   }
 
