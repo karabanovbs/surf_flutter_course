@@ -5,9 +5,10 @@ import 'package:places/drawing/drawing.dart';
 import 'package:places/res/text_constants.dart' as text_constants;
 
 class _BaseCard extends StatelessWidget {
-  final Sight? sight;
+  final Sight sight;
   final List<Widget> actions;
   final Widget content;
+  final void Function(Sight sight) onPressed;
 
   final double _imageSpace = 96;
 
@@ -16,6 +17,7 @@ class _BaseCard extends StatelessWidget {
     required this.sight,
     this.actions = const [],
     required this.content,
+    required this.onPressed,
   }) : super(key: key);
 
   @override
@@ -34,7 +36,7 @@ class _BaseCard extends StatelessWidget {
                   width: double.infinity,
                   color: Theme.of(context).colorScheme.surface,
                   child: Image.network(
-                    sight!.url,
+                    sight.url,
                     fit: BoxFit.fitWidth,
                     alignment: Alignment.topCenter,
                     loadingBuilder:
@@ -60,7 +62,9 @@ class _BaseCard extends StatelessWidget {
           Material(
             type: MaterialType.transparency,
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                onPressed.call(sight);
+              },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -75,7 +79,7 @@ class _BaseCard extends StatelessWidget {
                           /// sight type
                           Expanded(
                             child: Text(
-                              sight!.type.label.toLowerCase(),
+                              sight.type.label.toLowerCase(),
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle1!
@@ -118,8 +122,10 @@ class _BaseCard extends StatelessWidget {
 /// Sight card
 class SightCard extends StatelessWidget {
   final Sight sight;
+  final void Function(Sight sight) onPressed;
 
-  const SightCard({Key? key, required this.sight}) : super(key: key);
+  const SightCard({Key? key, required this.sight, required this.onPressed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -170,18 +176,21 @@ class SightCard extends StatelessWidget {
           ),
         ],
       ),
+      onPressed: onPressed,
     );
   }
 }
 
 class FavoriteSightCard extends StatelessWidget {
-  final Sight? sight;
+  final Sight sight;
   final void Function() onRemove;
+  final void Function(Sight sight) onPressed;
 
   const FavoriteSightCard({
     Key? key,
-    this.sight,
+    required this.sight,
     required this.onRemove,
+    required this.onPressed,
   }) : super(key: key);
 
   @override
@@ -241,6 +250,7 @@ class FavoriteSightCard extends StatelessWidget {
           },
           child: _BaseCard(
             sight: sight,
+            onPressed: onPressed,
             actions: [
               SizedBox(
                 height: 24,
@@ -277,7 +287,7 @@ class FavoriteSightCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  sight!.name,
+                  sight.name,
                   style: Theme.of(context).textTheme.subtitle1!.copyWith(
                         color: Theme.of(context).colorScheme.secondary,
                       ),
@@ -287,7 +297,7 @@ class FavoriteSightCard extends StatelessWidget {
                   child: SizedBox(
                     height: 28,
                     child: Text(
-                      sight!.details!,
+                      sight.details!,
                       style: Theme.of(context).textTheme.bodyText2!.copyWith(
                             color: Theme.of(context).primaryColor,
                           ),
@@ -295,7 +305,7 @@ class FavoriteSightCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  sight!.details!,
+                  sight.details!,
                   style: Theme.of(context).textTheme.bodyText2!.copyWith(
                         color: Theme.of(context).colorScheme.secondaryVariant,
                       ),
@@ -310,20 +320,26 @@ class FavoriteSightCard extends StatelessWidget {
 }
 
 class FavoriteHistorySightCard extends StatelessWidget {
-  final Sight? sight;
+  final Sight sight;
+  final void Function(Sight sight) onPressed;
 
-  const FavoriteHistorySightCard({Key? key, this.sight}) : super(key: key);
+  const FavoriteHistorySightCard({
+    Key? key,
+    required this.sight,
+    required this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return _BaseCard(
       sight: sight,
+      onPressed: onPressed,
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            sight!.name,
+            sight.name,
             style: Theme.of(context).textTheme.subtitle1!.copyWith(
                   color: Theme.of(context).colorScheme.secondary,
                 ),
@@ -333,7 +349,7 @@ class FavoriteHistorySightCard extends StatelessWidget {
             child: SizedBox(
               height: 28,
               child: Text(
-                sight!.details!,
+                sight.details!,
                 style: Theme.of(context).textTheme.bodyText2!.copyWith(
                       color: Theme.of(context).colorScheme.secondaryVariant,
                     ),
@@ -341,7 +357,7 @@ class FavoriteHistorySightCard extends StatelessWidget {
             ),
           ),
           Text(
-            sight!.details!,
+            sight.details!,
             style: Theme.of(context).textTheme.bodyText2!.copyWith(
                   color: Theme.of(context).colorScheme.secondaryVariant,
                 ),
