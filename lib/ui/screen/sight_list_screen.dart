@@ -7,6 +7,7 @@ import 'package:places/res/text_constants.dart';
 import 'package:places/ui/screen/add_sight_screen.dart';
 import 'package:places/ui/screen/filters_screen.dart';
 import 'package:places/ui/screen/sight_card.dart';
+import 'package:places/ui/screen/sight_details.dart';
 import 'package:places/ui/screen/sight_search_screen.dart';
 import 'package:places/ui/screen/visiting_screen.dart';
 import 'package:places/ui/widgets/widgets.dart';
@@ -48,20 +49,19 @@ class _SightListScreenState extends State<SightListScreen> {
                 SliverPersistentHeader(
                   pinned: true,
                   floating: true,
-                  delegate: SliverSearchAppbar(
-                      SearchBar(
-                        readonly: true,
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return SightSearchScreen(filters);
-                              },
-                            ),
-                          );
-                        },
-                        action: SearchBarFiltersActonButton(
-                          onPressed: () {
+                  delegate: SliverSearchAppbar(SearchBar(
+                    readonly: true,
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return SightSearchScreen(filters);
+                          },
+                        ),
+                      );
+                    },
+                    action: SearchBarFiltersActonButton(
+                      onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
@@ -78,9 +78,8 @@ class _SightListScreenState extends State<SightListScreen> {
                           },
                         );
                       },
-                        ),
-                      )
-                  ),
+                    ),
+                  )),
                 ),
                 SliverPadding(
                   padding: const EdgeInsets.only(
@@ -95,6 +94,15 @@ class _SightListScreenState extends State<SightListScreen> {
                             bottom: cardPaddingBottom,
                           ),
                           child: SightCard(
+                            onPressed: (sight) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => SightDetails(
+                                    sight: sight,
+                                  ),
+                                ),
+                              );
+                            },
                             sight: sights[index],
                           ),
                         );

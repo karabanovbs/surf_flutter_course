@@ -5,7 +5,9 @@ import 'package:places/drawing/drawing.dart';
 import 'package:places/mocks.dart';
 import 'package:places/res/typography.dart';
 import 'package:places/res/text_constants.dart';
+import 'package:places/ui/screen/settings_screen.dart';
 import 'package:places/ui/screen/sight_card.dart';
+import 'package:places/ui/screen/sight_details.dart';
 import 'package:places/ui/screen/sight_list_screen.dart';
 
 class VisitingScreen extends StatefulWidget {
@@ -51,9 +53,6 @@ class _VisitingScreenState extends State<VisitingScreen> {
               sights: _sights ?? sights,
               onReorder: (orderedSights) {
                 setState(() {
-                  // тут можно убрать final c моков и писать туда
-                  // тогда будет работать сохранение в рамках приложения
-                  // но смысла в этом не много
                   _sights = orderedSights;
                 });
               },
@@ -65,6 +64,15 @@ class _VisitingScreenState extends State<VisitingScreen> {
                       sights.remove(sight);
                     });
                   },
+                  onPressed: (Sight sight) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => SightDetails(
+                          sight: sight,
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             ),
@@ -73,6 +81,15 @@ class _VisitingScreenState extends State<VisitingScreen> {
               cardBuilder: (sight) {
                 return FavoriteHistorySightCard(
                   sight: sight,
+                  onPressed: (Sight sight) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => SightDetails(
+                          sight: sight,
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             ),
@@ -128,7 +145,7 @@ class __VisitingTabBarState extends State<_VisitingTabBar> {
                 height: 40,
                 child: TextButton(
                   onPressed: () {
-                    print('select tab ${widget.tabs!.indexOf(tab)}');
+                    _controller?.index = widget.tabs!.indexOf(tab);
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith(
@@ -321,6 +338,44 @@ class AppBottomNavBar extends StatelessWidget {
     return BottomNavigationBar(
       showSelectedLabels: false,
       showUnselectedLabels: false,
+      /// выглядит как дичь, нужно переделывать без навигации
+      onTap: (value) {
+        switch (value) {
+          case 0:
+            Navigator.of(context).pushReplacement(
+              PageRouteBuilder(
+                pageBuilder: (BuildContext context, Animation<double> animation,
+                    Animation<double> secondaryAnimation) {
+                  return SightListScreen();
+                },
+              ),
+            );
+            break;
+          case 1:
+            break;
+          case 2:
+            Navigator.of(context).pushReplacement(
+              PageRouteBuilder(
+                pageBuilder: (BuildContext context, Animation<double> animation,
+                    Animation<double> secondaryAnimation) {
+                  return VisitingScreen();
+                },
+              ),
+            );
+            break;
+          case 3:
+            Navigator.of(context).pushReplacement(
+              PageRouteBuilder(
+                pageBuilder: (BuildContext context, Animation<double> animation,
+                    Animation<double> secondaryAnimation) {
+                  return SettingsScreen();
+                },
+              ),
+            );
+            break;
+          default:
+        }
+      },
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: SizedBox(

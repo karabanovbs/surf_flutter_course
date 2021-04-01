@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/res/text_constants.dart' as text_constants;
+import 'package:places/ui/screen/sight_list_screen.dart';
 import 'package:places/ui/widgets/widgets.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -10,6 +11,7 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   late PageController _pageController;
+  bool _showStart = false;
 
   @override
   void initState() {
@@ -31,7 +33,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         actions: [
           TextButton(
             onPressed: () {
-              print('skip');
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => SightListScreen(),
+                ),
+              );
             },
             child: Text(text_constants.skip),
           ),
@@ -46,6 +52,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: OverscrollIndicatorNotificationAbsorb(
                 child: PageView(
                   controller: _pageController,
+                  onPageChanged: (value) {
+                    setState(() {
+                      _showStart = value == 2;
+                    });
+                  },
                   children: [
                     OnboardingScreenPage(
                       icon: TutorialWaymarkIcon(),
@@ -70,18 +81,30 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
           ),
-          SizedBox(
-            height: 64,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
-              ),
-              child: PrimaryButton(
-                child: Center(
-                    child: Text(text_constants.onboardingScreenStartButtonLbl
-                        .toUpperCase())),
-                onPressed: () {},
+          AnimatedOpacity(
+            duration: Duration(
+              milliseconds: 300,
+            ),
+            opacity: _showStart ? 1 : 0,
+            child: SizedBox(
+              height: 64,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: PrimaryButton(
+                  child: Center(
+                      child: Text(text_constants.onboardingScreenStartButtonLbl
+                          .toUpperCase())),
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => SightListScreen(),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           )
