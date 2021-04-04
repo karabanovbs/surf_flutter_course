@@ -14,6 +14,8 @@ part of 'logo.dart';
 //
 
 class _LogoIconPainter extends CustomPainter {
+  const _LogoIconPainter();
+
   final originalHeight = 160;
   final originalWidth = 160;
   @override
@@ -77,22 +79,14 @@ class _LogoIconPainter extends CustomPainter {
 }
 
 class _LogoIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _LogoIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _LogoIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 160 / 160,
-      child: CustomPaint(
-        painter: _LogoIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _LogoIconPainter(),
       ),
     );
   }

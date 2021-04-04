@@ -14,6 +14,8 @@ part of 'go_icon.dart';
 //
 
 class _GoIconPainter extends CustomPainter {
+  const _GoIconPainter();
+
   final originalHeight = 24;
   final originalWidth = 24;
   @override
@@ -73,22 +75,14 @@ class _GoIconPainter extends CustomPainter {
 }
 
 class _GoIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _GoIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _GoIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 24 / 24,
-      child: CustomPaint(
-        painter: _GoIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _GoIconPainter(),
       ),
     );
   }

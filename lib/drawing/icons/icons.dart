@@ -27,3 +27,6 @@ export 'tutorial_bag.dart';
 export 'tutorial_waymark.dart';
 export 'tutorial_point.dart';
 export 'logo.dart';
+export 'camera.dart';
+export 'file.dart';
+export 'photo.dart';

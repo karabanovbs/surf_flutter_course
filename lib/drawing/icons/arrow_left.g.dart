@@ -14,6 +14,8 @@ part of 'arrow_left.dart';
 //
 
 class _ArrowLeftIconPainter extends CustomPainter {
+  const _ArrowLeftIconPainter();
+
   final originalHeight = 12;
   final originalWidth = 8;
   @override
@@ -42,22 +44,14 @@ class _ArrowLeftIconPainter extends CustomPainter {
 }
 
 class _ArrowLeftIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _ArrowLeftIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _ArrowLeftIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 8 / 12,
-      child: CustomPaint(
-        painter: _ArrowLeftIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _ArrowLeftIconPainter(),
       ),
     );
   }

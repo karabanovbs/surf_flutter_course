@@ -14,6 +14,8 @@ part of 'search.dart';
 //
 
 class _SearchIconPainter extends CustomPainter {
+  const _SearchIconPainter();
+
   final originalHeight = 18;
   final originalWidth = 20;
   @override
@@ -59,22 +61,14 @@ class _SearchIconPainter extends CustomPainter {
 }
 
 class _SearchIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _SearchIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _SearchIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 20 / 18,
-      child: CustomPaint(
-        painter: _SearchIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _SearchIconPainter(),
       ),
     );
   }

@@ -16,6 +16,8 @@ part of 'calendar.dart';
 //
 
 class _CalendarIconPainter extends CustomPainter {
+  const _CalendarIconPainter();
+
   final originalHeight = 24;
   final originalWidth = 24;
   @override
@@ -125,22 +127,14 @@ class _CalendarIconPainter extends CustomPainter {
 }
 
 class _CalendarIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _CalendarIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _CalendarIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 24 / 24,
-      child: CustomPaint(
-        painter: _CalendarIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _CalendarIconPainter(),
       ),
     );
   }

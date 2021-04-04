@@ -14,6 +14,8 @@ part of 'list.dart';
 //
 
 class _ListIconPainter extends CustomPainter {
+  const _ListIconPainter();
+
   final originalHeight = 24;
   final originalWidth = 24;
   @override
@@ -99,22 +101,14 @@ class _ListIconPainter extends CustomPainter {
 }
 
 class _ListIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _ListIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _ListIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 24 / 24,
-      child: CustomPaint(
-        painter: _ListIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _ListIconPainter(),
       ),
     );
   }
@@ -128,6 +122,8 @@ class _ListIcon extends StatelessWidget {
 //
 
 class _ListFullIconPainter extends CustomPainter {
+  const _ListFullIconPainter();
+
   final originalHeight = 24;
   final originalWidth = 24;
   @override
@@ -203,22 +199,14 @@ class _ListFullIconPainter extends CustomPainter {
 }
 
 class _ListFullIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _ListFullIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _ListFullIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 24 / 24,
-      child: CustomPaint(
-        painter: _ListFullIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _ListFullIconPainter(),
       ),
     );
   }

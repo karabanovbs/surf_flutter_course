@@ -15,6 +15,8 @@ part of 'heart.dart';
 //
 
 class _HeartIconPainter extends CustomPainter {
+  const _HeartIconPainter();
+
   final originalHeight = 24;
   final originalWidth = 24;
   @override
@@ -70,22 +72,14 @@ class _HeartIconPainter extends CustomPainter {
 }
 
 class _HeartIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _HeartIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _HeartIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 24 / 24,
-      child: CustomPaint(
-        painter: _HeartIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _HeartIconPainter(),
       ),
     );
   }
@@ -99,6 +93,8 @@ class _HeartIcon extends StatelessWidget {
 //
 
 class _HeartFullIconPainter extends CustomPainter {
+  const _HeartFullIconPainter();
+
   final originalHeight = 24;
   final originalWidth = 24;
   @override
@@ -155,22 +151,14 @@ class _HeartFullIconPainter extends CustomPainter {
 }
 
 class _HeartFullIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _HeartFullIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _HeartFullIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 24 / 24,
-      child: CustomPaint(
-        painter: _HeartFullIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _HeartFullIconPainter(),
       ),
     );
   }

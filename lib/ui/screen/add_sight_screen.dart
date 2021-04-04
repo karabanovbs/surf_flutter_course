@@ -86,7 +86,16 @@ class _AddSightScreenState extends State<AddSightScreen> {
                       itemBuilder: (BuildContext context, int index) {
                         if (index == 0) {
                           return AddPhoto(
-                            onPressed: () {
+                            onPressed: () async {
+                              var result = await showDialog<SelectPhotoType>(
+                                context: context,
+                                builder: (BuildContext dialogContext) {
+                                  return SelectPhotoDialog();
+                                },
+                              );
+
+                              print(result);
+
                               setState(() {
                                 _photos.add(NetworkImage(
                                     'https://picsum.photos/id/${_photos.length}/200/300'));

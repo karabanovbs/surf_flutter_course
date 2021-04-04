@@ -15,6 +15,8 @@ part of 'settings.dart';
 //
 
 class _SettingsIconPainter extends CustomPainter {
+  const _SettingsIconPainter();
+
   final originalHeight = 24;
   final originalWidth = 24;
   @override
@@ -103,22 +105,14 @@ class _SettingsIconPainter extends CustomPainter {
 }
 
 class _SettingsIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _SettingsIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _SettingsIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 24 / 24,
-      child: CustomPaint(
-        painter: _SettingsIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _SettingsIconPainter(),
       ),
     );
   }
@@ -132,6 +126,8 @@ class _SettingsIcon extends StatelessWidget {
 //
 
 class _SettingsFullIconPainter extends CustomPainter {
+  const _SettingsFullIconPainter();
+
   final originalHeight = 24;
   final originalWidth = 24;
   @override
@@ -208,22 +204,14 @@ class _SettingsFullIconPainter extends CustomPainter {
 }
 
 class _SettingsFullIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _SettingsFullIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _SettingsFullIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 24 / 24,
-      child: CustomPaint(
-        painter: _SettingsFullIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _SettingsFullIconPainter(),
       ),
     );
   }

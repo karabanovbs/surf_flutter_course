@@ -14,6 +14,8 @@ part of 'remove.dart';
 //
 
 class _RemoveIconPainter extends CustomPainter {
+  const _RemoveIconPainter();
+
   final originalHeight = 20;
   final originalWidth = 20;
   @override
@@ -62,22 +64,14 @@ class _RemoveIconPainter extends CustomPainter {
 }
 
 class _RemoveIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _RemoveIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _RemoveIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 20 / 20,
-      child: CustomPaint(
-        painter: _RemoveIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _RemoveIconPainter(),
       ),
     );
   }

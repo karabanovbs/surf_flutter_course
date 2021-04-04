@@ -14,6 +14,8 @@ part of 'tutorial_bag.dart';
 //
 
 class _TutorialBagIconPainter extends CustomPainter {
+  const _TutorialBagIconPainter();
+
   final originalHeight = 104;
   final originalWidth = 104;
   @override
@@ -173,22 +175,14 @@ class _TutorialBagIconPainter extends CustomPainter {
 }
 
 class _TutorialBagIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _TutorialBagIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _TutorialBagIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 104 / 104,
-      child: CustomPaint(
-        painter: _TutorialBagIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _TutorialBagIconPainter(),
       ),
     );
   }

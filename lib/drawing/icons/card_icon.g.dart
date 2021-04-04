@@ -16,6 +16,8 @@ part of 'card_icon.dart';
 //
 
 class _CardIconPainter extends CustomPainter {
+  const _CardIconPainter();
+
   final originalHeight = 24;
   final originalWidth = 24;
   @override
@@ -87,22 +89,14 @@ class _CardIconPainter extends CustomPainter {
 }
 
 class _CardIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _CardIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _CardIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 24 / 24,
-      child: CustomPaint(
-        painter: _CardIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _CardIconPainter(),
       ),
     );
   }

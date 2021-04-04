@@ -14,6 +14,8 @@ part of 'delete.dart';
 //
 
 class _DeleteIconPainter extends CustomPainter {
+  const _DeleteIconPainter();
+
   final originalHeight = 12;
   final originalWidth = 12;
   @override
@@ -61,22 +63,14 @@ class _DeleteIconPainter extends CustomPainter {
 }
 
 class _DeleteIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _DeleteIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _DeleteIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 12 / 12,
-      child: CustomPaint(
-        painter: _DeleteIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _DeleteIconPainter(),
       ),
     );
   }

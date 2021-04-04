@@ -14,6 +14,8 @@ part of 'hotel.dart';
 //
 
 class _HotelIconPainter extends CustomPainter {
+  const _HotelIconPainter();
+
   final originalHeight = 32;
   final originalWidth = 32;
   @override
@@ -123,22 +125,14 @@ class _HotelIconPainter extends CustomPainter {
 }
 
 class _HotelIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _HotelIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _HotelIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 32 / 32,
-      child: CustomPaint(
-        painter: _HotelIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _HotelIconPainter(),
       ),
     );
   }
