@@ -23,39 +23,51 @@ class SightDetails extends StatelessWidget {
               toolbarHeight: 64,
               leadingWidth: 64,
               pinned: true,
+              leading: Container(),
 
-              /// back button
-              leading: Container(
-                padding: const EdgeInsets.all(16),
+              title: Center(
                 child: Container(
-                  width: 32,
-                  height: 32,
-                  child: ElevatedButton(
-                    child: Center(
-                      child: SizedBox(
-                        height: 12,
-                        child: IconWrapper(
-                          color: Theme.of(context).colorScheme.onBackground,
-                          child: ArrowLeftIcon(),
-                        ),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).maybePop();
-                    },
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all(EdgeInsets.zero),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      backgroundColor: MaterialStateProperty.all(
-                          Theme.of(context).backgroundColor),
-                    ),
+                  width: 40,
+                  height: 4,
+                  decoration: ShapeDecoration(
+                    color: Theme.of(context).colorScheme.background,
+                    shape: StadiumBorder(),
                   ),
                 ),
               ),
+
+              /// back button
+              actions: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    child: ElevatedButton(
+                      child: Center(
+                        child: SizedBox(
+                          height: 12,
+                          child: IconWrapper(
+                            color: Theme.of(context).colorScheme.onBackground,
+                            child: DeleteIcon(),
+                          ),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).maybePop();
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(EdgeInsets.zero),
+                        shape: MaterialStateProperty.all(
+                          CircleBorder(),
+                        ),
+                        backgroundColor: MaterialStateProperty.all(
+                            Theme.of(context).backgroundColor),
+                      ),
+                    ),
+                  ),
+                )
+              ],
               backgroundColor: Theme.of(context).backgroundColor.withOpacity(0),
               elevation: 0,
               expandedHeight: 360,
