@@ -73,6 +73,20 @@ class _VisitingScreenState extends State<VisitingScreen> {
                       ),
                     );
                   },
+                  onDate: () async {
+                    var date = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime.now().add(
+                        Duration(
+                          days: 365,
+                        ),
+                      ),
+                    );
+
+                    print(date);
+                  },
                 );
               },
             ),
@@ -338,6 +352,7 @@ class AppBottomNavBar extends StatelessWidget {
     return BottomNavigationBar(
       showSelectedLabels: false,
       showUnselectedLabels: false,
+
       /// выглядит как дичь, нужно переделывать без навигации
       onTap: (value) {
         switch (value) {

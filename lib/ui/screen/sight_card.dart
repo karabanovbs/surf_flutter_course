@@ -185,12 +185,14 @@ class FavoriteSightCard extends StatelessWidget {
   final Sight sight;
   final void Function() onRemove;
   final void Function(Sight sight) onPressed;
+  final void Function() onDate;
 
   const FavoriteSightCard({
     Key? key,
     required this.sight,
     required this.onRemove,
     required this.onPressed,
+    required this.onDate,
   }) : super(key: key);
 
   @override
@@ -256,9 +258,7 @@ class FavoriteSightCard extends StatelessWidget {
                 height: 24,
                 width: 24,
                 child: TextButton(
-                  onPressed: () {
-                    print('tap calendar');
-                  },
+                  onPressed: onDate,
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all(CircleBorder()),
                     padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
