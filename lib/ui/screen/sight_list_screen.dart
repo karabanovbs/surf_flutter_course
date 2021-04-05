@@ -95,12 +95,27 @@ class _SightListScreenState extends State<SightListScreen> {
                           ),
                           child: SightCard(
                             onPressed: (sight) {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => SightDetails(
-                                    sight: sight,
-                                  ),
-                                ),
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return DraggableScrollableSheet(
+                                    initialChildSize: 0.9,
+                                    builder: (context, snapshot) {
+                                      return ClipRRect(
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: const Radius.circular(12),
+                                          bottomRight:
+                                              const Radius.circular(12),
+                                        ),
+                                        child: SightDetails(
+                                          sight: sight,
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                isScrollControlled: true,
+                                backgroundColor: Color(0x00000000),
                               );
                             },
                             sight: sights[index],
