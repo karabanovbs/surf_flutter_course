@@ -74,11 +74,12 @@ class _VisitingScreenState extends State<VisitingScreen> {
                     );
                   },
                   onDate: () async {
+                    var now = DateTime.now();
                     var date = await showDatePicker(
                       context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime.now().add(
+                      initialDate: now,
+                      firstDate: now,
+                      lastDate: now.add(
                         Duration(
                           days: 365,
                         ),
