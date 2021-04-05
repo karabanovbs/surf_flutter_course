@@ -17,6 +17,8 @@ part of 'filters.dart';
 //
 
 class _FiltersIconPainter extends CustomPainter {
+  const _FiltersIconPainter();
+
   final originalHeight = 14;
   final originalWidth = 18;
   @override
@@ -110,22 +112,14 @@ class _FiltersIconPainter extends CustomPainter {
 }
 
 class _FiltersIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _FiltersIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _FiltersIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 18 / 14,
-      child: CustomPaint(
-        painter: _FiltersIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _FiltersIconPainter(),
       ),
     );
   }

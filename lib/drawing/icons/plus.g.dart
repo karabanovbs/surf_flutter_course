@@ -14,6 +14,8 @@ part of 'plus.dart';
 //
 
 class _PlusIconPainter extends CustomPainter {
+  const _PlusIconPainter();
+
   final originalHeight = 16;
   final originalWidth = 16;
   @override
@@ -47,22 +49,14 @@ class _PlusIconPainter extends CustomPainter {
 }
 
 class _PlusIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _PlusIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _PlusIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 16 / 16,
-      child: CustomPaint(
-        painter: _PlusIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _PlusIconPainter(),
       ),
     );
   }

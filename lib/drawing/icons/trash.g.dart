@@ -14,6 +14,8 @@ part of 'trash.dart';
 //
 
 class _TrashIconPainter extends CustomPainter {
+  const _TrashIconPainter();
+
   final originalHeight = 20;
   final originalWidth = 22;
   @override
@@ -91,22 +93,14 @@ class _TrashIconPainter extends CustomPainter {
 }
 
 class _TrashIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _TrashIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _TrashIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 22 / 20,
-      child: CustomPaint(
-        painter: _TrashIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _TrashIconPainter(),
       ),
     );
   }

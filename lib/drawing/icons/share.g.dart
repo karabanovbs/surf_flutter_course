@@ -18,6 +18,8 @@ part of 'share.dart';
 //
 
 class _ShareIconPainter extends CustomPainter {
+  const _ShareIconPainter();
+
   final originalHeight = 24;
   final originalWidth = 24;
   @override
@@ -115,22 +117,14 @@ class _ShareIconPainter extends CustomPainter {
 }
 
 class _ShareIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _ShareIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _ShareIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 24 / 24,
-      child: CustomPaint(
-        painter: _ShareIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _ShareIconPainter(),
       ),
     );
   }

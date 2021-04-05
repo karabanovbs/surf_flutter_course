@@ -14,6 +14,8 @@ part of 'close.dart';
 //
 
 class _CloseIconPainter extends CustomPainter {
+  const _CloseIconPainter();
+
   final originalHeight = 24;
   final originalWidth = 24;
   @override
@@ -59,22 +61,14 @@ class _CloseIconPainter extends CustomPainter {
 }
 
 class _CloseIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _CloseIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _CloseIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 24 / 24,
-      child: CustomPaint(
-        painter: _CloseIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _CloseIconPainter(),
       ),
     );
   }

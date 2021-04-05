@@ -14,6 +14,8 @@ part of 'map.dart';
 //
 
 class _MapIconPainter extends CustomPainter {
+  const _MapIconPainter();
+
   final originalHeight = 24;
   final originalWidth = 24;
   @override
@@ -75,22 +77,14 @@ class _MapIconPainter extends CustomPainter {
 }
 
 class _MapIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _MapIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _MapIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 24 / 24,
-      child: CustomPaint(
-        painter: _MapIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _MapIconPainter(),
       ),
     );
   }
@@ -104,6 +98,8 @@ class _MapIcon extends StatelessWidget {
 //
 
 class _MapFullIconPainter extends CustomPainter {
+  const _MapFullIconPainter();
+
   final originalHeight = 24;
   final originalWidth = 24;
   @override
@@ -165,22 +161,14 @@ class _MapFullIconPainter extends CustomPainter {
 }
 
 class _MapFullIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _MapFullIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _MapFullIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 24 / 24,
-      child: CustomPaint(
-        painter: _MapFullIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _MapFullIconPainter(),
       ),
     );
   }

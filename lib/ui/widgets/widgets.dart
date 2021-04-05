@@ -8,3 +8,4 @@ export 'removable_photo.dart';
 export 'gallery_viewer.dart';
 export 'animated_page_indicator.dart';
 export 'overscroll_indicator_notification_absorb.dart';
+export 'select_photo_dialog.dart';

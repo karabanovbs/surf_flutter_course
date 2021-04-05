@@ -14,6 +14,8 @@ part of 'check.dart';
 //
 
 class _CheckIconPainter extends CustomPainter {
+  const _CheckIconPainter();
+
   final originalHeight = 10;
   final originalWidth = 14;
   @override
@@ -42,22 +44,14 @@ class _CheckIconPainter extends CustomPainter {
 }
 
 class _CheckIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _CheckIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _CheckIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 14 / 10,
-      child: CustomPaint(
-        painter: _CheckIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _CheckIconPainter(),
       ),
     );
   }

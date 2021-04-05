@@ -89,3 +89,8 @@ const String onboardingScreenCreateDescription = 'Достигай цели ма
 const String onboardingScreenAddTitle = 'Добавляй места, которые нашёл сам';
 const String onboardingScreenAddDescription = 'Делись самыми интересными и помоги нам стать лучше!';
 const String onboardingScreenStartButtonLbl = 'На старт';
+
+// SelectPhotoDialog
+const String selectPhotoDialogCamera = 'Камера';
+const String selectPhotoDialogPhoto = 'Фотография';
+const String selectPhotoDialogFile = 'Файл';

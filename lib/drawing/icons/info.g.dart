@@ -14,6 +14,8 @@ part of 'info.dart';
 //
 
 class _InfoIconPainter extends CustomPainter {
+  const _InfoIconPainter();
+
   final originalHeight = 20;
   final originalWidth = 20;
   @override
@@ -69,22 +71,14 @@ class _InfoIconPainter extends CustomPainter {
 }
 
 class _InfoIcon extends StatelessWidget {
-  final Widget? child;
-  final Color? color;
-
-  const _InfoIcon({
-    Key? key,
-    this.child,
-    this.color,
-  }) : super(key: key);
+  const _InfoIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    return const AspectRatio(
       aspectRatio: 20 / 20,
-      child: CustomPaint(
-        painter: _InfoIconPainter(),
-        child: child,
+      child: const CustomPaint(
+        painter: const _InfoIconPainter(),
       ),
     );
   }
