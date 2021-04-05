@@ -116,7 +116,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: 16,
+          horizontal: 15,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -136,16 +136,34 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 SizedBox(
                   height: 24,
                 ),
-                Wrap(
-                  runSpacing: 12,
-                  spacing: 12,
+                GridView(
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                  ),
                   children: [
-                    for (var _filter in _filtersVariant)
+                    for (var _filter in _filtersVariant.take(
+
+                        /// TODO: В идеале наверно лучше использовать
+                        /// https://material.io/design/layout/responsive-layout-grid.html#breakpoints
+                        /// Реализации:
+                        /// https://pub.dev/packages/breakpoint
+                        /// https://pub.dev/packages/adaptive_breakpoints
+                        /// https://pub.dev/packages/layout
+
+                        (MediaQuery.of(context).size.height *
+                                    MediaQuery.of(context).devicePixelRatio) <=
+                                800
+                            ? 3
+                            : 6))
                       FilterCategory(
                         button: FilterRoundButton(
                           checked: _typeFilters.contains(_filter),
                           icon: _filtersIconMap[_filter],
                           onPressed: () {
+                            print(MediaQuery.of(context).size.height *
+                                MediaQuery.of(context).devicePixelRatio);
+                            print(MediaQuery.of(context));
                             setState(() {
                               if (_typeFilters.contains(_filter)) {
                                 _typeFilters.remove(_filter);
