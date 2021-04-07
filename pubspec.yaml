@@ -11,11 +11,13 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
+  dio: ^4.0.0
   svg_to_path_annotation:
     git:
       url: https://github.com/karabanovbs/svg_to_path_generator
       path: packages/svg_to_path_annotation
       ref: 0.0.2+4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -25,6 +27,7 @@ dev_dependencies:
       url: https://github.com/karabanovbs/svg_to_path_generator
       path: packages/svg_to_path_generator
       ref: 1.0.1
+
 flutter:
   uses-material-design: true
   fonts:
