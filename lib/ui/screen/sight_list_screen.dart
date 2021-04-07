@@ -86,40 +86,44 @@ class _SightListScreenState extends State<SightListScreen> {
                     right: bodyPaddingRight,
                     left: bodyPaddingLeft,
                   ),
-                  sliver: SliverList(
+                  sliver: SliverGrid(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisSpacing: 36,
+                      mainAxisSpacing: cardPaddingBottom,
+                      childAspectRatio: 328/188,
+                      crossAxisCount: MediaQuery.of(context).orientation ==
+                              Orientation.landscape
+                          ? 2
+                          : 1,
+                    ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: cardPaddingBottom,
-                          ),
-                          child: SightCard(
-                            onPressed: (sight) {
-                              showModalBottomSheet(
-                                context: context,
-                                builder: (context) {
-                                  return DraggableScrollableSheet(
-                                    initialChildSize: 0.9,
-                                    builder: (context, snapshot) {
-                                      return ClipRRect(
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: const Radius.circular(12),
-                                          bottomRight:
-                                              const Radius.circular(12),
-                                        ),
-                                        child: SightDetails(
-                                          sight: sight,
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                                isScrollControlled: true,
-                                backgroundColor: Color(0x00000000),
-                              );
-                            },
-                            sight: sights[index],
-                          ),
+                        return SightCard(
+                          onPressed: (sight) {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (context) {
+                                return DraggableScrollableSheet(
+                                  initialChildSize: 0.9,
+                                  builder: (context, snapshot) {
+                                    return ClipRRect(
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: const Radius.circular(12),
+                                        bottomRight:
+                                            const Radius.circular(12),
+                                      ),
+                                      child: SightDetails(
+                                        sight: sight,
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              isScrollControlled: true,
+                              backgroundColor: Color(0x00000000),
+                            );
+                          },
+                          sight: sights[index],
                         );
                       },
                       childCount: sights.length,

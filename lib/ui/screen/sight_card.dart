@@ -158,7 +158,8 @@ class SightCard extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 2),
               child: Text(
                 sight.name,
-                maxLines: 3,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.headline4!.copyWith(
                       color: Theme.of(context).colorScheme.secondary,
                     ),
@@ -172,7 +173,8 @@ class SightCard extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyText2!.copyWith(
                   color: Theme.of(context).colorScheme.secondaryVariant,
                 ),
-            maxLines: 4,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
