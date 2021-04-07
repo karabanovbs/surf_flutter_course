@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:places/domain/sight.dart';
@@ -75,17 +78,37 @@ class _VisitingScreenState extends State<VisitingScreen> {
                   },
                   onDate: () async {
                     var now = DateTime.now();
-                    var date = await showDatePicker(
-                      context: context,
-                      initialDate: now,
-                      firstDate: now,
-                      lastDate: now.add(
-                        Duration(
-                          days: 365,
-                        ),
+                    var minDate = now;
+                    var maxDate = now.add(
+                      Duration(
+                        days: 365,
                       ),
                     );
-
+                    DateTime? date;
+                    if (Platform.isAndroid) {
+                      date = await showDatePicker(
+                        context: context,
+                        initialDate: now,
+                        firstDate: minDate,
+                        lastDate: maxDate,
+                      );
+                    } else {
+                      await showModalBottomSheet(
+                        context: context,
+                        builder: (context) => SizedBox(
+                          height: 240,
+                          child: CupertinoDatePicker(
+                            minimumDate: minDate,
+                            maximumDate: maxDate,
+                            initialDateTime: now,
+                            mode: CupertinoDatePickerMode.date,
+                            onDateTimeChanged: (value) {
+                              date = value;
+                            },
+                          ),
+                        ),
+                      );
+                    }
                     print(date);
                   },
                 );
