@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:places/data/interactor/theme_interactor.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/main.dart';
 import 'package:places/res/text_constants.dart';
@@ -41,9 +42,9 @@ class SettingsScreen extends StatelessWidget {
                           style: Theme.of(context).textTheme.headline5,
                         ),
                         CupertinoSwitch(
-                          value: ThemeSettings().isDark,
+                          value: ThemeSettingsInteractor().isDark,
                           onChanged: (value) {
-                            ThemeSettings().switchLightness();
+                            ThemeSettingsInteractor().switchLightness();
                           },
                         ),
                       ],

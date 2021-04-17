@@ -2,41 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:places/res/themes.dart';
 import 'package:places/ui/screen/splash_screen.dart';
 
+import 'data/interactor/theme_interactor.dart';
+
 void main() {
   runApp(App());
-}
-
-/// Theme data holder
-class ThemeSettings extends ChangeNotifier {
-  static final ThemeSettings _instance = ThemeSettings._();
-
-  ThemeSettings._();
-
-  factory ThemeSettings() {
-    return _instance;
-  }
-
-  ThemeData currentTheme = lightTheme;
-
-  void setLightTheme() {
-    currentTheme = lightTheme;
-    notifyListeners();
-  }
-
-  void setDarkTheme() {
-    currentTheme = darkTheme;
-    notifyListeners();
-  }
-
-  get isDark => currentTheme == darkTheme;
-
-  void switchLightness() {
-    if (isDark) {
-      setLightTheme();
-    } else {
-      setDarkTheme();
-    }
-  }
 }
 
 class App extends StatelessWidget {
@@ -56,7 +25,7 @@ class _AppState extends State<_App> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'App title',
-      theme: ThemeSettings().currentTheme,
+      theme: ThemeSettingsInteractor().currentTheme,
       home: SplashScreen(
         isInitialized: Future.delayed(Duration(seconds: 2)),
       ),
@@ -66,7 +35,7 @@ class _AppState extends State<_App> {
   @override
   void initState() {
     super.initState();
-    ThemeSettings().addListener(_onThemeChange);
+    ThemeSettingsInteractor().addListener(_onThemeChange);
   }
 
   _onThemeChange() {
@@ -75,7 +44,7 @@ class _AppState extends State<_App> {
 
   @override
   void dispose() {
-    ThemeSettings().removeListener(_onThemeChange);
+    ThemeSettingsInteractor().removeListener(_onThemeChange);
     super.dispose();
   }
 }
