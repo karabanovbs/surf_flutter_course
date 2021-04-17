@@ -1,33 +1,45 @@
 import 'package:places/res/text_constants.dart';
+import 'package:collection/collection.dart';
 
 enum ESightType {
-  cinema,
-  restaurant,
-  special,
+  temple,
+  monument,
+  park,
   theatre,
   museum,
-  cafe,
   hotel,
-  park,
-  custom,
+  restaurant,
+  cafe,
+  other
 }
+
+const _mapSerialize = {
+  ESightType.temple: 'temple',
+  ESightType.monument: 'monument',
+  ESightType.park: 'park',
+  ESightType.theatre: 'theatre',
+  ESightType.museum: 'museum',
+  ESightType.hotel: 'hotel',
+  ESightType.restaurant: 'restaurant',
+  ESightType.cafe: 'cafe',
+  ESightType.other: 'other',
+};
 
 class SightType {
   final ESightType type;
   final String label;
 
-  SightType.custom(String? label)
-      : label = label ?? '',
-        type = ESightType.custom;
+  factory SightType.parse(String name) {
+    final type = _mapSerialize.entries.firstWhereOrNull(
+      (element) => element.value == name,
+    )?.key ?? ESightType.other;
+    return SightType(type);
+  }
 
   factory SightType(ESightType type) {
     switch (type) {
-      case ESightType.cinema:
-        return SightType.cinema();
       case ESightType.restaurant:
         return SightType.restaurant();
-      case ESightType.special:
-        return SightType.special();
       case ESightType.theatre:
         return SightType.theatre();
       case ESightType.museum:
@@ -38,22 +50,18 @@ class SightType {
         return SightType.hotel();
       case ESightType.park:
         return SightType.park();
-      case ESightType.custom:
-        return SightType.custom('');
+      case ESightType.temple:
+        return SightType.temple();
+      case ESightType.monument:
+        return SightType.monument();
+      case ESightType.other:
+        return SightType.other();
     }
   }
-
-  SightType.cinema()
-      : type = ESightType.cinema,
-        label = sightTypeCinema;
 
   SightType.restaurant()
       : type = ESightType.restaurant,
         label = sightTypeRestaurant;
-
-  SightType.special()
-      : type = ESightType.special,
-        label = sightTypeSpecial;
 
   SightType.theatre()
       : type = ESightType.theatre,
@@ -75,6 +83,18 @@ class SightType {
       : type = ESightType.park,
         label = sightTypePark;
 
+  SightType.temple()
+      : type = ESightType.temple,
+        label = sightTypeTemple;
+
+  SightType.monument()
+      : type = ESightType.monument,
+        label = sightTypeMonument;
+
+  SightType.other()
+      : type = ESightType.other,
+        label = sightTypeOther;
+
   @override
   bool operator ==(Object other) {
     if (other is SightType) {
@@ -89,4 +109,9 @@ class SightType {
 
   @override
   int get hashCode => type.hashCode;
+
+  @override
+  String toString() {
+    return _mapSerialize[type] ?? _mapSerialize[ESightType.other]!;
+  }
 }

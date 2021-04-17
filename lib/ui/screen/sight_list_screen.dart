@@ -37,8 +37,6 @@ class SightListScreen extends StatefulWidget {
 }
 
 class _SightListScreenState extends State<SightListScreen> {
-  FiltersResult? filters;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +56,7 @@ class _SightListScreenState extends State<SightListScreen> {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) {
-                            return SightSearchScreen(filters);
+                            return SightSearchScreen();
                           },
                         ),
                       );
@@ -68,17 +66,9 @@ class _SightListScreenState extends State<SightListScreen> {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
-                              return FiltersScreen(filters);
+                              return FiltersScreen();
                             },
                           ),
-                        ).then(
-                          (value) {
-                            if (value is FiltersResult) {
-                              setState(() {
-                                filters = value;
-                              });
-                            }
-                          },
                         );
                       },
                     ),
@@ -90,7 +80,7 @@ class _SightListScreenState extends State<SightListScreen> {
                     left: bodyPaddingLeft,
                   ),
                   sliver: FutureBuilder<List<Place>>(
-                    future: placeInteractor.getPlaces(null, null),
+                    future: placeInteractor.getPlaces(null, []),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<Place>> snapshot) {
                       if (!snapshot.hasData) {
@@ -141,7 +131,8 @@ class _SightListScreenState extends State<SightListScreen> {
                               },
                               sight: sight,
                               onLike: () async {
-                                if (await placeInteractor.isFavoritePlace(sight)) {
+                                if (await placeInteractor
+                                    .isFavoritePlace(sight)) {
                                   placeInteractor.removeFromFavorites(sight);
                                 } else {
                                   placeInteractor.addToFavorites(sight);
@@ -229,56 +220,6 @@ class _SightListScreenState extends State<SightListScreen> {
       ),
     );
   }
-}
-
-class _AppBar extends StatelessWidget implements PreferredSizeWidget {
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      /// Set color by backgroundColor
-      backgroundColor: Theme.of(context).backgroundColor,
-
-      /// Remove shadow
-      elevation: 0,
-
-      /// Set AppBar height
-      toolbarHeight: totalAppBarHeight,
-      title: Padding(
-        padding: const EdgeInsets.fromLTRB(appBarPaddingLeft, appBarPaddingTop,
-            appBarPaddingRight, appBarPaddingBottom),
-        child: SizedBox(
-          height: appBarTitleHeight,
-          width: double.infinity,
-          child: RichText(
-            maxLines: 2,
-            text: TextSpan(
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSecondary,
-                fontSize: 32,
-                height: 36 / 32,
-                fontWeight: FontWeight.bold,
-              ),
-              children: [
-                TextSpan(
-                    text: 'С',
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary)),
-                TextSpan(text: 'писок\n'),
-                TextSpan(
-                    text: 'и',
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.primaryVariant)),
-                TextSpan(text: 'нтересных мест'),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  Size get preferredSize => Size(double.infinity, totalAppBarHeight);
 }
 
 class SliverSearchAppbar extends SliverPersistentHeaderDelegate {

@@ -19,11 +19,11 @@ class PlacesFilter {
   });
 
   Map<String, dynamic> toJson() => {
-        'lat': lat,
-        'lng': lat,
-        'radius': radius,
+        if (lat != null && lng != null && radius != null) 'lat': lat,
+        if (lat != null && lng != null && radius != null) 'lng': lng,
+        if (lat != null && lng != null && radius != null) 'radius': radius,
         'typeFilter': typeFilter,
-        'nameFilter': nameFilter,
+        if (nameFilter != null) 'nameFilter': nameFilter,
       };
 }
 
@@ -78,10 +78,7 @@ class DioPlaceRepository extends IPlaceRepository {
     String? pagePrior,
     String? sortBy,
   }) {
-    return _dioClient
-        .get('/place')
-        .then((value) => value.data)
-        .then(
+    return _dioClient.get('/place').then((value) => value.data).then(
           (json) => List<Place>.from(
             json.map(
               (model) => Place.fromJson(model),
@@ -94,19 +91,18 @@ class DioPlaceRepository extends IPlaceRepository {
   Future<List<Place>> postFilteredPlaces(PlacesFilter filter) {
     return _dioClient
         .post(
-          '/filtered_places',
-          data: filter.toJson(),
-        )
+      '/filtered_places',
+      data: filter.toJson(),
+    )
         .then((value) {
-          return value.data;
-        })
-        .then(
-          (json) => List<Place>.from(
-            json.map(
-              (model) => Place.fromJson(model),
-            ),
-          ),
-        );
+      return value.data;
+    }).then(
+      (json) => List<Place>.from(
+        json.map(
+          (model) => Place.fromJson(model),
+        ),
+      ),
+    );
   }
 
   @override

@@ -18,9 +18,9 @@ class _SelectSightTypeScreenState extends State<SelectSightTypeScreen> {
   SightType? _selectedType;
 
   final Set<SightType> _variants = {
-    SightType.cinema(),
+    SightType.theatre(),
     SightType.restaurant(),
-    SightType.special(),
+    SightType.other(),
     SightType.theatre(),
     SightType.museum(),
     SightType.cafe(),

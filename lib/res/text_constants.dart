@@ -11,14 +11,15 @@ const String skip = 'Пропустить';
 
 /// SightTypeName
 
-const String sightTypeCinema = 'Кинотеатр';
 const String sightTypeRestaurant = 'Ресторан';
-const String sightTypeSpecial = 'Особое место';
 const String sightTypeTheatre = 'Театр';
 const String sightTypeMuseum = 'Музей';
 const String sightTypeCafe = 'Кафе';
 const String sightTypeHotel = 'Отель';
 const String sightTypePark = 'Парк';
+const String sightTypeTemple = 'Храм';
+const String sightTypeMonument = 'Монумент';
+const String sightTypeOther = 'Другое';
 
 /// SightList
 

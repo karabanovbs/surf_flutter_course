@@ -27,12 +27,6 @@ class _AnimatedPageIndicatorState extends State<AnimatedPageIndicator>
     super.initState();
   }
 
-  _onPageChange() {
-    // setState(() {
-    //   _currentPage = widget.controller.page;
-    // });
-  }
-
   @override
   void dispose() {
     _controller.dispose();

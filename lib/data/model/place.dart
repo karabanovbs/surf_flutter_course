@@ -10,7 +10,7 @@ class Place implements Sight {
   final double? lng;
   final String? placeName;
   final List<String> urls;
-  final String? placeType;
+  final SightType placeType;
   final String? description;
 
   Place({
@@ -30,7 +30,7 @@ class Place implements Sight {
         lng = json['lng'],
         placeName = json['name'],
         urls = List.from(json['urls']),
-        placeType = json['placeType'],
+        placeType = SightType.parse(json['placeType']),
         description = json['description'];
 
   Map<String, dynamic> toJson() => {
@@ -68,10 +68,10 @@ class Place implements Sight {
   double? get lon => lng;
 
   @override
-  String get name => placeType ?? '';
+  String get name => placeName ?? '';
 
   @override
-  SightType get type => SightType.custom(placeType);
+  SightType get type => placeType;
 
   @override
   String get url => urls.firstOrNull ?? '';

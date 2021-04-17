@@ -1,10 +1,11 @@
 import 'package:places/data/model/model.dart';
 import 'package:places/data/repository/repository.dart';
 import 'package:places/dio_client.dart';
+import 'package:places/domain/sight_type.dart';
 import 'package:places/helpers/distance_helper.dart';
 
 abstract class IPlaceInteractor {
-  Future<List<Place>> getPlaces(int? radius, String? category);
+  Future<List<Place>> getPlaces(int? radius, List<SightType> categories);
 
   Future<Place> getPlaceDetails(int id);
 
@@ -59,11 +60,11 @@ class InMemoryPlaceInteractor extends IPlaceInteractor {
   }
 
   @override
-  Future<List<Place>> getPlaces(int? radius, String? category) async {
+  Future<List<Place>> getPlaces(int? radius, List<SightType> categories) async {
     var currentGeo = GeoPoint(latitude: 0, longitude: 0);
     return (await _placeRepository.getPlaces())
         .where((element) =>
-            category != null ? element.placeType == category : true)
+            categories.contains(element.placeType) || categories.isEmpty)
         .where(
           (element) => radius != null
               ? arePointsBetween(

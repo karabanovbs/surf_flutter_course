@@ -26,7 +26,7 @@ final List<Sight> sights = [
     lon: 56.237967,
     url: 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     details: 'Well, endure me gold, ye mighty cloud!',
-    type: SightType.cinema(),
+    type: SightType.theatre(),
   ),
   Sight(
     name: 'Ho-ho-ho! urchin of halitosis!',
