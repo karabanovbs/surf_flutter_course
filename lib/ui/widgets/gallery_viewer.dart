@@ -33,7 +33,7 @@ class _GalleryViewerState extends State<GalleryViewer> {
               itemBuilder: (context, index) {
                 return Image.network(
                   widget.photos[index],
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.cover,
                   loadingBuilder:
                       (context, child, ImageChunkEvent? loadingProgress) {
                     if (loadingProgress == null) return child;

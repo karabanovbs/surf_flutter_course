@@ -1,8 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/drawing/drawing.dart';
-import 'package:places/mocks.dart';
+
+// import 'package:places/mocks.dart';
 import 'package:places/res/text_constants.dart';
 import 'package:places/ui/screen/add_sight_screen.dart';
 import 'package:places/ui/screen/filters_screen.dart';
@@ -86,48 +89,70 @@ class _SightListScreenState extends State<SightListScreen> {
                     right: bodyPaddingRight,
                     left: bodyPaddingLeft,
                   ),
-                  sliver: SliverGrid(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisSpacing: 36,
-                      mainAxisSpacing: cardPaddingBottom,
-                      childAspectRatio: 328/188,
-                      crossAxisCount: MediaQuery.of(context).orientation ==
-                              Orientation.landscape
-                          ? 2
-                          : 1,
-                    ),
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return SightCard(
-                          onPressed: (sight) {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (context) {
-                                return DraggableScrollableSheet(
-                                  initialChildSize: 0.9,
-                                  builder: (context, snapshot) {
-                                    return ClipRRect(
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: const Radius.circular(12),
-                                        bottomRight:
-                                            const Radius.circular(12),
-                                      ),
-                                      child: SightDetails(
-                                        sight: sight,
-                                      ),
+                  sliver: FutureBuilder<List<Place>>(
+                    future: placeInteractor.getPlaces(null, null),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<Place>> snapshot) {
+                      if (!snapshot.hasData) {
+                        return SliverToBoxAdapter(
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
+
+                      return SliverGrid(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisSpacing: 36,
+                          mainAxisSpacing: cardPaddingBottom,
+                          childAspectRatio: 328 / 188,
+                          crossAxisCount: MediaQuery.of(context).orientation ==
+                                  Orientation.landscape
+                              ? 2
+                              : 1,
+                        ),
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            Place sight = snapshot.data![index];
+                            return SightCard(
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) {
+                                    return DraggableScrollableSheet(
+                                      initialChildSize: 0.9,
+                                      builder: (context, _) {
+                                        return ClipRRect(
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: const Radius.circular(12),
+                                            bottomRight:
+                                                const Radius.circular(12),
+                                          ),
+                                          child: SightDetails(
+                                            sightId: sight.id!,
+                                          ),
+                                        );
+                                      },
                                     );
                                   },
+                                  isScrollControlled: true,
+                                  backgroundColor: Color(0x00000000),
                                 );
                               },
-                              isScrollControlled: true,
-                              backgroundColor: Color(0x00000000),
+                              sight: sight,
+                              onLike: () async {
+                                if (await placeInteractor.isFavoritePlace(sight)) {
+                                  placeInteractor.removeFromFavorites(sight);
+                                } else {
+                                  placeInteractor.addToFavorites(sight);
+                                }
+                              },
                             );
                           },
-                          sight: sights[index],
-                        );
-                      },
-                      childCount: sights.length,
-                    ),
+                          childCount: snapshot.data?.length,
+                        ),
+                      );
+                    },
                   ),
                 )
               ],
@@ -144,11 +169,14 @@ class _SightListScreenState extends State<SightListScreen> {
                   ),
                   child: Ink(
                     decoration: ShapeDecoration(
-                        shape: StadiumBorder(),
-                        gradient: LinearGradient(colors: [
+                      shape: StadiumBorder(),
+                      gradient: LinearGradient(
+                        colors: [
                           Color(0xFFFCDD3D),
                           Color(0xFF4CAF50),
-                        ])),
+                        ],
+                      ),
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 22, vertical: 15),

@@ -9,11 +9,16 @@ enum ESightType {
   cafe,
   hotel,
   park,
+  custom,
 }
 
 class SightType {
   final ESightType type;
   final String label;
+
+  SightType.custom(String? label)
+      : label = label ?? '',
+        type = ESightType.custom;
 
   factory SightType(ESightType type) {
     switch (type) {
@@ -33,6 +38,8 @@ class SightType {
         return SightType.hotel();
       case ESightType.park:
         return SightType.park();
+      case ESightType.custom:
+        return SightType.custom('');
     }
   }
 
