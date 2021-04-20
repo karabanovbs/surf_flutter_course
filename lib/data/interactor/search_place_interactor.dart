@@ -4,15 +4,6 @@ import 'package:places/dio_client.dart';
 import 'package:places/domain/sight_type.dart';
 import 'package:places/helpers/distance_helper.dart';
 
-class SearchPlaceFilter {
-  GeoPoint? currentLocation;
-  double? radius;
-
-  List<SightType> types;
-
-  SearchPlaceFilter({this.currentLocation, this.radius, this.types = const []});
-}
-
 abstract class ISearchPlaceInteractor {
   Future<void> setGeoFilters(double? radius);
 
