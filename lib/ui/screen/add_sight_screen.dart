@@ -339,7 +339,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                                   description: _description,
                                   lat: _lat,
                                   lng: _long,
-                                  placeType: SightType(_selectedType!).label,
+                                  placeType: SightType(_selectedType!),
                                   urls: _photos,
                                 ),
                               );

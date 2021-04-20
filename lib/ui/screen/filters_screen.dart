@@ -1,70 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:places/data/interactor/search_place_interactor.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/domain/sight_type.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/helpers/distance_helper.dart';
-import 'package:places/mocks.dart';
 import 'package:places/res/text_constants.dart';
 import 'package:places/ui/widgets/widgets.dart';
 
-class FiltersResult {
-  final Set<ESightType> typeFilters;
-  final double distanceStart;
-  final double distanceEnd;
-
-  FiltersResult(
-    this.typeFilters,
-    this.distanceStart,
-    this.distanceEnd,
-  );
-
-  bool filter(Sight sight) {
-    return arePointsBetween(
-          GeoPoint(
-            longitude: sight.lon ?? 0,
-            latitude: sight.lat ?? 0,
-          ),
-          const GeoPoint(
-            latitude: 58.006615,
-            longitude: 56.307513,
-          ),
-          distanceStart / 1000,
-          distanceEnd / 1000,
-        ) &&
-        (typeFilters.isEmpty || typeFilters.contains(sight.type));
-  }
-}
-
 /// Filter setup screen
 class FiltersScreen extends StatefulWidget {
-  final FiltersResult? filters;
-
-  FiltersScreen(this.filters);
-
   @override
   _FiltersScreenState createState() => _FiltersScreenState();
 }
 
 class _FiltersScreenState extends State<FiltersScreen> {
-  @override
-  void initState() {
-    super.initState();
-
-    if (widget.filters != null) {
-      _typeFilters = widget.filters!.typeFilters;
-      distanceStart = widget.filters!.distanceStart;
-      distanceEnd = widget.filters!.distanceEnd;
-    }
-  }
-
-  double distanceStart = 100;
-  double distanceEnd = 10000;
-
-  Set<ESightType> _typeFilters = {};
   Set<ESightType> _filtersVariant = {
     ESightType.hotel,
     ESightType.restaurant,
-    ESightType.special,
+    ESightType.other,
     ESightType.park,
     ESightType.museum,
     ESightType.cafe,
@@ -73,7 +27,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
   Map<ESightType, Widget> _filtersIconMap = {
     ESightType.hotel: HotelIcon(),
     ESightType.restaurant: RestourantIcon(),
-    ESightType.special: ParticularPlaceIcon(),
+    ESightType.other: ParticularPlaceIcon(),
     ESightType.park: ParkIcon(),
     ESightType.museum: MuseumIcon(),
     ESightType.cafe: CafeIcon(),
@@ -100,10 +54,10 @@ class _FiltersScreenState extends State<FiltersScreen> {
         elevation: 0,
         actions: [
           TextButton(
-            onPressed: () {
-              setState(() {
-                _typeFilters = {};
-              });
+            onPressed: () async {
+              await searchPlaceInteractor.setGeoFilters(null);
+
+              setState(() {});
             },
             child: Text(
               clearLbl,
@@ -157,20 +111,25 @@ class _FiltersScreenState extends State<FiltersScreen> {
                             ? 3
                             : 6))
                       FilterCategory(
-                        button: FilterRoundButton(
-                          checked: _typeFilters.contains(_filter),
-                          icon: _filtersIconMap[_filter],
-                          onPressed: () {
-                            print(MediaQuery.of(context).size.height *
-                                MediaQuery.of(context).devicePixelRatio);
-                            print(MediaQuery.of(context));
-                            setState(() {
-                              if (_typeFilters.contains(_filter)) {
-                                _typeFilters.remove(_filter);
-                              } else {
-                                _typeFilters.add(_filter);
-                              }
-                            });
+                        button: FutureBuilder<List<SightType>>(
+                          future: searchPlaceInteractor.getTypeFilters(),
+                          builder: (context, snapshot) {
+                            final types = snapshot.data ?? [];
+
+                            return FilterRoundButton(
+                              checked: types.contains(_filter),
+                              icon: _filtersIconMap[_filter],
+                              onPressed: () async {
+                                if (types.contains(_filter)) {
+                                  await searchPlaceInteractor
+                                      .removeTypeFilter(SightType(_filter));
+                                } else {
+                                  await searchPlaceInteractor
+                                      .addTypeFilter(SightType(_filter));
+                                }
+                                setState(() {});
+                              },
+                            );
                           },
                         ),
                         label: SightType(_filter).label,
@@ -196,30 +155,38 @@ class _FiltersScreenState extends State<FiltersScreen> {
                             distanceLbl,
                             style: Theme.of(context).textTheme.headline5,
                           ),
-                          Text(
-                            '$distanceFromLbl ${distanceStart.round()} $distanceToLbl ${distanceEnd.round()} $distanceUnitLbl',
-                            style:
-                                Theme.of(context).textTheme.headline5!.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondaryVariant,
-                                    ),
-                          )
+                          FutureBuilder<double?>(
+                              future: searchPlaceInteractor.getGeoFilters(),
+                              builder: (context, snapshot) {
+                                return Text(
+                                  '$distanceFromLbl ${100} $distanceToLbl ${(snapshot.data ?? 10000).round()} $distanceUnitLbl',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline5!
+                                      .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondaryVariant,
+                                      ),
+                                );
+                              })
                         ],
                       ),
                     ),
-                    AppRangeSlider(
-                      min: 100,
-                      max: 10000,
-                      start: distanceStart,
-                      end: distanceEnd,
-                      onChange: (start, end) {
-                        setState(() {
-                          distanceStart = start;
-                          distanceEnd = end;
-                        });
-                      },
-                    ),
+                    FutureBuilder<double?>(
+                        future: searchPlaceInteractor.getGeoFilters(),
+                        builder: (context, snapshot) {
+                          return AppRangeSlider(
+                            min: 100,
+                            max: 10000,
+                            start: 100,
+                            end: snapshot.data ?? 10000,
+                            onChange: (start, end) async {
+                              await searchPlaceInteractor.setGeoFilters(end);
+                              setState(() {});
+                            },
+                          );
+                        }),
                   ],
                 ),
               ),
@@ -228,22 +195,17 @@ class _FiltersScreenState extends State<FiltersScreen> {
               padding: const EdgeInsets.all(16),
               child: PrimaryButton(
                 child: Center(
-                  child: Text('$showLbl (${sights.where(
-                        (element) => FiltersResult(
-                          _typeFilters,
-                          distanceStart,
-                          distanceEnd,
-                        ).filter(element),
-                      ).length})'),
+                  child: FutureBuilder<List<Place>>(
+                    // Ну или надо было отдельынй метод для количества делать
+                    future: searchPlaceInteractor.searchPlaces(),
+                    initialData: [],
+                    builder: (context, snapshot) {
+                      return Text('$showLbl (${(snapshot.data ?? []).length})');
+                    },
+                  ),
                 ),
                 onPressed: () {
-                  Navigator.of(context).pop(
-                    FiltersResult(
-                      _typeFilters,
-                      distanceStart,
-                      distanceEnd,
-                    ),
-                  );
+                  Navigator.of(context).pop();
                 },
               ),
             ),

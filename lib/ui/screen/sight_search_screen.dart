@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:places/data/interactor/search_place_interactor.dart';
 import 'package:places/data/model/model.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/domain/sight_type.dart';
@@ -13,10 +14,6 @@ import 'package:places/ui/widgets/search_bar.dart';
 import 'package:places/ui/widgets/widgets.dart';
 
 class SightSearchScreen extends StatefulWidget {
-  final FiltersResult? filters;
-
-  SightSearchScreen(this.filters);
-
   @override
   _SightSearchScreenState createState() => _SightSearchScreenState();
 }
@@ -25,12 +22,6 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
   late final TextEditingController controller;
 
   List<Sight> searchResult = [];
-  List<String> searchHistory = [
-    'Moon',
-    'test1',
-    'test2',
-    'test3',
-  ];
 
   @override
   void initState() {
@@ -38,23 +29,11 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
     controller = TextEditingController()..addListener(_searchListener);
   }
 
-  void _search(String search) {
+  void _search(String search) async {
     if (search.trim().isNotEmpty) {
+      searchResult = await searchPlaceInteractor.searchPlaces(search);
       print('search: $search');
-      setState(() {
-        searchHistory.add(search);
-        searchResult = sights
-            .where(
-              (element) =>
-                  element.name.toLowerCase().contains(
-                        search.toLowerCase(),
-                      ) &&
-                  (widget.filters != null
-                      ? widget.filters!.filter(element)
-                      : true),
-            )
-            .toList();
-      });
+      setState(() {});
     }
   }
 
@@ -104,30 +83,37 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
           SizedBox(
             height: 32,
           ),
-          if (searchHistory.isNotEmpty && controller.text.isEmpty)
-            Expanded(
-              child: _SearchHistory(
-                searchHistory: searchHistory,
-                clearHistory: () {
-                  setState(() {
-                    searchHistory = [];
-                  });
-                },
-                remove: (search) {
-                  setState(() {
-                    searchHistory = searchHistory
-                        .whereNot((element) => element == search)
-                        .toList();
-                  });
-                },
-                select: (search) {
-                  setState(() {
-                    controller.text = search;
-                    _search(controller.text);
-                  });
-                },
-              ),
-            ),
+          FutureBuilder<List<String>>(
+            future: searchPlaceInteractor.getHistory(),
+            initialData: [],
+            builder: (context, snapshot) {
+              final searchHistory = snapshot.data;
+              if (searchHistory != null &&
+                  searchHistory.isNotEmpty &&
+                  controller.text.isEmpty) {
+                return Expanded(
+                  child: _SearchHistory(
+                    searchHistory: searchHistory,
+                    clearHistory: () async {
+                      await searchPlaceInteractor.clearHistory();
+                      setState(() {});
+                    },
+                    remove: (search) async {
+                      await searchPlaceInteractor.removeHistory(search);
+                      setState(() {});
+                    },
+                    select: (search) {
+                      setState(() {
+                        controller.text = search;
+                        _search(controller.text);
+                      });
+                    },
+                  ),
+                );
+              }
+              return Container();
+            },
+          ),
           if (searchResult.isEmpty && controller.text.isNotEmpty)
             Expanded(
               child: Column(
@@ -292,29 +278,29 @@ class _SightSearchResultListItem extends StatelessWidget {
                                 TextSpan(
                                   text: sight.name.substring(
                                     0,
-                                    sight.name
-                                        .toLowerCase()
-                                        .indexOf(search.toLowerCase()),
+                                    sight.name.toLowerCase().indexOf(
+                                          search.toLowerCase(),
+                                        ),
                                   ),
                                   style: Theme.of(context).textTheme.headline5,
                                 ),
                                 TextSpan(
                                   text: sight.name.substring(
-                                    sight.name
-                                        .toLowerCase()
-                                        .indexOf(search.toLowerCase()),
-                                    sight.name
-                                            .toLowerCase()
-                                            .indexOf(search.toLowerCase()) +
+                                    sight.name.toLowerCase().indexOf(
+                                          search.toLowerCase(),
+                                        ),
+                                    sight.name.toLowerCase().indexOf(
+                                              search.toLowerCase(),
+                                            ) +
                                         search.length,
                                   ),
                                   style: Theme.of(context).textTheme.headline4,
                                 ),
                                 TextSpan(
                                   text: sight.name.substring(
-                                    sight.name
-                                            .toLowerCase()
-                                            .indexOf(search.toLowerCase()) +
+                                    sight.name.toLowerCase().indexOf(
+                                              search.toLowerCase(),
+                                            ) +
                                         search.length,
                                     sight.name.length,
                                   ),

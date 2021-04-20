@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:places/data/model/model.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/dio_client.dart';
+import 'package:places/domain/sight_type.dart';
 
 void main() {
   group('networking', () {
@@ -21,7 +22,7 @@ void main() {
             description: 'описание',
             lat: 60.01693,
             lng: 30.61895,
-            placeType: 'other',
+            placeType: SightType.parse('other'),
             urls: [
               'https://test-backend-flutter.surfstudio.ru/files/1616508391032.jpg',
               'https://test-backend-flutter.surfstudio.ru/files/1616508391033.jpg'
@@ -48,7 +49,7 @@ void main() {
                 description: 'описание',
                 lat: 60.01693,
                 lng: 30.61895,
-                placeType: 'other',
+                placeType: SightType.parse('other'),
                 urls: [
                   'https://test-backend-flutter.surfstudio.ru/files/1616508391032.jpg',
                   'https://test-backend-flutter.surfstudio.ru/files/1616508391033.jpg'
@@ -90,7 +91,7 @@ void main() {
             lng: 0,
             placeName: 'test',
             urls: [],
-            placeType: 'temple',
+            placeType: SightType.parse('temple'),
             description: 'test',
           ),
         );
