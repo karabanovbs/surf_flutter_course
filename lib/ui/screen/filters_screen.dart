@@ -21,8 +21,8 @@ class FiltersResult {
   bool filter(Sight sight) {
     return arePointsBetween(
           GeoPoint(
-            longitude: sight.lon,
-            latitude: sight.lat,
+            longitude: sight.lon ?? 0,
+            latitude: sight.lat ?? 0,
           ),
           const GeoPoint(
             latitude: 58.006615,

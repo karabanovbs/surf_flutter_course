@@ -2,103 +2,117 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:places/domain/sight.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/drawing/drawing.dart';
-import 'package:places/res/typography.dart';
 import 'package:places/ui/widgets/widgets.dart';
 
 /// Sight details widget
 class SightDetails extends StatelessWidget {
-  final Sight? sight;
+  final int sightId;
 
-  const SightDetails({Key? key, this.sight}) : super(key: key);
+  const SightDetails({
+    Key? key,
+    required this.sightId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              toolbarHeight: 64,
-              leadingWidth: 64,
-              pinned: true,
-              leading: Container(),
+      body: FutureBuilder(
+        future: placeInteractor.getPlaceDetails(sightId),
+        builder: (BuildContext context, AsyncSnapshot<Place> snapshot) {
+          if (!snapshot.hasData || snapshot.data == null) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
-              title: Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: ShapeDecoration(
-                    color: Theme.of(context).colorScheme.background,
-                    shape: StadiumBorder(),
-                  ),
-                ),
-              ),
+          final sight = snapshot.data!;
 
-              /// back button
-              actions: [
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    child: ElevatedButton(
-                      child: Center(
-                        child: SizedBox(
-                          height: 12,
-                          child: IconWrapper(
-                            color: Theme.of(context).colorScheme.onBackground,
-                            child: DeleteIcon(),
-                          ),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).maybePop();
-                      },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all(EdgeInsets.zero),
-                        shape: MaterialStateProperty.all(
-                          CircleBorder(),
-                        ),
-                        backgroundColor: MaterialStateProperty.all(
-                            Theme.of(context).backgroundColor),
+          return Container(
+            child: CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  toolbarHeight: 64,
+                  leadingWidth: 64,
+                  pinned: true,
+                  leading: Container(),
+
+                  title: Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: ShapeDecoration(
+                        color: Theme.of(context).colorScheme.background,
+                        shape: StadiumBorder(),
                       ),
                     ),
                   ),
-                )
+
+                  /// back button
+                  actions: [
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        child: ElevatedButton(
+                          child: Center(
+                            child: SizedBox(
+                              height: 12,
+                              child: IconWrapper(
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
+                                child: DeleteIcon(),
+                              ),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).maybePop();
+                          },
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all(EdgeInsets.zero),
+                            shape: MaterialStateProperty.all(
+                              CircleBorder(),
+                            ),
+                            backgroundColor: MaterialStateProperty.all(
+                                Theme.of(context).backgroundColor),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                  backgroundColor:
+                      Theme.of(context).backgroundColor.withOpacity(0),
+                  elevation: 0,
+                  expandedHeight: 360,
+                  flexibleSpace: FlexibleSpaceBar(
+                    collapseMode: CollapseMode.pin,
+                    background: _buildGallery(context, sight),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: _buildDescription(context, sight),
+                ),
+                SliverToBoxAdapter(
+                  child: _buildControls(context, sight),
+                ),
               ],
-              backgroundColor: Theme.of(context).backgroundColor.withOpacity(0),
-              elevation: 0,
-              expandedHeight: 360,
-              flexibleSpace: FlexibleSpaceBar(
-                collapseMode: CollapseMode.pin,
-                background: _buildGallery(context),
-              ),
             ),
-            SliverToBoxAdapter(
-              child: _buildDescription(context),
-            ),
-            SliverToBoxAdapter(
-              child: _buildControls(context),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildGallery(BuildContext context) {
+  Widget _buildGallery(BuildContext context, Place sight) {
     return GalleryViewer(
-      photos: Iterable.generate(
-              Random().nextInt(10) + 1,
-              (index) =>
-                  'https://picsum.photos/id/${Random().nextInt(99) + 1}/200/300')
-          .toList(),
+      photos: sight.urls,
     );
   }
 
-  Widget _buildDescription(BuildContext context) {
+  Widget _buildDescription(BuildContext context, Place sight) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(bottom: 24),
@@ -107,7 +121,7 @@ class SightDetails extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            sight!.name,
+            sight.name,
             style: Theme.of(context).textTheme.headline2!.copyWith(
                   color: Theme.of(context).colorScheme.secondary,
                 ),
@@ -115,7 +129,7 @@ class SightDetails extends StatelessWidget {
           Row(
             children: [
               Text(
-                sight!.type.label.toLowerCase(),
+                sight.type.label.toLowerCase(),
                 style: Theme.of(context).textTheme.subtitle1!.copyWith(),
               ),
               Padding(
@@ -132,7 +146,7 @@ class SightDetails extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 24),
             child: Text(
-              sight!.details!,
+              sight.details!,
               style: Theme.of(context).textTheme.headline4!.copyWith(
                     color: Theme.of(context).colorScheme.secondary,
                   ),
@@ -143,7 +157,7 @@ class SightDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildControls(BuildContext context) {
+  Widget _buildControls(BuildContext context, Place sight) {
     print(Theme.of(context).primaryColor);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -252,8 +266,12 @@ class SightDetails extends StatelessWidget {
                 child: Container(
                   height: 40,
                   child: TextButton(
-                    onPressed: () {
-                      print('add to favorite');
+                    onPressed: () async {
+                      if (await placeInteractor.isFavoritePlace(sight)) {
+                        placeInteractor.removeFromFavorites(sight);
+                      } else {
+                        placeInteractor.addToFavorites(sight);
+                      }
                     },
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all(

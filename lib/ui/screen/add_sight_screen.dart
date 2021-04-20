@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/model/model.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/domain/sight_type.dart';
 import 'package:places/drawing/drawing.dart';
@@ -23,7 +25,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
   double? _long;
   double? _lat;
 
-  List<NetworkImage> _photos = [];
+  List<String> _photos = [];
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -97,15 +99,14 @@ class _AddSightScreenState extends State<AddSightScreen> {
                               print(result);
 
                               setState(() {
-                                _photos.add(NetworkImage(
-                                    'https://picsum.photos/id/${_photos.length}/200/300'));
+                                _photos.add('https://picsum.photos/id/${_photos.length}/200/300');
                               });
                             },
                           );
                         }
 
                         return RemovablePhoto(
-                          photo: _photos[index - 1],
+                          photo: NetworkImage(_photos[index - 1]),
                           onRemove: () {
                             setState(() {
                               _photos.remove(_photos[index - 1]);
@@ -331,15 +332,15 @@ class _AddSightScreenState extends State<AddSightScreen> {
                       ),
                       onPressed: canSave
                           ? () {
-                              mocks.sights.add(
-                                Sight(
-                                  name: _name!,
-                                  details: _description,
+                              placeInteractor.addNewPlace(
+                                Place(
+                                  id: null,
+                                  placeName: _name!,
+                                  description: _description,
                                   lat: _lat,
-                                  lon: _long,
-                                  type: SightType(_selectedType!),
-                                  url:
-                                      'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
+                                  lng: _long,
+                                  placeType: SightType(_selectedType!).label,
+                                  urls: _photos,
                                 ),
                               );
 

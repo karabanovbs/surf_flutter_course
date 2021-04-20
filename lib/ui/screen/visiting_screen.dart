@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/drawing/drawing.dart';
-import 'package:places/mocks.dart';
-import 'package:places/res/typography.dart';
 import 'package:places/res/text_constants.dart';
 import 'package:places/ui/screen/settings_screen.dart';
 import 'package:places/ui/screen/sight_card.dart';
@@ -19,8 +19,6 @@ class VisitingScreen extends StatefulWidget {
 }
 
 class _VisitingScreenState extends State<VisitingScreen> {
-  var _sights;
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -52,85 +50,96 @@ class _VisitingScreenState extends State<VisitingScreen> {
         ),
         body: TabBarView(
           children: [
-            _TabCardsList(
-              sights: _sights ?? sights,
-              onReorder: (orderedSights) {
-                setState(() {
-                  _sights = orderedSights;
-                });
-              },
-              cardBuilder: (sight) {
-                return FavoriteSightCard(
-                  sight: sight,
-                  onRemove: () {
+            FutureBuilder<List<Place>>(
+              future: placeInteractor.getFavoritePlaces(),
+              builder: (context, snapshot) {
+                return _TabCardsList(
+                  sights: snapshot.data ?? <Place>[],
+                  onReorder: (orderedSights) {
                     setState(() {
-                      sights.remove(sight);
+                      placeInteractor
+                          .addToFavoritesAll(orderedSights.cast<Place>());
                     });
                   },
-                  onPressed: (Sight sight) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => SightDetails(
-                          sight: sight,
-                        ),
-                      ),
-                    );
-                  },
-                  onDate: () async {
-                    var now = DateTime.now();
-                    var minDate = now;
-                    var maxDate = now.add(
-                      Duration(
-                        days: 365,
-                      ),
-                    );
-                    DateTime? date;
-                    if (Platform.isAndroid) {
-                      date = await showDatePicker(
-                        context: context,
-                        initialDate: now,
-                        firstDate: minDate,
-                        lastDate: maxDate,
-                      );
-                    } else {
-                      await showModalBottomSheet(
-                        context: context,
-                        builder: (context) => SizedBox(
-                          height: 240,
-                          child: CupertinoDatePicker(
-                            minimumDate: minDate,
-                            maximumDate: maxDate,
-                            initialDateTime: now,
-                            mode: CupertinoDatePickerMode.date,
-                            onDateTimeChanged: (value) {
-                              date = value;
-                            },
+                  cardBuilder: (sight) {
+                    return FavoriteSightCard(
+                      sight: sight,
+                      onRemove: () {
+                        setState(() {
+                          placeInteractor.removeFromFavorites(sight as Place);
+                        });
+                      },
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => SightDetails(
+                              sightId: (sight as Place).id!,
+                            ),
                           ),
-                        ),
-                      );
-                    }
-                    print(date);
-                  },
-                );
-              },
-            ),
-            _TabCardsList(
-              // sights: mocks,
-              cardBuilder: (sight) {
-                return FavoriteHistorySightCard(
-                  sight: sight,
-                  onPressed: (Sight sight) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => SightDetails(
-                          sight: sight,
-                        ),
-                      ),
+                        );
+                      },
+                      onDate: () async {
+                        var now = DateTime.now();
+                        var minDate = now;
+                        var maxDate = now.add(
+                          Duration(
+                            days: 365,
+                          ),
+                        );
+                        DateTime? date;
+                        if (Platform.isAndroid) {
+                          date = await showDatePicker(
+                            context: context,
+                            initialDate: now,
+                            firstDate: minDate,
+                            lastDate: maxDate,
+                          );
+                        } else {
+                          await showModalBottomSheet(
+                            context: context,
+                            builder: (context) => SizedBox(
+                              height: 240,
+                              child: CupertinoDatePicker(
+                                minimumDate: minDate,
+                                maximumDate: maxDate,
+                                initialDateTime: now,
+                                mode: CupertinoDatePickerMode.date,
+                                onDateTimeChanged: (value) {
+                                  date = value;
+                                },
+                              ),
+                            ),
+                          );
+                        }
+                        print(date);
+                      },
                     );
                   },
                 );
               },
             ),
+            FutureBuilder<List<Place>>(
+                future: placeInteractor.getVisitPlaces(),
+                initialData: [],
+                builder: (context, snapshot) {
+                  return _TabCardsList(
+                    sights: snapshot.data ?? [],
+                    cardBuilder: (sight) {
+                      return FavoriteHistorySightCard(
+                        sight: sight,
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => SightDetails(
+                                sightId: (sight as Place).id!,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                }),
           ],
         ),
         bottomNavigationBar: AppBottomNavBar(

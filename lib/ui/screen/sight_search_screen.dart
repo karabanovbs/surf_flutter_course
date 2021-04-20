@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:places/data/model/model.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/domain/sight_type.dart';
 import 'package:places/drawing/drawing.dart';
@@ -169,7 +170,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                     MaterialPageRoute(
                       builder: (context) {
                         return SightDetails(
-                          sight: sight,
+                          sightId: (sight as Place).id!,
                         );
                       },
                     ),

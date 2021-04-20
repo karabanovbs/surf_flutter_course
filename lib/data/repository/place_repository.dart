@@ -39,7 +39,7 @@ abstract class IPlaceRepository {
     String? sortBy,
   });
 
-  Future<Place> getPlace(String id);
+  Future<Place> getPlace(int id);
 
   Future<void> deletePlace(String id);
 
@@ -62,7 +62,7 @@ class DioPlaceRepository extends IPlaceRepository {
   }
 
   @override
-  Future<Place> getPlace(String id) {
+  Future<Place> getPlace(int id) {
     return _dioClient
         .get('/place/$id')
         .then((value) => value.data)

@@ -8,7 +8,7 @@ class _BaseCard extends StatelessWidget {
   final Sight sight;
   final List<Widget> actions;
   final Widget content;
-  final void Function(Sight sight) onPressed;
+  final void Function() onPressed;
 
   final double _imageSpace = 96;
 
@@ -63,7 +63,7 @@ class _BaseCard extends StatelessWidget {
             type: MaterialType.transparency,
             child: InkWell(
               onTap: () {
-                onPressed.call(sight);
+                onPressed.call();
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -122,10 +122,15 @@ class _BaseCard extends StatelessWidget {
 /// Sight card
 class SightCard extends StatelessWidget {
   final Sight sight;
-  final void Function(Sight sight) onPressed;
+  final void Function() onPressed;
+  final void Function() onLike;
 
-  const SightCard({Key? key, required this.sight, required this.onPressed})
-      : super(key: key);
+  const SightCard({
+    Key? key,
+    required this.sight,
+    required this.onPressed,
+    required this.onLike,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -136,9 +141,7 @@ class SightCard extends StatelessWidget {
           height: 24,
           width: 24,
           child: TextButton(
-            onPressed: () {
-              print('like place');
-            },
+            onPressed: onLike,
             style: ButtonStyle(
               shape: MaterialStateProperty.all(CircleBorder()),
               padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
@@ -186,7 +189,7 @@ class SightCard extends StatelessWidget {
 class FavoriteSightCard extends StatelessWidget {
   final Sight sight;
   final void Function() onRemove;
-  final void Function(Sight sight) onPressed;
+  final void Function() onPressed;
   final void Function() onDate;
 
   const FavoriteSightCard({
@@ -323,7 +326,7 @@ class FavoriteSightCard extends StatelessWidget {
 
 class FavoriteHistorySightCard extends StatelessWidget {
   final Sight sight;
-  final void Function(Sight sight) onPressed;
+  final void Function() onPressed;
 
   const FavoriteHistorySightCard({
     Key? key,

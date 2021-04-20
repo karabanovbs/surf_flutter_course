@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'package:collection/collection.dart';
+import 'package:places/domain/sight.dart';
+import 'package:places/domain/sight_type.dart';
 
-class Place {
+// Обходной костыль с реализацией, лень рефакторить
+class Place implements Sight {
   final int? id;
   final double? lat;
   final double? lng;
-  final String? name;
+  final String? placeName;
   final List<String> urls;
   final String? placeType;
   final String? description;
@@ -14,17 +17,18 @@ class Place {
     required this.id,
     required this.lat,
     required this.lng,
-    required this.name,
+    required this.placeName,
     required this.urls,
     required this.placeType,
     required this.description,
   });
 
+  // руками конечно такое лучше не писать
   Place.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         lat = json['lat'],
         lng = json['lng'],
-        name = json['name'],
+        placeName = json['name'],
         urls = List.from(json['urls']),
         placeType = json['placeType'],
         description = json['description'];
@@ -33,7 +37,7 @@ class Place {
         if (id != null) 'id': id,
         'lat': lat,
         'lng': lng,
-        'name': name,
+        'name': placeName,
         'urls': urls,
         'placeType': placeType,
         'description': description,
@@ -46,7 +50,7 @@ class Place {
           other.id == this.id &&
           other.lat == this.lat &&
           other.lng == this.lng &&
-          other.name == this.name &&
+          other.placeName == this.placeName &&
           ListEquality().equals(other.urls, this.urls) &&
           other.placeType == this.placeType &&
           other.description == this.description;
@@ -56,4 +60,19 @@ class Place {
 
   @override
   int get hashCode => super.hashCode;
+
+  @override
+  String? get details => description;
+
+  @override
+  double? get lon => lng;
+
+  @override
+  String get name => placeType ?? '';
+
+  @override
+  SightType get type => SightType.custom(placeType);
+
+  @override
+  String get url => urls.firstOrNull ?? '';
 }
