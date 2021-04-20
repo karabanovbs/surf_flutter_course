@@ -6,7 +6,6 @@ import 'package:places/data/model/model.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/domain/sight_type.dart';
 import 'package:places/drawing/drawing.dart';
-import 'package:places/mocks.dart' as mocks;
 import 'package:places/res/text_constants.dart';
 import 'package:places/ui/screen/select_type_screen.dart';
 import 'package:places/ui/widgets/primary_button.dart';
@@ -95,8 +94,6 @@ class _AddSightScreenState extends State<AddSightScreen> {
                                   return SelectPhotoDialog();
                                 },
                               );
-
-                              print(result);
 
                               setState(() {
                                 _photos.add('https://picsum.photos/id/${_photos.length}/200/300');

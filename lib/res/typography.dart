@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
-import 'colors.dart';
-
 var textTheme = TextTheme(
   headline1: TextStyle(
     fontSize: 32,

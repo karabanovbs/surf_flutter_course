@@ -124,12 +124,14 @@ class SightCard extends StatelessWidget {
   final Sight sight;
   final void Function() onPressed;
   final void Function() onLike;
+  final bool liked;
 
   const SightCard({
     Key? key,
     required this.sight,
     required this.onPressed,
     required this.onLike,
+    required this.liked,
   }) : super(key: key);
 
   @override
@@ -146,7 +148,7 @@ class SightCard extends StatelessWidget {
               shape: MaterialStateProperty.all(CircleBorder()),
               padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
             ),
-            child: const HeartIcon(),
+            child: !liked ? const HeartIcon() : HeartFullIcon(),
           ),
         )
       ],

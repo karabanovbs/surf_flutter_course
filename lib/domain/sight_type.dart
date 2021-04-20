@@ -1,5 +1,5 @@
-import 'package:places/res/text_constants.dart';
 import 'package:collection/collection.dart';
+import 'package:places/res/text_constants.dart';
 
 enum ESightType {
   temple,

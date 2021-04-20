@@ -1,7 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:flutter/foundation.dart';
-
 class GeoPoint {
   final double latitude;
   final double longitude;
