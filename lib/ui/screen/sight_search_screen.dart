@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:collection/collection.dart';
 import 'package:places/data/interactor/search_place_interactor.dart';
 import 'package:places/data/model/model.dart';
 import 'package:places/domain/sight.dart';
-import 'package:places/domain/sight_type.dart';
 import 'package:places/drawing/drawing.dart';
-import 'package:places/helpers/distance_helper.dart';
-import 'package:places/mocks.dart';
 import 'package:places/res/text_constants.dart' as text_constants;
-import 'package:places/ui/screen/filters_screen.dart';
 import 'package:places/ui/screen/sight_details.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 import 'package:places/ui/widgets/widgets.dart';

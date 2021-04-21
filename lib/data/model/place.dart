@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 import 'package:collection/collection.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/domain/sight_type.dart';
@@ -59,7 +59,7 @@ class Place implements Sight {
   }
 
   @override
-  int get hashCode => super.hashCode;
+  int get hashCode => id.hashCode;
 
   @override
   String? get details => description;

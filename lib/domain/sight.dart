@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:places/domain/sight_type.dart';
 
 /// Sight model

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:places/data/interactor/search_place_interactor.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/domain/sight.dart';
 import 'package:places/domain/sight_type.dart';
 import 'package:places/drawing/drawing.dart';
-import 'package:places/helpers/distance_helper.dart';
 import 'package:places/res/text_constants.dart';
 import 'package:places/ui/widgets/widgets.dart';
 

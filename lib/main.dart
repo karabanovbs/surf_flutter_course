@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:places/res/themes.dart';
 import 'package:places/ui/screen/splash_screen.dart';
 
 import 'data/interactor/theme_interactor.dart';

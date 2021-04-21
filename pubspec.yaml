@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   dio: ^4.0.0
+  rxdart: ^0.26.0
   svg_to_path_annotation:
     git:
       url: https://github.com/karabanovbs/svg_to_path_generator

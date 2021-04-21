@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:places/main.dart';
 import 'package:places/res/themes.dart';
 
 /// Theme data interactor
