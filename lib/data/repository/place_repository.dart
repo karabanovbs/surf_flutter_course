@@ -1,6 +1,6 @@
-
 import 'package:dio/dio.dart';
 import 'package:places/data/model/model.dart';
+import 'package:places/exceptions/exceptions.dart';
 
 class PlacesFilter {
   final double? lat;
@@ -57,7 +57,10 @@ class DioPlaceRepository extends IPlaceRepository {
 
   @override
   Future<void> deletePlace(String id) {
-    return _dioClient.delete('/place/$id');
+    return _dioClient.delete('/place/$id').catchError(
+          handleDioException,
+          test: (error) => error is DioError,
+        );
   }
 
   @override
@@ -65,7 +68,11 @@ class DioPlaceRepository extends IPlaceRepository {
     return _dioClient
         .get('/place/$id')
         .then((value) => value.data)
-        .then((json) => Place.fromJson(json));
+        .then((json) => Place.fromJson(json))
+        .catchError(
+          handleDioException,
+          test: (error) => error is DioError,
+        );
   }
 
   @override
@@ -77,31 +84,53 @@ class DioPlaceRepository extends IPlaceRepository {
     String? pagePrior,
     String? sortBy,
   }) {
-    return _dioClient.get('/place').then((value) => value.data).then(
+    return _dioClient
+        .get('/place')
+        .then((value) => value.data)
+        .then(
           (json) => List<Place>.from(
             json.map(
               (model) => Place.fromJson(model),
             ),
           ),
+        )
+        .catchError(
+          handleDioException,
+          test: (error) => error is DioError,
         );
+  }
+
+  handleDioException(dynamic error) async {
+    if (error is DioError) {
+      if (error.response != null) {
+        throw NetworkException(error.requestOptions.path, error.response!.data);
+      } else {
+        throw NetworkException(error.requestOptions.path, error.message);
+      }
+    }
   }
 
   @override
   Future<List<Place>> postFilteredPlaces(PlacesFilter filter) {
     return _dioClient
         .post(
-      '/filtered_places',
-      data: filter.toJson(),
-    )
+          '/filtered_places',
+          data: filter.toJson(),
+        )
         .then((value) {
-      return value.data;
-    }).then(
-      (json) => List<Place>.from(
-        json.map(
-          (model) => Place.fromJson(model),
-        ),
-      ),
-    );
+          return value.data;
+        })
+        .then(
+          (json) => List<Place>.from(
+            json.map(
+              (model) => Place.fromJson(model),
+            ),
+          ),
+        )
+        .catchError(
+          handleDioException,
+          test: (error) => error is DioError,
+        );
   }
 
   @override
@@ -114,6 +143,10 @@ class DioPlaceRepository extends IPlaceRepository {
         .then((value) => value.data)
         .then(
           (json) => Place.fromJson(json),
+        )
+        .catchError(
+          handleDioException,
+          test: (error) => error is DioError,
         );
   }
 
@@ -127,6 +160,10 @@ class DioPlaceRepository extends IPlaceRepository {
         .then((value) => value.data)
         .then(
           (json) => Place.fromJson(json),
+        )
+        .catchError(
+          handleDioException,
+          test: (error) => error is DioError,
         );
   }
 }
