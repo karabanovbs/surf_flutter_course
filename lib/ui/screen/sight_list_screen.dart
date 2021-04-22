@@ -56,7 +56,7 @@ class _SightListScreenState extends State<SightListScreen> {
       yield _LoadingStateInProgress();
       yield _LoadingStateSuccess(await placeInteractor.getPlaces(null, []));
     } catch (_) {
-      _LoadingStateError();
+      yield _LoadingStateError();
     }
   })();
 
@@ -202,10 +202,8 @@ class _SightListScreenState extends State<SightListScreen> {
                         );
                       }
 
-                      return SliverToBoxAdapter(
-                        child: Center(
-                          child: Icon(Icons.error),
-                        ),
+                      return SliverFillRemaining(
+                        child: ErrorSubScreen(),
                       );
                     },
                   ),

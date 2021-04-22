@@ -85,7 +85,7 @@ class DioPlaceRepository extends IPlaceRepository {
     String? sortBy,
   }) {
     return _dioClient
-        .get('/place')
+        .get('/place1')
         .then((value) => value.data)
         .then(
           (json) => List<Place>.from(

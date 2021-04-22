@@ -30,3 +30,4 @@ export 'trash.dart';
 export 'tutorial_bag.dart';
 export 'tutorial_point.dart';
 export 'tutorial_waymark.dart';
+export 'error.dart';

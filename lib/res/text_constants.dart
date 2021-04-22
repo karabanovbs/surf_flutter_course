@@ -8,6 +8,9 @@ const String save = 'Сохранить';
 const String search = 'Поиск';
 const String delete = 'Удалить';
 const String skip = 'Пропустить';
+const String error = 'Ошибка';
+const String errorDescription = '''Что то пошло не так
+Попробуйте позже.''';
 
 /// SightTypeName
 
