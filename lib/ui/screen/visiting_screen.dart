@@ -12,6 +12,7 @@ import 'package:places/ui/screen/settings_screen.dart';
 import 'package:places/ui/screen/sight_card.dart';
 import 'package:places/ui/screen/sight_details.dart';
 import 'package:places/ui/screen/sight_list_screen.dart';
+import 'package:provider/provider.dart';
 
 class VisitingScreen extends StatefulWidget {
   @override
@@ -51,13 +52,13 @@ class _VisitingScreenState extends State<VisitingScreen> {
         body: TabBarView(
           children: [
             FutureBuilder<List<Place>>(
-              future: placeInteractor.getFavoritePlaces(),
+              future: context.read<IPlaceInteractor>().getFavoritePlaces(),
               builder: (context, snapshot) {
                 return _TabCardsList(
                   sights: snapshot.data ?? <Place>[],
                   onReorder: (orderedSights) {
                     setState(() {
-                      placeInteractor
+                      context.read<IPlaceInteractor>()
                           .addToFavoritesAll(orderedSights.cast<Place>());
                     });
                   },
@@ -66,7 +67,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
                       sight: sight,
                       onRemove: () {
                         setState(() {
-                          placeInteractor.removeFromFavorites(sight as Place);
+                          context.read<IPlaceInteractor>().removeFromFavorites(sight as Place);
                         });
                       },
                       onPressed: () {
@@ -119,7 +120,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
               },
             ),
             FutureBuilder<List<Place>>(
-                future: placeInteractor.getVisitPlaces(),
+                future: context.read<IPlaceInteractor>().getVisitPlaces(),
                 initialData: [],
                 builder: (context, snapshot) {
                   return _TabCardsList(

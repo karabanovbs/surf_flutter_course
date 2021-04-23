@@ -4,14 +4,6 @@ import 'package:places/res/themes.dart';
 
 /// Theme data interactor
 class ThemeSettingsInteractor extends ChangeNotifier {
-  static final ThemeSettingsInteractor _instance = ThemeSettingsInteractor._();
-
-  ThemeSettingsInteractor._();
-
-  factory ThemeSettingsInteractor() {
-    return _instance;
-  }
-
   ThemeData currentTheme = lightTheme;
 
   void setLightTheme() {

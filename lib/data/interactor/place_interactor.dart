@@ -111,7 +111,3 @@ class InMemoryPlaceInteractor extends IPlaceInteractor {
     return _favoritePlaces.contains(place);
   }
 }
-
-IPlaceInteractor placeInteractor = InMemoryPlaceInteractor(
-  DioPlaceRepository(dioClient),
-);

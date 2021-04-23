@@ -13,6 +13,7 @@ import 'package:places/ui/screen/sight_details.dart';
 import 'package:places/ui/screen/sight_search_screen.dart';
 import 'package:places/ui/screen/visiting_screen.dart';
 import 'package:places/ui/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 
@@ -51,17 +52,23 @@ class SightListScreen extends StatefulWidget {
 }
 
 class _SightListScreenState extends State<SightListScreen> {
-  final Stream<_LoadingState> _loadPlacesStream = (() async* {
+  late Stream<_LoadingState> _loadPlacesStream;
+
+  final StreamController<void> _likeChanged =
+      StreamController<void>.broadcast();
+
+@override
+  void initState() {
+  _loadPlacesStream = (() async* {
     try {
       yield _LoadingStateInProgress();
-      yield _LoadingStateSuccess(await placeInteractor.getPlaces(null, []));
+      yield _LoadingStateSuccess(await context.read<IPlaceInteractor>().getPlaces(null, []));
     } catch (_) {
       yield _LoadingStateError();
     }
   })();
-
-  final StreamController<void> _likeChanged =
-      StreamController<void>.broadcast();
+    super.didChangeDependencies();
+  }
 
   @override
   void dispose() {
@@ -146,7 +153,7 @@ class _SightListScreenState extends State<SightListScreen> {
                                     .startWith(null)
                                     .flatMap<bool>(
                                   (event) async* {
-                                    yield await placeInteractor
+                                    yield await context.read<IPlaceInteractor>()
                                         .isFavoritePlace(sight);
                                   },
                                 ).distinct(),
@@ -182,13 +189,13 @@ class _SightListScreenState extends State<SightListScreen> {
                                     },
                                     sight: sight,
                                     onLike: () async {
-                                      if (await placeInteractor
+                                      if (await context.read<IPlaceInteractor>()
                                           .isFavoritePlace(sight)) {
-                                        await placeInteractor
+                                        await context.read<IPlaceInteractor>()
                                             .removeFromFavorites(sight);
                                         _likeChanged.add(null);
                                       } else {
-                                        await placeInteractor
+                                        await context.read<IPlaceInteractor>()
                                             .addToFavorites(sight);
                                         _likeChanged.add(null);
                                       }

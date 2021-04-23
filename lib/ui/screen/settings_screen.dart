@@ -4,6 +4,7 @@ import 'package:places/data/interactor/theme_interactor.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/res/text_constants.dart';
 import 'package:places/ui/screen/visiting_screen.dart';
+import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -41,9 +42,11 @@ class SettingsScreen extends StatelessWidget {
                           style: Theme.of(context).textTheme.headline5,
                         ),
                         CupertinoSwitch(
-                          value: ThemeSettingsInteractor().isDark,
+                          value: Provider.of<ThemeSettingsInteractor>(context, listen: false)
+                              .isDark,
                           onChanged: (value) {
-                            ThemeSettingsInteractor().switchLightness();
+                            Provider.of<ThemeSettingsInteractor>(context, listen: false)
+                                .switchLightness();
                           },
                         ),
                       ],

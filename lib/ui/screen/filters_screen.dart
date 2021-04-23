@@ -5,6 +5,7 @@ import 'package:places/domain/sight_type.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/res/text_constants.dart';
 import 'package:places/ui/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 /// Filter setup screen
 class FiltersScreen extends StatefulWidget {
@@ -53,7 +54,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
         actions: [
           TextButton(
             onPressed: () async {
-              await searchPlaceInteractor.setGeoFilters(null);
+              await context.read<ISearchPlaceInteractor>()
+                  .setGeoFilters(null);
 
               setState(() {});
             },
@@ -110,7 +112,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
                             : 6))
                       FilterCategory(
                         button: FutureBuilder<List<SightType>>(
-                          future: searchPlaceInteractor.getTypeFilters(),
+                          future: context.read<ISearchPlaceInteractor>()
+                              .getTypeFilters(),
                           builder: (context, snapshot) {
                             final types = snapshot.data ?? [];
 
@@ -119,10 +122,12 @@ class _FiltersScreenState extends State<FiltersScreen> {
                               icon: _filtersIconMap[_filter],
                               onPressed: () async {
                                 if (types.contains(_filter)) {
-                                  await searchPlaceInteractor
+                                  await Provider.of<ISearchPlaceInteractor>(
+                                          context)
                                       .removeTypeFilter(SightType(_filter));
                                 } else {
-                                  await searchPlaceInteractor
+                                  await Provider.of<ISearchPlaceInteractor>(
+                                          context)
                                       .addTypeFilter(SightType(_filter));
                                 }
                                 setState(() {});
@@ -154,7 +159,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
                             style: Theme.of(context).textTheme.headline5,
                           ),
                           FutureBuilder<double?>(
-                              future: searchPlaceInteractor.getGeoFilters(),
+                              future:
+                                  context.read<ISearchPlaceInteractor>()
+                                      .getGeoFilters(),
                               builder: (context, snapshot) {
                                 return Text(
                                   '$distanceFromLbl ${100} $distanceToLbl ${(snapshot.data ?? 10000).round()} $distanceUnitLbl',
@@ -172,7 +179,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
                       ),
                     ),
                     FutureBuilder<double?>(
-                        future: searchPlaceInteractor.getGeoFilters(),
+                        future: context.read<ISearchPlaceInteractor>()
+                            .getGeoFilters(),
                         builder: (context, snapshot) {
                           return AppRangeSlider(
                             min: 100,
@@ -180,7 +188,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
                             start: 100,
                             end: snapshot.data ?? 10000,
                             onChange: (start, end) async {
-                              await searchPlaceInteractor.setGeoFilters(end);
+                              await context.read<ISearchPlaceInteractor>()
+                                  .setGeoFilters(end);
                               setState(() {});
                             },
                           );
@@ -195,7 +204,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 child: Center(
                   child: FutureBuilder<List<Place>>(
                     // Ну или надо было отдельынй метод для количества делать
-                    future: searchPlaceInteractor.searchPlaces(),
+                    future: context.read<ISearchPlaceInteractor>()
+                        .searchPlaces(),
                     initialData: [],
                     builder: (context, snapshot) {
                       return Text('$showLbl (${(snapshot.data ?? []).length})');
