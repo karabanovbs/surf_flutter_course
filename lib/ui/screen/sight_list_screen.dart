@@ -67,7 +67,7 @@ class _SightListScreenState extends State<SightListScreen> {
       yield _LoadingStateError();
     }
   })();
-    super.didChangeDependencies();
+    super.initState();
   }
 
   @override
