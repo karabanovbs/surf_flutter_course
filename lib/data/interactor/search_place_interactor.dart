@@ -97,7 +97,3 @@ class InMemorySearchPlaceInteractor extends ISearchPlaceInteractor {
     _types.clear();
   }
 }
-
-ISearchPlaceInteractor searchPlaceInteractor = InMemorySearchPlaceInteractor(
-  DioPlaceRepository(dioClient),
-);

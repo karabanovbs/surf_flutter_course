@@ -5,6 +5,7 @@ import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/ui/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 /// Sight details widget
 class SightDetails extends StatelessWidget {
@@ -19,7 +20,7 @@ class SightDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-        future: placeInteractor.getPlaceDetails(sightId),
+        future: context.read<IPlaceInteractor>().getPlaceDetails(sightId),
         builder: (BuildContext context, AsyncSnapshot<Place> snapshot) {
           if (!snapshot.hasData || snapshot.data == null) {
             return Center(
@@ -266,10 +267,10 @@ class SightDetails extends StatelessWidget {
                   height: 40,
                   child: TextButton(
                     onPressed: () async {
-                      if (await placeInteractor.isFavoritePlace(sight)) {
-                        placeInteractor.removeFromFavorites(sight);
+                      if (await context.read<IPlaceInteractor>().isFavoritePlace(sight)) {
+                        context.read<IPlaceInteractor>().removeFromFavorites(sight);
                       } else {
-                        placeInteractor.addToFavorites(sight);
+                        context.read<IPlaceInteractor>().addToFavorites(sight);
                       }
                     },
                     style: ButtonStyle(

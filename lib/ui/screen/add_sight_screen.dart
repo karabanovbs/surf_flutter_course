@@ -10,6 +10,7 @@ import 'package:places/res/text_constants.dart';
 import 'package:places/ui/screen/select_type_screen.dart';
 import 'package:places/ui/widgets/primary_button.dart';
 import 'package:places/ui/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 /// Add new [Sight] screen
 class AddSightScreen extends StatefulWidget {
@@ -96,7 +97,8 @@ class _AddSightScreenState extends State<AddSightScreen> {
                               );
 
                               setState(() {
-                                _photos.add('https://picsum.photos/id/${_photos.length}/200/300');
+                                _photos.add(
+                                    'https://picsum.photos/id/${_photos.length}/200/300');
                               });
                             },
                           );
@@ -329,7 +331,8 @@ class _AddSightScreenState extends State<AddSightScreen> {
                       ),
                       onPressed: canSave
                           ? () {
-                              placeInteractor.addNewPlace(
+                              context.read<IPlaceInteractor>()
+                                  .addNewPlace(
                                 Place(
                                   id: null,
                                   placeName: _name!,

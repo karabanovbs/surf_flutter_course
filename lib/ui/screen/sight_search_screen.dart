@@ -7,6 +7,7 @@ import 'package:places/res/text_constants.dart' as text_constants;
 import 'package:places/ui/screen/sight_details.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 import 'package:places/ui/widgets/widgets.dart';
+import 'package:provider/provider.dart';
 
 class SightSearchScreen extends StatefulWidget {
   @override
@@ -26,7 +27,8 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
 
   void _search(String search) async {
     if (search.trim().isNotEmpty) {
-      searchResult = await searchPlaceInteractor.searchPlaces(search);
+      searchResult = await context.read<ISearchPlaceInteractor>()
+          .searchPlaces(search);
       print('search: $search');
       setState(() {});
     }
@@ -79,7 +81,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
             height: 32,
           ),
           FutureBuilder<List<String>>(
-            future: searchPlaceInteractor.getHistory(),
+            future: context.read<ISearchPlaceInteractor>().getHistory(),
             initialData: [],
             builder: (context, snapshot) {
               final searchHistory = snapshot.data;
@@ -90,11 +92,11 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                   child: _SearchHistory(
                     searchHistory: searchHistory,
                     clearHistory: () async {
-                      await searchPlaceInteractor.clearHistory();
+                      await context.read<ISearchPlaceInteractor>().clearHistory();
                       setState(() {});
                     },
                     remove: (search) async {
-                      await searchPlaceInteractor.removeHistory(search);
+                      await context.read<ISearchPlaceInteractor>().removeHistory(search);
                       setState(() {});
                     },
                     select: (search) {
