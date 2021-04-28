@@ -2,8 +2,12 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/data/stores/sight_favorite_store.dart';
+import 'package:places/data/stores/sight_list_store.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/res/text_constants.dart';
 import 'package:places/ui/screen/add_sight_screen.dart';
@@ -14,8 +18,6 @@ import 'package:places/ui/screen/sight_search_screen.dart';
 import 'package:places/ui/screen/visiting_screen.dart';
 import 'package:places/ui/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:rxdart/rxdart.dart';
-
 
 /// Constants
 ///   AppBar
@@ -32,19 +34,6 @@ const double bodyPaddingLeft = appBarPaddingLeft;
 const double bodyPaddingRight = appBarPaddingRight;
 const double cardPaddingBottom = appBarPaddingBottom;
 
-// Когда нибудь это будет состояние
-abstract class _LoadingState {}
-
-class _LoadingStateInProgress extends _LoadingState {}
-
-class _LoadingStateSuccess<T> extends _LoadingState {
-  final T data;
-
-  _LoadingStateSuccess(this.data);
-}
-
-class _LoadingStateError extends _LoadingState {}
-
 /// App home screen with list of sight
 class SightListScreen extends StatefulWidget {
   @override
@@ -52,35 +41,19 @@ class SightListScreen extends StatefulWidget {
 }
 
 class _SightListScreenState extends State<SightListScreen> {
-  late Stream<_LoadingState> _loadPlacesStream;
-
-  final StreamController<void> _likeChanged =
-      StreamController<void>.broadcast();
-
-@override
-  void initState() {
-  _loadPlacesStream = (() async* {
-    try {
-      yield _LoadingStateInProgress();
-      yield _LoadingStateSuccess(await context.read<IPlaceInteractor>().getPlaces(null, []));
-    } catch (_) {
-      yield _LoadingStateError();
-    }
-  })();
-    super.initState();
-  }
+  late SightListStore _sightListStore;
 
   @override
-  void dispose() {
-    _likeChanged.close();
-    super.dispose();
+  void initState() {
+    _sightListStore = SightListStore(context.read<IPlaceInteractor>());
+    _sightListStore.loadPlaces();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       /// Create AppBar
-      // appBar: _AppBar(),
       body: SafeArea(
         child: Stack(
           children: [
@@ -118,95 +91,45 @@ class _SightListScreenState extends State<SightListScreen> {
                     right: bodyPaddingRight,
                     left: bodyPaddingLeft,
                   ),
-                  sliver: StreamBuilder<_LoadingState>(
-                    stream: _loadPlacesStream,
-                    initialData: _LoadingStateInProgress(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<_LoadingState> snapshot) {
-                      var data = snapshot.data;
-                      if (data is _LoadingStateInProgress) {
-                        return SliverToBoxAdapter(
+                  sliver: Observer(
+                    builder: (BuildContext context) {
+                      if (_sightListStore.places?.status ==
+                          FutureStatus.pending) {
+                        return SliverFillRemaining(
                           child: Center(
                             child: CircularProgressIndicator(),
                           ),
                         );
                       }
 
-                      if (data is _LoadingStateSuccess<List<Place>>) {
-                        return SliverGrid(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisSpacing: 36,
-                            mainAxisSpacing: cardPaddingBottom,
-                            childAspectRatio: 328 / 188,
-                            crossAxisCount:
-                                MediaQuery.of(context).orientation ==
-                                        Orientation.landscape
-                                    ? 2
-                                    : 1,
-                          ),
-                          delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                              Place sight = data.data[index];
-                              return StreamBuilder<bool>(
-                                stream: _likeChanged.stream
-                                    .startWith(null)
-                                    .flatMap<bool>(
-                                  (event) async* {
-                                    yield await context.read<IPlaceInteractor>()
-                                        .isFavoritePlace(sight);
-                                  },
-                                ).distinct(),
-                                initialData: false,
-                                builder: (context, snapshot) {
-                                  return SightCard(
-                                    liked: snapshot.data ?? false,
-                                    onPressed: () {
-                                      showModalBottomSheet(
-                                        context: context,
-                                        builder: (context) {
-                                          return DraggableScrollableSheet(
-                                            initialChildSize: 0.9,
-                                            builder: (context, _) {
-                                              return ClipRRect(
-                                                borderRadius:
-                                                    const BorderRadius.only(
-                                                  topLeft:
-                                                      const Radius.circular(12),
-                                                  bottomRight:
-                                                      const Radius.circular(12),
-                                                ),
-                                                child: SightDetails(
-                                                  sightId: sight.id!,
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                        isScrollControlled: true,
-                                        backgroundColor: Color(0x00000000),
-                                      );
-                                    },
-                                    sight: sight,
-                                    onLike: () async {
-                                      if (await context.read<IPlaceInteractor>()
-                                          .isFavoritePlace(sight)) {
-                                        await context.read<IPlaceInteractor>()
-                                            .removeFromFavorites(sight);
-                                        _likeChanged.add(null);
-                                      } else {
-                                        await context.read<IPlaceInteractor>()
-                                            .addToFavorites(sight);
-                                        _likeChanged.add(null);
-                                      }
-                                    },
-                                  );
-                                },
-                              );
-                            },
-                            childCount: data.data.length,
-                          ),
-                        );
+                      if (_sightListStore.places?.status ==
+                          FutureStatus.fulfilled) {
+                        final places = _sightListStore.places?.value;
+
+                        if (places != null) {
+                          return SliverGrid(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisSpacing: 36,
+                              mainAxisSpacing: cardPaddingBottom,
+                              childAspectRatio: 328 / 188,
+                              crossAxisCount:
+                                  MediaQuery.of(context).orientation ==
+                                          Orientation.landscape
+                                      ? 2
+                                      : 1,
+                            ),
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                                Place place = places[index];
+                                return _PlaceCard(
+                                  place: place,
+                                );
+                              },
+                              childCount: places.length,
+                            ),
+                          );
+                        }
                       }
 
                       return SliverFillRemaining(
@@ -354,5 +277,74 @@ class SliverSearchAppbar extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
     return false;
+  }
+}
+
+class _PlaceCard extends StatefulWidget {
+  final Place place;
+
+  const _PlaceCard({
+    Key? key,
+    required this.place,
+  }) : super(key: key);
+
+  @override
+  __PlaceCardState createState() => __PlaceCardState();
+}
+
+class __PlaceCardState extends State<_PlaceCard> {
+  late SightFavoriteStore _sightFavoriteStore;
+
+  @override
+  void initState() {
+    _sightFavoriteStore =
+        SightFavoriteStore(context.read<IPlaceInteractor>(), widget.place);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Observer(
+      builder: (BuildContext context) {
+        return SightCard(
+          liked: _sightFavoriteStore.isFavorite,
+          onPressed: () {
+            final id = widget.place.id;
+
+            if (id != null) {
+              showModalBottomSheet(
+                context: context,
+                builder: (context) {
+                  return DraggableScrollableSheet(
+                    initialChildSize: 0.9,
+                    builder: (context, _) {
+                      return ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: const Radius.circular(12),
+                          bottomRight: const Radius.circular(12),
+                        ),
+                        child: SightDetails(
+                          sightId: id,
+                        ),
+                      );
+                    },
+                  );
+                },
+                isScrollControlled: true,
+                backgroundColor: Color(0x00000000),
+              );
+            }
+          },
+          sight: widget.place,
+          onLike: () async {
+            if (_sightFavoriteStore.isFavorite) {
+              await _sightFavoriteStore.removeFromFavorites(widget.place);
+            } else {
+              await _sightFavoriteStore.addToFavorites(widget.place);
+            }
+          },
+        );
+      },
+    );
   }
 }
