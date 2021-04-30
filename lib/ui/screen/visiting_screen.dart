@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/blocs/favorite_places_list/favorite_places_list_bloc.dart';
+import 'package:places/blocs/visit_places_list/visit_places_list_bloc.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/domain/sight.dart';
@@ -22,129 +25,155 @@ class VisitingScreen extends StatefulWidget {
 class _VisitingScreenState extends State<VisitingScreen> {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Theme.of(context).colorScheme.background,
-          elevation: 0,
-          title: Text(
-            visitingScreenTitle,
-            style: TextStyle(
-              fontSize: 18,
-              color: Theme.of(context).colorScheme.onBackground,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => FavoritePlacesListBloc(
+            context.read<IPlaceInteractor>(),
+          )..add(FetchFavoritePlacesListEvent()),
+        ),
+        BlocProvider(
+          create: (context) => VisitPlacesListBloc(
+            context.read<IPlaceInteractor>(),
+          )..add(FetchVisitPlacesListEvent()),
+        )
+      ],
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            backgroundColor: Theme.of(context).colorScheme.background,
+            elevation: 0,
+            title: Text(
+              visitingScreenTitle,
+              style: TextStyle(
+                fontSize: 18,
+                color: Theme.of(context).colorScheme.onBackground,
+              ),
             ),
-          ),
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(40),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: _VisitingTabBar(
-                tabs: [
-                  visitingScreenFavTabLabel,
-                  visitingScreenFavHistoryTabLabel,
-                ],
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(40),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: _VisitingTabBar(
+                  tabs: [
+                    visitingScreenFavTabLabel,
+                    visitingScreenFavHistoryTabLabel,
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        body: TabBarView(
-          children: [
-            FutureBuilder<List<Place>>(
-              future: context.read<IPlaceInteractor>().getFavoritePlaces(),
-              builder: (context, snapshot) {
-                return _TabCardsList(
-                  sights: snapshot.data ?? <Place>[],
-                  onReorder: (orderedSights) {
-                    setState(() {
-                      context.read<IPlaceInteractor>()
-                          .addToFavoritesAll(orderedSights.cast<Place>());
-                    });
-                  },
-                  cardBuilder: (sight) {
-                    return FavoriteSightCard(
-                      sight: sight,
-                      onRemove: () {
-                        setState(() {
-                          context.read<IPlaceInteractor>().removeFromFavorites(sight as Place);
-                        });
-                      },
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => SightDetails(
-                              sightId: (sight as Place).id!,
-                            ),
+          body: TabBarView(
+            children: [
+              BlocBuilder<FavoritePlacesListBloc, FavoritePlacesListState>(
+                builder: (context, favoritePlacesListState) {
+                  if (favoritePlacesListState
+                      is SuccessFavoritePlacesListState) {
+                    return _TabCardsList(
+                      sights: favoritePlacesListState.places,
+                      onReorder: (orderedSights) {
+                        BlocProvider.of<FavoritePlacesListBloc>(context).add(
+                          ReorderFavoritePlacesListEvent(
+                            orderedSights.cast<Place>(),
                           ),
                         );
                       },
-                      onDate: () async {
-                        var now = DateTime.now();
-                        var minDate = now;
-                        var maxDate = now.add(
-                          Duration(
-                            days: 365,
-                          ),
-                        );
-                        DateTime? date;
-                        if (Platform.isAndroid) {
-                          date = await showDatePicker(
-                            context: context,
-                            initialDate: now,
-                            firstDate: minDate,
-                            lastDate: maxDate,
-                          );
-                        } else {
-                          await showModalBottomSheet(
-                            context: context,
-                            builder: (context) => SizedBox(
-                              height: 240,
-                              child: CupertinoDatePicker(
-                                minimumDate: minDate,
-                                maximumDate: maxDate,
-                                initialDateTime: now,
-                                mode: CupertinoDatePickerMode.date,
-                                onDateTimeChanged: (value) {
-                                  date = value;
-                                },
+                      cardBuilder: (sight) {
+                        return FavoriteSightCard(
+                          sight: sight,
+                          onRemove: () {
+                            BlocProvider.of<FavoritePlacesListBloc>(context)
+                                .add(
+                              RemoveFavoritePlacesListEvent(sight as Place),
+                            );
+                          },
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => SightDetails(
+                                  sightId: (sight as Place).id!,
+                                ),
                               ),
-                            ),
-                          );
-                        }
-                        print(date);
+                            );
+                          },
+                          onDate: () async {
+                            var now = DateTime.now();
+                            var minDate = now;
+                            var maxDate = now.add(
+                              Duration(
+                                days: 365,
+                              ),
+                            );
+                            DateTime? date;
+                            if (Platform.isAndroid) {
+                              date = await showDatePicker(
+                                context: context,
+                                initialDate: now,
+                                firstDate: minDate,
+                                lastDate: maxDate,
+                              );
+                            } else {
+                              await showModalBottomSheet(
+                                context: context,
+                                builder: (context) => SizedBox(
+                                  height: 240,
+                                  child: CupertinoDatePicker(
+                                    minimumDate: minDate,
+                                    maximumDate: maxDate,
+                                    initialDateTime: now,
+                                    mode: CupertinoDatePickerMode.date,
+                                    onDateTimeChanged: (value) {
+                                      date = value;
+                                    },
+                                  ),
+                                ),
+                              );
+                            }
+                            print(date);
+                          },
+                        );
                       },
                     );
-                  },
-                );
-              },
-            ),
-            FutureBuilder<List<Place>>(
-                future: context.read<IPlaceInteractor>().getVisitPlaces(),
-                initialData: [],
-                builder: (context, snapshot) {
-                  return _TabCardsList(
-                    sights: snapshot.data ?? [],
-                    cardBuilder: (sight) {
-                      return FavoriteHistorySightCard(
-                        sight: sight,
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => SightDetails(
-                                sightId: (sight as Place).id!,
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
+                  }
+
+                  return Center(
+                    child: CircularProgressIndicator(),
                   );
-                }),
-          ],
-        ),
-        bottomNavigationBar: AppBottomNavBar(
-          index: 2,
+                },
+              ),
+              BlocBuilder<VisitPlacesListBloc, VisitPlacesListState>(
+                builder: (context, visitPlacesListState) {
+                  if (visitPlacesListState is SuccessVisitPlacesListState) {
+                    return _TabCardsList(
+                      sights: visitPlacesListState.places,
+                      cardBuilder: (sight) {
+                        return FavoriteHistorySightCard(
+                          sight: sight,
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => SightDetails(
+                                  sightId: (sight as Place).id!,
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              )
+            ],
+          ),
+          bottomNavigationBar: AppBottomNavBar(
+            index: 2,
+          ),
         ),
       ),
     );

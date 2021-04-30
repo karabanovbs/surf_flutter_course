@@ -20,6 +20,7 @@ dependencies:
       path: packages/svg_to_path_annotation
       ref: 0.0.2+4
   mobx: ^2.0.1
+  flutter_bloc: ^7.0.0
   flutter_mobx: ^2.0.0
 
 dev_dependencies:
