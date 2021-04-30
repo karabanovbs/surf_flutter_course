@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:places/data/interactor/search_place_interactor.dart';
 import 'package:places/data/model/model.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/drawing/drawing.dart';
+import 'package:places/redux/state/app_state.dart';
+import 'package:places/redux/store.dart';
 import 'package:places/res/text_constants.dart' as text_constants;
 import 'package:places/ui/screen/sight_details.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 import 'package:places/ui/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:redux/redux.dart';
 
 class SightSearchScreen extends StatefulWidget {
   @override
@@ -17,20 +21,17 @@ class SightSearchScreen extends StatefulWidget {
 class _SightSearchScreenState extends State<SightSearchScreen> {
   late final TextEditingController controller;
 
-  List<Sight> searchResult = [];
-
   @override
   void initState() {
     super.initState();
+    context.read<Store<AppState>>().dispatch(SearchPlaceLoadHistoryAction());
     controller = TextEditingController()..addListener(_searchListener);
   }
 
   void _search(String search) async {
     if (search.trim().isNotEmpty) {
-      searchResult = await context.read<ISearchPlaceInteractor>()
-          .searchPlaces(search);
+      context.read<Store<AppState>>().dispatch(SearchPlaceSearchAction(search));
       print('search: $search');
-      setState(() {});
     }
   }
 
@@ -80,87 +81,106 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
           SizedBox(
             height: 32,
           ),
-          FutureBuilder<List<String>>(
-            future: context.read<ISearchPlaceInteractor>().getHistory(),
-            initialData: [],
-            builder: (context, snapshot) {
-              final searchHistory = snapshot.data;
-              if (searchHistory != null &&
-                  searchHistory.isNotEmpty &&
-                  controller.text.isEmpty) {
-                return Expanded(
-                  child: _SearchHistory(
-                    searchHistory: searchHistory,
-                    clearHistory: () async {
-                      await context.read<ISearchPlaceInteractor>().clearHistory();
-                      setState(() {});
-                    },
-                    remove: (search) async {
-                      await context.read<ISearchPlaceInteractor>().removeHistory(search);
-                      setState(() {});
-                    },
-                    select: (search) {
-                      setState(() {
+          StoreConnector(
+            converter: (Store<AppState> store) {
+              return store.state.searchPlaceHistoryState;
+            },
+            builder: (BuildContext context, ISearchPlaceHistoryState state) {
+              if (state is SearchPlaceHistoryState) {
+                final searchHistory = state.searchHistory;
+                if (searchHistory.isNotEmpty && controller.text.isEmpty) {
+                  return Expanded(
+                    child: _SearchHistory(
+                      searchHistory: searchHistory,
+                      clearHistory: () async {
+                        context.read<Store<AppState>>().dispatch(SearchPlaceClearHistoryFailureAction());
+                      },
+                      remove: (search) async {
+                        context.read<Store<AppState>>().dispatch(SearchPlaceRemoveHistoryFailureAction(search));
+                      },
+                      select: (search) {
                         controller.text = search;
                         _search(controller.text);
-                      });
-                    },
-                  ),
-                );
+                      },
+                    ),
+                  );
+                }
               }
+
               return Container();
             },
           ),
-          if (searchResult.isEmpty && controller.text.isNotEmpty)
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 50.83,
-                    height: 48,
-                    child: IconWrapper(
-                      color: Theme.of(context).colorScheme.onSurface,
-                      child: SearchIcon(),
+          StoreConnector(
+            converter: (Store<AppState> store) {
+              return store.state.searchPlaceState;
+            },
+            builder: (context, ISearchPlaceState state) {
+              if (state is SearchPlaceState) {
+                if (state.result.isEmpty && controller.text.isNotEmpty) {
+                  return Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 50.83,
+                          height: 48,
+                          child: IconWrapper(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            child: SearchIcon(),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 32,
+                        ),
+                        Text(
+                          text_constants.sightSearchNotFoundLbl,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline3
+                              ?.copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          text_constants.sightSearchNotFoundDescriptionLbl,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText2
+                              ?.copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface),
+                        ),
+                      ],
                     ),
-                  ),
-                  SizedBox(
-                    height: 32,
-                  ),
-                  Text(
-                    text_constants.sightSearchNotFoundLbl,
-                    style: Theme.of(context).textTheme.headline3?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    text_constants.sightSearchNotFoundDescriptionLbl,
-                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface),
-                  ),
-                ],
-              ),
-            ),
-          if (searchResult.isNotEmpty && controller.text.isNotEmpty)
-            Expanded(
-              child: _SightSearchResultList(
-                searchResult: searchResult,
-                search: controller.text,
-                onPressed: (sight) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return SightDetails(
-                          sightId: (sight as Place).id!,
+                  );
+                }
+
+                if (state.result.isNotEmpty && controller.text.isNotEmpty) {
+                  return Expanded(
+                    child: _SightSearchResultList(
+                      searchResult: state.result,
+                      search: controller.text,
+                      onPressed: (sight) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return SightDetails(
+                                sightId: (sight as Place).id!,
+                              );
+                            },
+                          ),
                         );
                       },
                     ),
                   );
-                },
-              ),
-            ),
+                }
+              }
+              return Container();
+            },
+          ),
         ],
       ),
     );
@@ -244,7 +264,7 @@ class _SightSearchResultListItem extends StatelessWidget {
                     width: 56,
                     child: Image.network(
                       sight.url,
-                      fit: BoxFit.fitWidth,
+                      fit: BoxFit.cover,
                       alignment: Alignment.topCenter,
                       loadingBuilder:
                           (context, child, ImageChunkEvent? loadingProgress) {
