@@ -1,46 +1,35 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mwwm/mwwm.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/model.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/domain/sight_type.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/res/text_constants.dart';
+import 'package:places/ui/screen/add_sight_screen/add_sight_wm.dart';
 import 'package:places/ui/screen/select_type_screen.dart';
 import 'package:places/ui/widgets/primary_button.dart';
 import 'package:places/ui/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:relation/relation.dart';
 
 /// Add new [Sight] screen
-class AddSightScreen extends StatefulWidget {
+class AddSightScreen extends CoreMwwmWidget {
+  const AddSightScreen({
+    required WidgetModelBuilder widgetModelBuilder,
+    Key? key,
+  }) : super(
+          key: key,
+          widgetModelBuilder: widgetModelBuilder,
+        );
+
   @override
   _AddSightScreenState createState() => _AddSightScreenState();
 }
 
-class _AddSightScreenState extends State<AddSightScreen> {
-  ESightType? _selectedType;
-  String? _name;
-  String? _description;
-  double? _long;
-  double? _lat;
-
-  List<String> _photos = [];
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(EnumProperty('selectedType', _selectedType));
-    properties.add(StringProperty('name', _name));
-    properties.add(StringProperty('description', _description));
-    properties.add(DoubleProperty('long', _long));
-    properties.add(DoubleProperty('lat', _lat));
-    properties.add(IterableProperty('lat', _photos));
-  }
-
-  bool get canSave =>
-      _selectedType != null && _name != null && _lat != null && _long != null;
-
+class _AddSightScreenState extends WidgetState<AddSightWidgetModel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,45 +67,52 @@ class _AddSightScreenState extends State<AddSightScreen> {
                 children: [
                   SizedBox(
                     height: 72 + 24 * 2,
-                    child: ListView.separated(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 24,
-                      ),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _photos.length + 1,
-                      itemBuilder: (BuildContext context, int index) {
-                        if (index == 0) {
-                          return AddPhoto(
-                            onPressed: () async {
-                              var result = await showDialog<SelectPhotoType>(
-                                context: context,
-                                builder: (BuildContext dialogContext) {
-                                  return SelectPhotoDialog();
+                    child: StreamedStateBuilder<List<String>>(
+                      streamedState: wm.loadedPhotosStream,
+                      builder: (context, _photos) {
+                        if (_photos != null) {
+                          return ListView.separated(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 24,
+                            ),
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _photos.length + 1,
+                            itemBuilder: (BuildContext context, int index) {
+                              if (index == 0) {
+                                return AddPhoto(
+                                  onPressed: () async {
+                                    var result =
+                                        await showDialog<SelectPhotoType>(
+                                      context: context,
+                                      builder: (BuildContext dialogContext) {
+                                        return SelectPhotoDialog();
+                                      },
+                                    );
+
+                                    wm.loadPhotoAction.accept();
+                                  },
+                                );
+                              }
+
+                              return RemovablePhoto(
+                                photo: NetworkImage(_photos[index - 1]),
+                                onRemove: () {
+                                  wm.removePhotoAction
+                                      .accept(_photos[index - 1]);
                                 },
                               );
-
-                              setState(() {
-                                _photos.add(
-                                    'https://picsum.photos/id/${_photos.length}/200/300');
-                              });
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              return SizedBox(
+                                width: 16,
+                              );
                             },
                           );
                         }
 
-                        return RemovablePhoto(
-                          photo: NetworkImage(_photos[index - 1]),
-                          onRemove: () {
-                            setState(() {
-                              _photos.remove(_photos[index - 1]);
-                            });
-                          },
-                        );
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return SizedBox(
-                          width: 16,
-                        );
+                        return Container();
                       },
                     ),
                   ),
@@ -141,19 +137,23 @@ class _AddSightScreenState extends State<AddSightScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      _selectedType != null
-                                          ? SightType(_selectedType!).label
-                                          : notSelect,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline5!
-                                          .copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .secondary,
-                                          ),
-                                    ),
+                                    StreamedStateBuilder<ESightType?>(
+                                        streamedState: wm.selectedTypeStream,
+                                        builder: (context, state) {
+                                          return Text(
+                                            state != null
+                                                ? SightType(state).label
+                                                : notSelect,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline5!
+                                                .copyWith(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary,
+                                                ),
+                                          );
+                                        }),
                                     SizedBox(
                                       height: 12,
                                       child: IconWrapper(
@@ -176,9 +176,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                                   },
                                 ),
                               ).then((value) {
-                                setState(() {
-                                  _selectedType = value;
-                                });
+                                wm.selectedTypeStream.accept(value);
                               });
                             },
                           ),
@@ -207,9 +205,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                               child: _PrimaryTextField(
                                 hintText: addSightScreenNameHint,
                                 onChanged: (value) {
-                                  setState(() {
-                                    _name = value;
-                                  });
+                                  wm.nameStream.accept(value);
                                 },
                               ),
                             ),
@@ -236,9 +232,9 @@ class _AddSightScreenState extends State<AddSightScreen> {
                                       hintText: addSightScreenLatHint,
                                       numeric: true,
                                       onChanged: (value) {
-                                        setState(() {
-                                          _lat = double.parse(value);
-                                        });
+                                        wm.latStream.accept(
+                                          double.parse(value),
+                                        );
                                       },
                                     ),
                                   ),
@@ -260,9 +256,9 @@ class _AddSightScreenState extends State<AddSightScreen> {
                                       hintText: addSightScreenLonHint,
                                       numeric: true,
                                       onChanged: (value) {
-                                        setState(() {
-                                          _long = double.parse(value);
-                                        });
+                                        wm.longStream.accept(
+                                          double.parse(value),
+                                        );
                                       },
                                     ),
                                   ),
@@ -307,9 +303,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                                 multiline: true,
                                 hintText: addSightScreenDescriptionHint,
                                 onChanged: (value) {
-                                  setState(() {
-                                    _description = value;
-                                  });
+                                  wm.descriptionStream.accept(value);
                                 },
                               ),
                             ),
@@ -323,30 +317,24 @@ class _AddSightScreenState extends State<AddSightScreen> {
                       vertical: 8,
                       horizontal: 16,
                     ),
-                    child: PrimaryButton(
-                      child: Center(
-                        child: Text(
-                          save.toUpperCase(),
-                        ),
-                      ),
-                      onPressed: canSave
-                          ? () {
-                              context.read<IPlaceInteractor>()
-                                  .addNewPlace(
-                                Place(
-                                  id: null,
-                                  placeName: _name!,
-                                  description: _description,
-                                  lat: _lat,
-                                  lng: _long,
-                                  placeType: SightType(_selectedType!),
-                                  urls: _photos,
-                                ),
-                              );
+                    child: StreamedStateBuilder<bool>(
+                      streamedState: wm.canSaveStream,
+                      builder: (context, canSave) {
+                        return PrimaryButton(
+                          child: Center(
+                            child: Text(
+                              save.toUpperCase(),
+                            ),
+                          ),
+                          onPressed: (canSave ?? false)
+                              ? () {
+                                  wm.savePlace();
 
-                              Navigator.of(context).pop();
-                            }
-                          : null,
+                                  Navigator.of(context).pop();
+                                }
+                              : null,
+                        );
+                      },
                     ),
                   ),
                 ],

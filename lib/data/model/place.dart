@@ -39,7 +39,7 @@ class Place implements Sight {
         'lng': lng,
         'name': placeName,
         'urls': urls,
-        'placeType': placeType,
+        'placeType': placeType.toString(),
         'description': description,
       };
 
