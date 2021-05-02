@@ -19,9 +19,11 @@ dependencies:
       url: https://github.com/karabanovbs/svg_to_path_generator
       path: packages/svg_to_path_annotation
       ref: 0.0.2+4
+  flutter_mobx: ^2.0.0
   mobx: ^2.0.1
   flutter_bloc: ^7.0.0
-  flutter_mobx: ^2.0.0
+  flutter_redux: ^0.8.2
+  redux: ^5.0.0
 
 dev_dependencies:
   flutter_test:
