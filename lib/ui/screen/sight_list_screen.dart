@@ -183,7 +183,11 @@ class SightListScreen extends StatelessWidget {
                     ),
                     onPressed: () {
                       Navigator.of(context).push(
-                        AddSightScreenRoute(),
+                        MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return AddSightScreenRoute();
+                          },
+                        ),
                       );
                     },
                   ),
