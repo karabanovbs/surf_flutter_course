@@ -16,8 +16,6 @@ dependencies:
   provider: ^5.0.0
   svg_to_path_annotation: ^1.0.0
   flutter_bloc: ^7.0.0
-  flutter_redux: ^0.8.2
-  redux: ^5.0.0
   mwwm: ^1.1.0
   relation: ^2.0.0
   freezed_annotation: ^0.14.2

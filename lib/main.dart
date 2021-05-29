@@ -1,13 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/dio_client.dart';
-import 'package:places/redux/store.dart';
 import 'package:places/ui/screen/splash_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:redux/redux.dart';
-
 import 'data/interactor/place_interactor.dart';
 import 'data/interactor/search_place_interactor.dart';
 import 'data/interactor/theme_interactor.dart';
@@ -40,28 +36,14 @@ class App extends StatelessWidget {
           create: (context) =>
               InMemoryPlaceInteractor(context.read<IPlaceRepository>()),
         ),
-        Provider(
-          create: (context) => Store<AppState>(
-            appStateReducer,
-            initialState: AppState(),
-            middleware: [
-              SearchPlaceMiddleware(
-                context.read<ISearchPlaceInteractor>(),
-              ),
-            ],
-          ),
-        )
       ],
       child: Consumer<ThemeSettingsInteractor>(
         builder: (context, value, child) {
-          return StoreProvider(
-            store: context.read<Store<AppState>>(),
-            child: MaterialApp(
-              title: 'App title',
-              theme: value.currentTheme,
-              home: SplashScreen(
-                isInitialized: Future.delayed(Duration(seconds: 2)),
-              ),
+          return MaterialApp(
+            title: 'App title',
+            theme: value.currentTheme,
+            home: SplashScreen(
+              isInitialized: Future.delayed(Duration(seconds: 2)),
             ),
           );
         },
