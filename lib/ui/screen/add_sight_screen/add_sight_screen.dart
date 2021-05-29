@@ -2,8 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mwwm/mwwm.dart';
-import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/model/model.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/domain/sight_type.dart';
 import 'package:places/drawing/drawing.dart';
@@ -12,7 +10,6 @@ import 'package:places/ui/screen/add_sight_screen/add_sight_wm.dart';
 import 'package:places/ui/screen/select_type_screen.dart';
 import 'package:places/ui/widgets/primary_button.dart';
 import 'package:places/ui/widgets/widgets.dart';
-import 'package:provider/provider.dart';
 import 'package:relation/relation.dart';
 
 /// Add new [Sight] screen

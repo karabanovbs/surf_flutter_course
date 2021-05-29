@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:places/data/interactor/search_place_interactor.dart';
 import 'package:places/data/model/model.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/drawing/drawing.dart';
