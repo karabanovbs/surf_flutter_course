@@ -10,7 +10,8 @@ import 'package:places/data/stores/sight_favorite_store.dart';
 import 'package:places/data/stores/sight_list_store.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/res/text_constants.dart';
-import 'package:places/ui/screen/add_sight_screen.dart';
+import 'package:places/ui/screen/add_sight_screen/add_sight_route.dart';
+import 'package:places/ui/screen/add_sight_screen/add_sight_screen.dart';
 import 'package:places/ui/screen/filters_screen.dart';
 import 'package:places/ui/screen/sight_card.dart';
 import 'package:places/ui/screen/sight_details.dart';
@@ -190,9 +191,7 @@ class _SightListScreenState extends State<SightListScreen> {
                   ),
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => AddSightScreen(),
-                      ),
+                      AddSightScreenRoute(),
                     );
                   },
                 ),
