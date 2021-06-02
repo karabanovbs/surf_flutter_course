@@ -54,10 +54,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _navigateToNext() async {
     await widget.isInitialized;
-    // Navigator.of(context).pushReplacement(
-    //   MaterialPageRoute(
-    //     builder: (context) => OnboardingScreen(),
-    //   ),
-    // );
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => OnboardingScreen(),
+      ),
+    );
   }
 }
