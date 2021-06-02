@@ -1,35 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mwwm/mwwm.dart';
-import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/model/model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/blocs/add_sight_form/add_sight_form_bloc.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/domain/sight_type.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/res/text_constants.dart';
-import 'package:places/ui/screen/add_sight_screen/add_sight_wm.dart';
 import 'package:places/ui/screen/select_type_screen.dart';
 import 'package:places/ui/widgets/primary_button.dart';
 import 'package:places/ui/widgets/widgets.dart';
-import 'package:provider/provider.dart';
-import 'package:relation/relation.dart';
 
 /// Add new [Sight] screen
-class AddSightScreen extends CoreMwwmWidget {
-  const AddSightScreen({
-    required WidgetModelBuilder widgetModelBuilder,
-    Key? key,
-  }) : super(
-          key: key,
-          widgetModelBuilder: widgetModelBuilder,
-        );
-
-  @override
-  _AddSightScreenState createState() => _AddSightScreenState();
-}
-
-class _AddSightScreenState extends WidgetState<AddSightWidgetModel> {
+class AddSightScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,52 +50,54 @@ class _AddSightScreenState extends WidgetState<AddSightWidgetModel> {
                 children: [
                   SizedBox(
                     height: 72 + 24 * 2,
-                    child: StreamedStateBuilder<List<String>>(
-                      streamedState: wm.loadedPhotosStream,
-                      builder: (context, _photos) {
-                        if (_photos != null) {
-                          return ListView.separated(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 24,
-                            ),
-                            scrollDirection: Axis.horizontal,
-                            itemCount: _photos.length + 1,
-                            itemBuilder: (BuildContext context, int index) {
-                              if (index == 0) {
-                                return AddPhoto(
-                                  onPressed: () async {
-                                    var result =
-                                        await showDialog<SelectPhotoType>(
-                                      context: context,
-                                      builder: (BuildContext dialogContext) {
-                                        return SelectPhotoDialog();
-                                      },
-                                    );
-
-                                    wm.loadPhotoAction.accept();
-                                  },
-                                );
-                              }
-
-                              return RemovablePhoto(
-                                photo: NetworkImage(_photos[index - 1]),
-                                onRemove: () {
-                                  wm.removePhotoAction
-                                      .accept(_photos[index - 1]);
+                    child: BlocBuilder<AddSightFormBloc, AddSightFormState>(
+                      buildWhen: (previous, current) =>
+                          previous.photos.length != current.photos.length,
+                      builder: (context, addSightFormState) {
+                        var _photos = addSightFormState.photos;
+                        return ListView.separated(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 24,
+                          ),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _photos.length + 1,
+                          itemBuilder: (BuildContext context, int index) {
+                            if (index == 0) {
+                              return AddPhoto(
+                                onPressed: () async {
+                                  var result =
+                                      await showDialog<SelectPhotoType>(
+                                    context: context,
+                                    builder: (BuildContext dialogContext) {
+                                      return SelectPhotoDialog();
+                                    },
+                                  );
+                                  BlocProvider.of<AddSightFormBloc>(context)
+                                      .add(AddSightFormEvent.loadPhoto());
                                 },
                               );
-                            },
-                            separatorBuilder:
-                                (BuildContext context, int index) {
-                              return SizedBox(
-                                width: 16,
-                              );
-                            },
-                          );
-                        }
+                            }
 
-                        return Container();
+                            return RemovablePhoto(
+                              photo: NetworkImage(_photos[index - 1]),
+                              onRemove: () {
+                                BlocProvider.of<AddSightFormBloc>(context)
+                                    .add(
+                                  AddSightFormEvent.removePhoto(
+                                    _photos[index - 1],
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          separatorBuilder:
+                              (BuildContext context, int index) {
+                            return SizedBox(
+                              width: 16,
+                            );
+                          },
+                        );
                       },
                     ),
                   ),
@@ -137,9 +122,14 @@ class _AddSightScreenState extends WidgetState<AddSightWidgetModel> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    StreamedStateBuilder<ESightType?>(
-                                        streamedState: wm.selectedTypeStream,
-                                        builder: (context, state) {
+                                    BlocBuilder<AddSightFormBloc,
+                                            AddSightFormState>(
+                                        buildWhen: (previous, current) =>
+                                            previous.selectedType !=
+                                            current.selectedType,
+                                        builder: (context, addSightFormState) {
+                                          var state =
+                                              addSightFormState.selectedType;
                                           return Text(
                                             state != null
                                                 ? SightType(state).label
@@ -176,7 +166,11 @@ class _AddSightScreenState extends WidgetState<AddSightWidgetModel> {
                                   },
                                 ),
                               ).then((value) {
-                                wm.selectedTypeStream.accept(value);
+                                BlocProvider.of<AddSightFormBloc>(context).add(
+                                  AddSightFormEvent.changeSelectedType(
+                                    value,
+                                  ),
+                                );
                               });
                             },
                           ),
@@ -205,7 +199,12 @@ class _AddSightScreenState extends WidgetState<AddSightWidgetModel> {
                               child: _PrimaryTextField(
                                 hintText: addSightScreenNameHint,
                                 onChanged: (value) {
-                                  wm.nameStream.accept(value);
+                                  BlocProvider.of<AddSightFormBloc>(context)
+                                      .add(
+                                    AddSightFormEvent.changeName(
+                                      value,
+                                    ),
+                                  );
                                 },
                               ),
                             ),
@@ -232,8 +231,12 @@ class _AddSightScreenState extends WidgetState<AddSightWidgetModel> {
                                       hintText: addSightScreenLatHint,
                                       numeric: true,
                                       onChanged: (value) {
-                                        wm.latStream.accept(
-                                          double.parse(value),
+                                        BlocProvider.of<AddSightFormBloc>(
+                                                context)
+                                            .add(
+                                          AddSightFormEvent.changeLat(
+                                            double.parse(value),
+                                          ),
                                         );
                                       },
                                     ),
@@ -256,8 +259,12 @@ class _AddSightScreenState extends WidgetState<AddSightWidgetModel> {
                                       hintText: addSightScreenLonHint,
                                       numeric: true,
                                       onChanged: (value) {
-                                        wm.longStream.accept(
-                                          double.parse(value),
+                                        BlocProvider.of<AddSightFormBloc>(
+                                                context)
+                                            .add(
+                                          AddSightFormEvent.changeLong(
+                                            double.parse(value),
+                                          ),
                                         );
                                       },
                                     ),
@@ -303,7 +310,12 @@ class _AddSightScreenState extends WidgetState<AddSightWidgetModel> {
                                 multiline: true,
                                 hintText: addSightScreenDescriptionHint,
                                 onChanged: (value) {
-                                  wm.descriptionStream.accept(value);
+                                  BlocProvider.of<AddSightFormBloc>(context)
+                                      .add(
+                                    AddSightFormEvent.changeDescription(
+                                      value,
+                                    ),
+                                  );
                                 },
                               ),
                             ),
@@ -317,18 +329,21 @@ class _AddSightScreenState extends WidgetState<AddSightWidgetModel> {
                       vertical: 8,
                       horizontal: 16,
                     ),
-                    child: StreamedStateBuilder<bool>(
-                      streamedState: wm.canSaveStream,
-                      builder: (context, canSave) {
+                    child: BlocBuilder<AddSightFormBloc, AddSightFormState>(
+                      builder: (context, addSightFormState) {
+                        var canSave = addSightFormState.canSave;
                         return PrimaryButton(
                           child: Center(
                             child: Text(
                               save.toUpperCase(),
                             ),
                           ),
-                          onPressed: (canSave ?? false)
+                          onPressed: (canSave)
                               ? () {
-                                  wm.savePlace();
+                                  BlocProvider.of<AddSightFormBloc>(context)
+                                      .add(
+                                    AddSightFormEvent.save(),
+                                  );
 
                                   Navigator.of(context).pop();
                                 }

@@ -1,17 +1,14 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/blocs/sight_favorite/sight_favorite_bloc.dart';
+import 'package:places/blocs/sight_list/sight_list_bloc.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/data/stores/sight_favorite_store.dart';
-import 'package:places/data/stores/sight_list_store.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/res/text_constants.dart';
 import 'package:places/ui/screen/add_sight_screen/add_sight_route.dart';
-import 'package:places/ui/screen/add_sight_screen/add_sight_screen.dart';
 import 'package:places/ui/screen/filters_screen.dart';
 import 'package:places/ui/screen/sight_card.dart';
 import 'package:places/ui/screen/sight_details.dart';
@@ -36,79 +33,61 @@ const double bodyPaddingRight = appBarPaddingRight;
 const double cardPaddingBottom = appBarPaddingBottom;
 
 /// App home screen with list of sight
-class SightListScreen extends StatefulWidget {
-  @override
-  _SightListScreenState createState() => _SightListScreenState();
-}
-
-class _SightListScreenState extends State<SightListScreen> {
-  late SightListStore _sightListStore;
-
-  @override
-  void initState() {
-    _sightListStore = SightListStore(context.read<IPlaceInteractor>());
-    _sightListStore.loadPlaces();
-    super.initState();
-  }
-
+class SightListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      /// Create AppBar
-      body: SafeArea(
-        child: Stack(
-          children: [
-            CustomScrollView(
-              slivers: [
-                SliverPersistentHeader(
-                  pinned: true,
-                  floating: true,
-                  delegate: SliverSearchAppbar(SearchBar(
-                    readonly: true,
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return SightSearchScreen();
-                          },
-                        ),
-                      );
-                    },
-                    action: SearchBarFiltersActonButton(
+    return MultiProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => SightListBloc(context.read<IPlaceInteractor>())
+            ..add(
+              SightListEvent.loadPlaces(),
+            ),
+        )
+      ],
+      child: Scaffold(
+        /// Create AppBar
+        body: SafeArea(
+          child: Stack(
+            children: [
+              CustomScrollView(
+                slivers: [
+                  SliverPersistentHeader(
+                    pinned: true,
+                    floating: true,
+                    delegate: SliverSearchAppbar(SearchBar(
+                      readonly: true,
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
-                              return FiltersScreen();
+                              return SightSearchScreen();
                             },
                           ),
                         );
                       },
-                    ),
-                  )),
-                ),
-                SliverPadding(
-                  padding: const EdgeInsets.only(
-                    right: bodyPaddingRight,
-                    left: bodyPaddingLeft,
+                      action: SearchBarFiltersActonButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return FiltersScreen();
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    )),
                   ),
-                  sliver: Observer(
-                    builder: (BuildContext context) {
-                      if (_sightListStore.places?.status ==
-                          FutureStatus.pending) {
-                        return SliverFillRemaining(
-                          child: Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
-                      }
-
-                      if (_sightListStore.places?.status ==
-                          FutureStatus.fulfilled) {
-                        final places = _sightListStore.places?.value;
-
-                        if (places != null) {
-                          return SliverGrid(
+                  SliverPadding(
+                    padding: const EdgeInsets.only(
+                      right: bodyPaddingRight,
+                      left: bodyPaddingLeft,
+                    ),
+                    sliver: BlocBuilder<SightListBloc, SightListState>(
+                      builder: (BuildContext context, state) {
+                        return state.maybeMap(
+                          loaded: (_state) => SliverGrid(
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisSpacing: 36,
@@ -122,86 +101,104 @@ class _SightListScreenState extends State<SightListScreen> {
                             ),
                             delegate: SliverChildBuilderDelegate(
                               (context, index) {
-                                Place place = places[index];
-                                return _PlaceCard(
-                                  place: place,
+                                Place place = _state.places[index];
+                                return BlocProvider(
+                                  create: (BuildContext context) =>
+                                      SightFavoriteBloc(
+                                    context.read<IPlaceInteractor>(),
+                                    place,
+                                  )..add(
+                                          SightFavoriteEvent.checkFavorite(),
+                                        ),
+                                  child: _PlaceCard(
+                                    place: place,
+                                  ),
                                 );
                               },
-                              childCount: places.length,
+                              childCount: _state.places.length,
                             ),
-                          );
-                        }
-                      }
-
-                      return SliverFillRemaining(
-                        child: ErrorSubScreen(),
+                          ),
+                          failure: (value) => SliverFillRemaining(
+                            child: ErrorSubScreen(),
+                          ),
+                          orElse: () => SliverFillRemaining(
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
+              ),
+              Positioned(
+                bottom: 16,
+                right: 0,
+                left: 0,
+                child: Center(
+                  child: TextButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all(StadiumBorder()),
+                      padding: MaterialStateProperty.all(EdgeInsets.zero),
+                    ),
+                    child: Ink(
+                      decoration: ShapeDecoration(
+                        shape: StadiumBorder(),
+                        gradient: LinearGradient(
+                          colors: [
+                            Color(0xFFFCDD3D),
+                            Color(0xFF4CAF50),
+                          ],
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 22, vertical: 15),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              width: 14,
+                              height: 14,
+                              child: PlusIcon(),
+                            ),
+                            SizedBox(
+                              width: 14,
+                            ),
+                            Text(
+                              sightListAddNewLbl.toUpperCase(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .background,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return AddSightScreenRoute();
+                          },
+                        ),
                       );
                     },
                   ),
-                )
-              ],
-            ),
-            Positioned(
-              bottom: 16,
-              right: 0,
-              left: 0,
-              child: Center(
-                child: TextButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all(StadiumBorder()),
-                    padding: MaterialStateProperty.all(EdgeInsets.zero),
-                  ),
-                  child: Ink(
-                    decoration: ShapeDecoration(
-                      shape: StadiumBorder(),
-                      gradient: LinearGradient(
-                        colors: [
-                          Color(0xFFFCDD3D),
-                          Color(0xFF4CAF50),
-                        ],
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 22, vertical: 15),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                            width: 14,
-                            height: 14,
-                            child: PlusIcon(),
-                          ),
-                          SizedBox(
-                            width: 14,
-                          ),
-                          Text(
-                            sightListAddNewLbl.toUpperCase(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle1!
-                                .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.background,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      AddSightScreenRoute(),
-                    );
-                  },
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      bottomNavigationBar: AppBottomNavBar(
-        index: 0,
+        bottomNavigationBar: AppBottomNavBar(
+          index: 0,
+        ),
       ),
     );
   }
@@ -279,7 +276,7 @@ class SliverSearchAppbar extends SliverPersistentHeaderDelegate {
   }
 }
 
-class _PlaceCard extends StatefulWidget {
+class _PlaceCard extends StatelessWidget {
   final Place place;
 
   const _PlaceCard({
@@ -288,27 +285,16 @@ class _PlaceCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  __PlaceCardState createState() => __PlaceCardState();
-}
-
-class __PlaceCardState extends State<_PlaceCard> {
-  late SightFavoriteStore _sightFavoriteStore;
-
-  @override
-  void initState() {
-    _sightFavoriteStore =
-        SightFavoriteStore(context.read<IPlaceInteractor>(), widget.place);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Observer(
-      builder: (BuildContext context) {
+    return BlocBuilder<SightFavoriteBloc, SightFavoriteState>(
+      builder: (BuildContext context, sightFavoriteState) {
         return SightCard(
-          liked: _sightFavoriteStore.isFavorite,
+          liked: sightFavoriteState.map(
+            regular: (value) => false,
+            favorite: (value) => true,
+          ),
           onPressed: () {
-            final id = widget.place.id;
+            final id = place.id;
 
             if (id != null) {
               showModalBottomSheet(
@@ -334,13 +320,18 @@ class __PlaceCardState extends State<_PlaceCard> {
               );
             }
           },
-          sight: widget.place,
+          sight: place,
           onLike: () async {
-            if (_sightFavoriteStore.isFavorite) {
-              await _sightFavoriteStore.removeFromFavorites(widget.place);
-            } else {
-              await _sightFavoriteStore.addToFavorites(widget.place);
-            }
+            sightFavoriteState.map(
+              regular: (value) =>
+                  BlocProvider.of<SightFavoriteBloc>(context).add(
+                SightFavoriteEvent.addToFavorites(),
+              ),
+              favorite: (value) =>
+                  BlocProvider.of<SightFavoriteBloc>(context).add(
+                SightFavoriteEvent.removeFromFavorites(),
+              ),
+            );
           },
         );
       },

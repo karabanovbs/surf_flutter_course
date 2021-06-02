@@ -10,33 +10,20 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.3
   dio: ^4.0.0
-  rxdart: ^0.26.0
+  rxdart: ^0.27.0
   provider: ^5.0.0
-  svg_to_path_annotation:
-    git:
-      url: https://github.com/karabanovbs/svg_to_path_generator
-      path: packages/svg_to_path_annotation
-      ref: 0.0.2+4
-  flutter_mobx: ^2.0.0
-  mobx: ^2.0.1
+  svg_to_path_annotation: ^1.0.0
   flutter_bloc: ^7.0.0
-  flutter_redux: ^0.8.2
-  redux: ^5.0.0
-  mwwm: ^1.1.0
-  relation: ^1.0.0
+  freezed_annotation: ^0.14.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: ^1.12.2
-  mobx_codegen: ^2.0.1+3
-  svg_to_path_generator:
-    git:
-      url: https://github.com/karabanovbs/svg_to_path_generator
-      path: packages/svg_to_path_generator
-      ref: 1.0.1
+  build_runner: ^2.0.3
+  svg_to_path_generator: ^1.0.1+2
+  freezed: ^0.14.2
 
 flutter:
   uses-material-design: true

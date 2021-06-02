@@ -9,6 +9,6 @@ class NetworkException implements Exception {
 
   @override
   String toString() {
-    return "В запросе '${requestUrl}' возникла ошибка: ${error}";
+    return "В запросе '$requestUrl' возникла ошибка: $error";
   }
 }

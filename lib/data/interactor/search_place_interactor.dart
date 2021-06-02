@@ -1,6 +1,5 @@
 import 'package:places/data/model/model.dart';
 import 'package:places/data/repository/repository.dart';
-import 'package:places/dio_client.dart';
 import 'package:places/domain/sight_type.dart';
 
 abstract class ISearchPlaceInteractor {

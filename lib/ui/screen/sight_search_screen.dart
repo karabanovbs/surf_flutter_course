@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:places/data/interactor/search_place_interactor.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/blocs/search_place/search_place_bloc.dart';
+import 'package:places/blocs/search_place_history/search_place_history_bloc.dart';
+import 'package:places/data/interactor/interactor.dart';
 import 'package:places/data/model/model.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/drawing/drawing.dart';
-import 'package:places/redux/state/app_state.dart';
-import 'package:places/redux/store.dart';
 import 'package:places/res/text_constants.dart' as text_constants;
 import 'package:places/ui/screen/sight_details.dart';
 import 'package:places/ui/widgets/search_bar.dart';
 import 'package:places/ui/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:redux/redux.dart';
 
 class SightSearchScreen extends StatefulWidget {
   @override
@@ -20,17 +19,22 @@ class SightSearchScreen extends StatefulWidget {
 
 class _SightSearchScreenState extends State<SightSearchScreen> {
   late final TextEditingController controller;
+  late final SearchPlaceBloc _searchPlaceBloc;
 
   @override
   void initState() {
     super.initState();
-    context.read<Store<AppState>>().dispatch(SearchPlaceLoadHistoryAction());
     controller = TextEditingController()..addListener(_searchListener);
+    _searchPlaceBloc = SearchPlaceBloc(
+      context.read<ISearchPlaceInteractor>(),
+    );
   }
 
-  void _search(String search) async {
+  void _search(
+    String search,
+  ) async {
     if (search.trim().isNotEmpty) {
-      context.read<Store<AppState>>().dispatch(SearchPlaceSearchAction(search));
+      _searchPlaceBloc.add(SearchPlaceEvent.search(search));
       print('search: $search');
     }
   }
@@ -45,143 +49,175 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
   void dispose() {
     controller.removeListener(_searchListener);
     controller.dispose();
+    _searchPlaceBloc.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).backgroundColor,
-        elevation: 0,
-        title: Text(
-          text_constants.sightListScreenTitle,
+    return MultiProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => _searchPlaceBloc,
         ),
-      ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 6,
+        BlocProvider(
+          create: (context) => SearchPlaceHistoryBloc(
+            context.read<ISearchPlaceInteractor>(),
+          )..add(SearchPlaceHistoryEvent.load()),
+        ),
+      ],
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).backgroundColor,
+          elevation: 0,
+          title: Text(
+            text_constants.sightListScreenTitle,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: SearchBar(
-              controller: controller,
-              autoFocus: true,
-              onEditingComplete: () {
-                _search(controller.text);
-              },
-              action: ClearInputButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
+        ),
+        body: Column(
+          children: [
+            SizedBox(
+              height: 6,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: SearchBar(
+                controller: controller,
+                autoFocus: true,
+                onEditingComplete: () {
+                  _search(controller.text);
                 },
+                action: ClearInputButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            height: 32,
-          ),
-          StoreConnector(
-            converter: (Store<AppState> store) {
-              return store.state.searchPlaceHistoryState;
-            },
-            builder: (BuildContext context, ISearchPlaceHistoryState state) {
-              if (state is SearchPlaceHistoryState) {
-                final searchHistory = state.searchHistory;
-                if (searchHistory.isNotEmpty && controller.text.isEmpty) {
-                  return Expanded(
-                    child: _SearchHistory(
-                      searchHistory: searchHistory,
-                      clearHistory: () async {
-                        context.read<Store<AppState>>().dispatch(SearchPlaceClearHistoryFailureAction());
-                      },
-                      remove: (search) async {
-                        context.read<Store<AppState>>().dispatch(SearchPlaceRemoveHistoryFailureAction(search));
-                      },
-                      select: (search) {
-                        controller.text = search;
-                        _search(controller.text);
-                      },
-                    ),
-                  );
-                }
-              }
+            SizedBox(
+              height: 32,
+            ),
+            BlocBuilder<SearchPlaceBloc, SearchPlaceState>(
+                builder: (context, SearchPlaceState searchPlaceState) {
+              return BlocBuilder<SearchPlaceHistoryBloc,
+                  SearchPlaceHistoryState>(
+                builder: (BuildContext context,
+                    SearchPlaceHistoryState _searchPlaceHistoryState) {
+                  return _searchPlaceHistoryState.maybeMap(
+                        loaded: (state) {
+                          final searchHistory = state.searchHistory;
+                          if (searchHistory.isNotEmpty &&
+                              searchPlaceState.maybeMap(
+                                loaded: (value) => false,
+                                orElse: () => true,
+                              )) {
+                            return Expanded(
+                              child: _SearchHistory(
+                                searchHistory: searchHistory,
+                                clearHistory: () async {
+                                  BlocProvider.of<SearchPlaceHistoryBloc>(
+                                          context)
+                                      .add(SearchPlaceHistoryEvent.clear());
+                                },
+                                remove: (search) async {
+                                  BlocProvider.of<SearchPlaceHistoryBloc>(
+                                          context)
+                                      .add(SearchPlaceHistoryEvent.remove(
+                                          search));
+                                },
+                                select: (search) {
+                                  controller.text = search;
+                                  _search(controller.text);
+                                },
+                              ),
+                            );
+                          }
+                        },
+                        orElse: () => null,
+                      ) ??
+                      Container();
+                },
+              );
+            }),
+            BlocBuilder<SearchPlaceBloc, SearchPlaceState>(
+              builder: (context, SearchPlaceState searchPlaceState) {
+                return searchPlaceState.maybeMap(
+                      loaded: (state) {
+                        if (state.places.isEmpty &&
+                            controller.text.isNotEmpty) {
+                          return Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 50.83,
+                                  height: 48,
+                                  child: IconWrapper(
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                    child: SearchIcon(),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 32,
+                                ),
+                                Text(
+                                  text_constants.sightSearchNotFoundLbl,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline3
+                                      ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  text_constants
+                                      .sightSearchNotFoundDescriptionLbl,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
 
-              return Container();
-            },
-          ),
-          StoreConnector(
-            converter: (Store<AppState> store) {
-              return store.state.searchPlaceState;
-            },
-            builder: (context, ISearchPlaceState state) {
-              if (state is SearchPlaceState) {
-                if (state.result.isEmpty && controller.text.isNotEmpty) {
-                  return Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 50.83,
-                          height: 48,
-                          child: IconWrapper(
-                            color: Theme.of(context).colorScheme.onSurface,
-                            child: SearchIcon(),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 32,
-                        ),
-                        Text(
-                          text_constants.sightSearchNotFoundLbl,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline3
-                              ?.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          text_constants.sightSearchNotFoundDescriptionLbl,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText2
-                              ?.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-
-                if (state.result.isNotEmpty && controller.text.isNotEmpty) {
-                  return Expanded(
-                    child: _SightSearchResultList(
-                      searchResult: state.result,
-                      search: controller.text,
-                      onPressed: (sight) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return SightDetails(
-                                sightId: (sight as Place).id!,
-                              );
-                            },
-                          ),
-                        );
+                        if (state.places.isNotEmpty &&
+                            controller.text.isNotEmpty) {
+                          return Expanded(
+                            child: _SightSearchResultList(
+                              searchResult: state.places,
+                              search: controller.text,
+                              onPressed: (sight) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return SightDetails(
+                                        sightId: (sight as Place).id!,
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        }
                       },
-                    ),
-                  );
-                }
-              }
-              return Container();
-            },
-          ),
-        ],
+                      orElse: () => null,
+                    ) ??
+                    Container();
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
