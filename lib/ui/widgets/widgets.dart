@@ -10,3 +10,4 @@ export 'removable_photo.dart';
 export 'search_bar.dart';
 export 'search_bar_filters_acton_button.dart';
 export 'select_photo_dialog.dart';
+export 'animated_splash_logo.dart';

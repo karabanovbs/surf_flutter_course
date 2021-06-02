@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/ui/screen/onboarding_screen.dart';
+import 'package:places/ui/widgets/widgets.dart';
 
 class SplashScreen extends StatefulWidget {
   final Future<void> isInitialized;
@@ -45,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: SizedBox(
           height: 160,
           width: 160,
-          child: LogoIcon(),
+          child: AnimatedSplashLogo(),
         ),
       ),
     );
@@ -53,10 +54,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _navigateToNext() async {
     await widget.isInitialized;
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => OnboardingScreen(),
-      ),
-    );
+    // Navigator.of(context).pushReplacement(
+    //   MaterialPageRoute(
+    //     builder: (context) => OnboardingScreen(),
+    //   ),
+    // );
   }
 }
