@@ -148,7 +148,12 @@ class SightCard extends StatelessWidget {
               shape: MaterialStateProperty.all(CircleBorder()),
               padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
             ),
-            child: !liked ? const HeartIcon() : HeartFullIcon(),
+            child: AnimatedSwitcher(
+              duration: Duration(
+                milliseconds: 300,
+              ),
+              child: !liked ? const HeartIcon() : HeartFullIcon(),
+            ),
           ),
         )
       ],

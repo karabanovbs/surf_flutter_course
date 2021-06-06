@@ -306,7 +306,7 @@ class _PlaceCard extends StatelessWidget {
                       return ClipRRect(
                         borderRadius: const BorderRadius.only(
                           topLeft: const Radius.circular(12),
-                          bottomRight: const Radius.circular(12),
+                          topRight: const Radius.circular(12),
                         ),
                         child: SightDetails(
                           sightId: id,
