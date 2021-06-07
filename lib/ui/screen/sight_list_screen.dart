@@ -123,7 +123,7 @@ class SightListScreen extends StatelessWidget {
                           ),
                           orElse: () => SliverFillRemaining(
                             child: Center(
-                              child: CircularProgressIndicator(),
+                              child: AppLoader(),
                             ),
                           ),
                         );
@@ -212,7 +212,6 @@ class SliverSearchAppbar extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    print(shrinkOffset);
     return Container(
       color: Theme.of(context).colorScheme.background,
       child: Padding(

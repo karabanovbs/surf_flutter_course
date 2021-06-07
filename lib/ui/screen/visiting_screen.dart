@@ -132,7 +132,6 @@ class _VisitingScreenState extends State<VisitingScreen> {
                                 ),
                               );
                             }
-                            print(date);
                           },
                         );
                       },
@@ -140,7 +139,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
                   }
 
                   return Center(
-                    child: CircularProgressIndicator(),
+                    child: AppLoader(),
                   );
                 },
               ),
@@ -166,7 +165,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
                     );
                   }
                   return Center(
-                    child: CircularProgressIndicator(),
+                    child: AppLoader(),
                   );
                 },
               )

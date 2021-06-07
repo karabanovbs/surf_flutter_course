@@ -307,7 +307,7 @@ class _SightSearchResultListItem extends StatelessWidget {
                         if (loadingProgress == null) return child;
                         return Align(
                           alignment: Alignment.center,
-                          child: CircularProgressIndicator(),
+                          child: AppLoader(),
                         );
                       },
                     ),
