@@ -15,6 +15,7 @@ import 'package:places/ui/screen/settings_screen.dart';
 import 'package:places/ui/screen/sight_card.dart';
 import 'package:places/ui/screen/sight_details.dart';
 import 'package:places/ui/screen/sight_list_screen.dart';
+import 'package:places/ui/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 class VisitingScreen extends StatefulWidget {
@@ -56,7 +57,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
               preferredSize: Size.fromHeight(40),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: _VisitingTabBar(
+                child: AnimatedVisitingTabBar(
                   tabs: [
                     visitingScreenFavTabLabel,
                     visitingScreenFavHistoryTabLabel,
@@ -177,99 +178,6 @@ class _VisitingScreenState extends State<VisitingScreen> {
         ),
       ),
     );
-  }
-}
-
-class _VisitingTabBar extends StatefulWidget {
-  final TabController? controller;
-  final List<String>? tabs;
-
-  const _VisitingTabBar({
-    Key? key,
-    this.controller,
-    this.tabs,
-  }) : super(key: key);
-
-  @override
-  __VisitingTabBarState createState() => __VisitingTabBarState();
-}
-
-class __VisitingTabBarState extends State<_VisitingTabBar> {
-  TabController? _controller;
-  int? _tabIndex;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _controller ??= widget.controller ?? DefaultTabController.of(context);
-    _tabIndex = _controller!.index;
-    _controller!.addListener(_tabControllerListener);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 40,
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.all(Radius.circular(20)),
-      ),
-      child: Row(
-        children: [
-          for (var tab in widget.tabs!)
-            Expanded(
-              child: Container(
-                height: 40,
-                child: TextButton(
-                  onPressed: () {
-                    _controller?.index = widget.tabs!.indexOf(tab);
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                      (states) => widget.tabs!.indexOf(tab) == _tabIndex
-                          ? Theme.of(context).colorScheme.onSecondary
-                          : null,
-                    ),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20),
-                        ),
-                      ),
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      tab,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: widget.tabs!.indexOf(tab) == _tabIndex
-                            ? Theme.of(context).colorScheme.onPrimary
-                            : Theme.of(context).colorScheme.onSurface,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  void _tabControllerListener() {
-    if (_controller!.index != _tabIndex) {
-      setState(() {
-        _tabIndex = _controller!.index;
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller!.removeListener(_tabControllerListener);
-    super.dispose();
   }
 }
 
