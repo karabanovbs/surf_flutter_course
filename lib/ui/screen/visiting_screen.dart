@@ -94,7 +94,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => SightDetails(
-                                  sightId: (sight as Place).id!,
+                                  sight: (sight as Place),
                                 ),
                               ),
                             );
@@ -155,7 +155,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => SightDetails(
-                                  sightId: (sight as Place).id!,
+                                  sight: sight as Place,
                                 ),
                               ),
                             );

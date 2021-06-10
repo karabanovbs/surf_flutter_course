@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:places/data/interactor/place_interactor.dart';
@@ -9,29 +8,29 @@ import 'package:provider/provider.dart';
 
 /// Sight details widget
 class SightDetails extends StatelessWidget {
-  final int sightId;
+  final Place sight;
+  final ScrollController? scrollController;
 
   const SightDetails({
     Key? key,
-    required this.sightId,
+    required this.sight,
+    this.scrollController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var sightId = sight.id;
     return Scaffold(
       body: FutureBuilder(
-        future: context.read<IPlaceInteractor>().getPlaceDetails(sightId),
+        future: sightId != null
+            ? context.read<IPlaceInteractor>().getPlaceDetails(sightId)
+            : Future<Place>.error(ArgumentError()),
         builder: (BuildContext context, AsyncSnapshot<Place> snapshot) {
-          if (!snapshot.hasData || snapshot.data == null) {
-            return Center(
-              child: AppLoader(),
-            );
-          }
-
-          final sight = snapshot.data!;
+          final sight = snapshot.data ?? this.sight;
 
           return Container(
             child: CustomScrollView(
+              controller: scrollController,
               slivers: [
                 SliverAppBar(
                   toolbarHeight: 64,
@@ -107,8 +106,11 @@ class SightDetails extends StatelessWidget {
   }
 
   Widget _buildGallery(BuildContext context, Place sight) {
-    return GalleryViewer(
-      photos: sight.urls,
+    return Hero(
+      tag: sight.urls[0],
+      child: GalleryViewer(
+        photos: sight.urls,
+      ),
     );
   }
 
@@ -186,15 +188,7 @@ class SightDetails extends StatelessWidget {
                       height: 24,
                       width: 24,
                       margin: const EdgeInsets.only(right: 10),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          colorFilter: ColorFilter.mode(
-                            Theme.of(context).colorScheme.onPrimary,
-                            BlendMode.srcIn,
-                          ),
-                          image: AssetImage('res/images/go.png'),
-                        ),
-                      ),
+                      child: GoIcon(),
                     ),
                     Text(
                       'построить маршрут'.toUpperCase(),
@@ -266,8 +260,12 @@ class SightDetails extends StatelessWidget {
                   height: 40,
                   child: TextButton(
                     onPressed: () async {
-                      if (await context.read<IPlaceInteractor>().isFavoritePlace(sight)) {
-                        context.read<IPlaceInteractor>().removeFromFavorites(sight);
+                      if (await context
+                          .read<IPlaceInteractor>()
+                          .isFavoritePlace(sight)) {
+                        context
+                            .read<IPlaceInteractor>()
+                            .removeFromFavorites(sight);
                       } else {
                         context.read<IPlaceInteractor>().addToFavorites(sight);
                       }
