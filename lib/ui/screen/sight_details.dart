@@ -24,7 +24,7 @@ class SightDetails extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<Place> snapshot) {
           if (!snapshot.hasData || snapshot.data == null) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: AppLoader(),
             );
           }
 
@@ -158,7 +158,6 @@ class SightDetails extends StatelessWidget {
   }
 
   Widget _buildControls(BuildContext context, Place sight) {
-    print(Theme.of(context).primaryColor);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(

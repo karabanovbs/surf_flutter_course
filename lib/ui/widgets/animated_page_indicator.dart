@@ -85,8 +85,6 @@ class _AnimatedPageIndicatorState extends State<AnimatedPageIndicator>
                 });
 
                 var page = widget.controller.page;
-                print(page);
-
                 if (page != null) {
                   if (page % 2 > 0.5) {
                     _controllerLeft.animateTo(

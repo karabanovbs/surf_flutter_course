@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/ui/widgets/app_loader.dart';
 
 class GalleryViewer extends StatefulWidget {
   final List<String> photos;
@@ -39,7 +40,7 @@ class _GalleryViewerState extends State<GalleryViewer> {
                     if (loadingProgress == null) return child;
                     return Align(
                       alignment: Alignment.center,
-                      child: CircularProgressIndicator(),
+                      child: AppLoader(),
                     );
                   },
                 );

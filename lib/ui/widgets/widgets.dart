@@ -12,3 +12,4 @@ export 'search_bar_filters_acton_button.dart';
 export 'select_photo_dialog.dart';
 export 'animated_splash_logo.dart';
 export 'animated_visiting_tab_bar.dart';
+export 'app_loader.dart';
