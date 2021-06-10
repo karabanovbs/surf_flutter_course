@@ -41,10 +41,30 @@ class _BaseCard extends StatelessWidget {
                     alignment: Alignment.topCenter,
                     loadingBuilder:
                         (context, child, ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Align(
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator(),
+                      return AnimatedSwitcher(
+                        layoutBuilder: (currentChild, previousChildren) {
+                          return Stack(
+                            children: <Widget>[
+                              ...previousChildren,
+                              if (currentChild != null)
+                                Positioned.fill(child: currentChild),
+                            ],
+                            alignment: Alignment.center,
+                          );
+                        },
+                        child: loadingProgress == null
+                            ? child
+                            : Align(
+                                alignment: Alignment.center,
+                                child: const Image(
+                                  image: const AssetImage(
+                                    'res/images/placeholder.png',
+                                  ),
+                                ),
+                              ),
+                        duration: Duration(
+                          milliseconds: 300,
+                        ),
                       );
                     },
                   ),
@@ -82,8 +102,8 @@ class _BaseCard extends StatelessWidget {
                               sight.type.label.toLowerCase(),
                               style: Theme.of(context)
                                   .textTheme
-                                  .subtitle1!
-                                  .copyWith(
+                                  .subtitle1
+                                  ?.copyWith(
                                     color:
                                         Theme.of(context).colorScheme.onPrimary,
                                   ),
