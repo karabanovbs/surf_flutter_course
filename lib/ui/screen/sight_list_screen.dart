@@ -296,26 +296,38 @@ class _PlaceCard extends StatelessWidget {
             final id = place.id;
 
             if (id != null) {
-              showModalBottomSheet(
-                context: context,
-                builder: (context) {
-                  return DraggableScrollableSheet(
-                    initialChildSize: 0.9,
-                    builder: (context, _) {
-                      return ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: const Radius.circular(12),
-                          topRight: const Radius.circular(12),
-                        ),
-                        child: SightDetails(
-                          sightId: id,
-                        ),
-                      );
-                    },
-                  );
-                },
-                isScrollControlled: true,
-                backgroundColor: Color(0x00000000),
+              // [HeroController] works only with [PageRoute]
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  opaque: false,
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return BottomSheet(
+                        backgroundColor: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(0.5),
+                        onClosing: () {
+                          Navigator.of(context).maybePop();
+                        },
+                        builder: (context) {
+                          return DraggableScrollableSheet(
+                            initialChildSize: 0.9,
+                            builder: (context, _controller) {
+                              return ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: const Radius.circular(12),
+                                  topRight: const Radius.circular(12),
+                                ),
+                                child: SightDetails(
+                                  sight: place,
+                                  scrollController: _controller,
+                                ),
+                              );
+                            },
+                          );
+                        });
+                  },
+                ),
               );
             }
           },

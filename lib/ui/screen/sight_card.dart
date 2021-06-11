@@ -35,38 +35,41 @@ class _BaseCard extends StatelessWidget {
                   height: _imageSpace,
                   width: double.infinity,
                   color: Theme.of(context).colorScheme.surface,
-                  child: Image.network(
-                    sight.url,
-                    fit: BoxFit.fitWidth,
-                    alignment: Alignment.topCenter,
-                    loadingBuilder:
-                        (context, child, ImageChunkEvent? loadingProgress) {
-                      return AnimatedSwitcher(
-                        layoutBuilder: (currentChild, previousChildren) {
-                          return Stack(
-                            children: <Widget>[
-                              ...previousChildren,
-                              if (currentChild != null)
-                                Positioned.fill(child: currentChild),
-                            ],
-                            alignment: Alignment.center,
-                          );
-                        },
-                        child: loadingProgress == null
-                            ? child
-                            : Align(
-                                alignment: Alignment.center,
-                                child: const Image(
-                                  image: const AssetImage(
-                                    'res/images/placeholder.png',
+                  child: Hero(
+                    tag: sight.url,
+                    child: Image.network(
+                      sight.url,
+                      fit: BoxFit.fitWidth,
+                      alignment: Alignment.topCenter,
+                      loadingBuilder:
+                          (context, child, ImageChunkEvent? loadingProgress) {
+                        return AnimatedSwitcher(
+                          layoutBuilder: (currentChild, previousChildren) {
+                            return Stack(
+                              children: <Widget>[
+                                ...previousChildren,
+                                if (currentChild != null)
+                                  Positioned.fill(child: currentChild),
+                              ],
+                              alignment: Alignment.center,
+                            );
+                          },
+                          child: loadingProgress == null
+                              ? child
+                              : Align(
+                                  alignment: Alignment.center,
+                                  child: const Image(
+                                    image: const AssetImage(
+                                      'res/images/placeholder.png',
+                                    ),
                                   ),
                                 ),
-                              ),
-                        duration: Duration(
-                          milliseconds: 300,
-                        ),
-                      );
-                    },
+                          duration: Duration(
+                            milliseconds: 300,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
                 Expanded(

@@ -201,7 +201,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                                   MaterialPageRoute(
                                     builder: (context) {
                                       return SightDetails(
-                                        sightId: (sight as Place).id!,
+                                        sight: sight as Place,
                                       );
                                     },
                                   ),
