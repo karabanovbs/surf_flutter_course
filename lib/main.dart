@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/blocs/onboarding/onboarding_bloc.dart';
 import 'package:places/data/repository/filters_repository.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/data/storage/storage.dart';
@@ -25,7 +26,8 @@ class App extends StatelessWidget {
           create: (context) => SharedPreferencesStorage(),
         ),
         ChangeNotifierProvider(
-          create: (context) => ThemeSettingsInteractor(context.read<IDataStorage>()),
+          create: (context) =>
+              ThemeSettingsInteractor(context.read<IDataStorage>()),
         ),
         Provider<Dio>(
           create: (_) => Dio(
@@ -58,6 +60,12 @@ class App extends StatelessWidget {
                 ..add(
                   PlaceFiltersEvent.load(),
                 ),
+        ),
+        BlocProvider(
+          create: (context) => OnboardingBloc(context.read<IDataStorage>())
+            ..add(
+              OnboardingEvent.checkOnboarding(),
+            ),
         ),
       ],
       child: Consumer<ThemeSettingsInteractor>(

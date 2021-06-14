@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/blocs/onboarding/onboarding_bloc.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/res/text_constants.dart' as text_constants;
 import 'package:places/ui/screen/sight_list_screen.dart';
@@ -33,6 +35,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         actions: [
           TextButton(
             onPressed: () {
+              BlocProvider.of<OnboardingBloc>(context)
+                  .add(OnboardingEvent.skip());
+
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (context) => SightListScreen(),
@@ -98,6 +103,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       child: Text(text_constants.onboardingScreenStartButtonLbl
                           .toUpperCase())),
                   onPressed: () {
+                    BlocProvider.of<OnboardingBloc>(context)
+                        .add(OnboardingEvent.complete());
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => SightListScreen(),
