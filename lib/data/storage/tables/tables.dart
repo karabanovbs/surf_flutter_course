@@ -1,2 +1,3 @@
 export 'search_history.dart';
-export 'favorite_palces.dart';
+export 'visited_places.dart';
+export 'favorite_places.dart';

@@ -606,13 +606,429 @@ class $FavoritePlaceTable extends FavoritePlace
   }
 }
 
+class VisitedPlaceData extends DataClass
+    implements Insertable<VisitedPlaceData> {
+  final int id;
+  final double lat;
+  final double lng;
+  final String placeName;
+  final String url;
+  final int placeType;
+  final String description;
+  VisitedPlaceData(
+      {required this.id,
+      required this.lat,
+      required this.lng,
+      required this.placeName,
+      required this.url,
+      required this.placeType,
+      required this.description});
+  factory VisitedPlaceData.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return VisitedPlaceData(
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      lat: const RealType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}lat'])!,
+      lng: const RealType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}lng'])!,
+      placeName: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}place_name'])!,
+      url: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}url'])!,
+      placeType: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}place_type'])!,
+      description: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}description'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['lat'] = Variable<double>(lat);
+    map['lng'] = Variable<double>(lng);
+    map['place_name'] = Variable<String>(placeName);
+    map['url'] = Variable<String>(url);
+    map['place_type'] = Variable<int>(placeType);
+    map['description'] = Variable<String>(description);
+    return map;
+  }
+
+  VisitedPlaceCompanion toCompanion(bool nullToAbsent) {
+    return VisitedPlaceCompanion(
+      id: Value(id),
+      lat: Value(lat),
+      lng: Value(lng),
+      placeName: Value(placeName),
+      url: Value(url),
+      placeType: Value(placeType),
+      description: Value(description),
+    );
+  }
+
+  factory VisitedPlaceData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return VisitedPlaceData(
+      id: serializer.fromJson<int>(json['id']),
+      lat: serializer.fromJson<double>(json['lat']),
+      lng: serializer.fromJson<double>(json['lng']),
+      placeName: serializer.fromJson<String>(json['placeName']),
+      url: serializer.fromJson<String>(json['url']),
+      placeType: serializer.fromJson<int>(json['placeType']),
+      description: serializer.fromJson<String>(json['description']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'lat': serializer.toJson<double>(lat),
+      'lng': serializer.toJson<double>(lng),
+      'placeName': serializer.toJson<String>(placeName),
+      'url': serializer.toJson<String>(url),
+      'placeType': serializer.toJson<int>(placeType),
+      'description': serializer.toJson<String>(description),
+    };
+  }
+
+  VisitedPlaceData copyWith(
+          {int? id,
+          double? lat,
+          double? lng,
+          String? placeName,
+          String? url,
+          int? placeType,
+          String? description}) =>
+      VisitedPlaceData(
+        id: id ?? this.id,
+        lat: lat ?? this.lat,
+        lng: lng ?? this.lng,
+        placeName: placeName ?? this.placeName,
+        url: url ?? this.url,
+        placeType: placeType ?? this.placeType,
+        description: description ?? this.description,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('VisitedPlaceData(')
+          ..write('id: $id, ')
+          ..write('lat: $lat, ')
+          ..write('lng: $lng, ')
+          ..write('placeName: $placeName, ')
+          ..write('url: $url, ')
+          ..write('placeType: $placeType, ')
+          ..write('description: $description')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => $mrjf($mrjc(
+      id.hashCode,
+      $mrjc(
+          lat.hashCode,
+          $mrjc(
+              lng.hashCode,
+              $mrjc(
+                  placeName.hashCode,
+                  $mrjc(url.hashCode,
+                      $mrjc(placeType.hashCode, description.hashCode)))))));
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is VisitedPlaceData &&
+          other.id == this.id &&
+          other.lat == this.lat &&
+          other.lng == this.lng &&
+          other.placeName == this.placeName &&
+          other.url == this.url &&
+          other.placeType == this.placeType &&
+          other.description == this.description);
+}
+
+class VisitedPlaceCompanion extends UpdateCompanion<VisitedPlaceData> {
+  final Value<int> id;
+  final Value<double> lat;
+  final Value<double> lng;
+  final Value<String> placeName;
+  final Value<String> url;
+  final Value<int> placeType;
+  final Value<String> description;
+  const VisitedPlaceCompanion({
+    this.id = const Value.absent(),
+    this.lat = const Value.absent(),
+    this.lng = const Value.absent(),
+    this.placeName = const Value.absent(),
+    this.url = const Value.absent(),
+    this.placeType = const Value.absent(),
+    this.description = const Value.absent(),
+  });
+  VisitedPlaceCompanion.insert({
+    required int id,
+    required double lat,
+    required double lng,
+    required String placeName,
+    required String url,
+    required int placeType,
+    required String description,
+  })   : id = Value(id),
+        lat = Value(lat),
+        lng = Value(lng),
+        placeName = Value(placeName),
+        url = Value(url),
+        placeType = Value(placeType),
+        description = Value(description);
+  static Insertable<VisitedPlaceData> custom({
+    Expression<int>? id,
+    Expression<double>? lat,
+    Expression<double>? lng,
+    Expression<String>? placeName,
+    Expression<String>? url,
+    Expression<int>? placeType,
+    Expression<String>? description,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (lat != null) 'lat': lat,
+      if (lng != null) 'lng': lng,
+      if (placeName != null) 'place_name': placeName,
+      if (url != null) 'url': url,
+      if (placeType != null) 'place_type': placeType,
+      if (description != null) 'description': description,
+    });
+  }
+
+  VisitedPlaceCompanion copyWith(
+      {Value<int>? id,
+      Value<double>? lat,
+      Value<double>? lng,
+      Value<String>? placeName,
+      Value<String>? url,
+      Value<int>? placeType,
+      Value<String>? description}) {
+    return VisitedPlaceCompanion(
+      id: id ?? this.id,
+      lat: lat ?? this.lat,
+      lng: lng ?? this.lng,
+      placeName: placeName ?? this.placeName,
+      url: url ?? this.url,
+      placeType: placeType ?? this.placeType,
+      description: description ?? this.description,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (lat.present) {
+      map['lat'] = Variable<double>(lat.value);
+    }
+    if (lng.present) {
+      map['lng'] = Variable<double>(lng.value);
+    }
+    if (placeName.present) {
+      map['place_name'] = Variable<String>(placeName.value);
+    }
+    if (url.present) {
+      map['url'] = Variable<String>(url.value);
+    }
+    if (placeType.present) {
+      map['place_type'] = Variable<int>(placeType.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('VisitedPlaceCompanion(')
+          ..write('id: $id, ')
+          ..write('lat: $lat, ')
+          ..write('lng: $lng, ')
+          ..write('placeName: $placeName, ')
+          ..write('url: $url, ')
+          ..write('placeType: $placeType, ')
+          ..write('description: $description')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $VisitedPlaceTable extends VisitedPlace
+    with TableInfo<$VisitedPlaceTable, VisitedPlaceData> {
+  final GeneratedDatabase _db;
+  final String? _alias;
+  $VisitedPlaceTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedIntColumn id = _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn(
+      'id',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _latMeta = const VerificationMeta('lat');
+  @override
+  late final GeneratedRealColumn lat = _constructLat();
+  GeneratedRealColumn _constructLat() {
+    return GeneratedRealColumn(
+      'lat',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _lngMeta = const VerificationMeta('lng');
+  @override
+  late final GeneratedRealColumn lng = _constructLng();
+  GeneratedRealColumn _constructLng() {
+    return GeneratedRealColumn(
+      'lng',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _placeNameMeta = const VerificationMeta('placeName');
+  @override
+  late final GeneratedTextColumn placeName = _constructPlaceName();
+  GeneratedTextColumn _constructPlaceName() {
+    return GeneratedTextColumn(
+      'place_name',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _urlMeta = const VerificationMeta('url');
+  @override
+  late final GeneratedTextColumn url = _constructUrl();
+  GeneratedTextColumn _constructUrl() {
+    return GeneratedTextColumn(
+      'url',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _placeTypeMeta = const VerificationMeta('placeType');
+  @override
+  late final GeneratedIntColumn placeType = _constructPlaceType();
+  GeneratedIntColumn _constructPlaceType() {
+    return GeneratedIntColumn(
+      'place_type',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
+  @override
+  late final GeneratedTextColumn description = _constructDescription();
+  GeneratedTextColumn _constructDescription() {
+    return GeneratedTextColumn(
+      'description',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, lat, lng, placeName, url, placeType, description];
+  @override
+  $VisitedPlaceTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'visited_place';
+  @override
+  final String actualTableName = 'visited_place';
+  @override
+  VerificationContext validateIntegrity(Insertable<VisitedPlaceData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('lat')) {
+      context.handle(
+          _latMeta, lat.isAcceptableOrUnknown(data['lat']!, _latMeta));
+    } else if (isInserting) {
+      context.missing(_latMeta);
+    }
+    if (data.containsKey('lng')) {
+      context.handle(
+          _lngMeta, lng.isAcceptableOrUnknown(data['lng']!, _lngMeta));
+    } else if (isInserting) {
+      context.missing(_lngMeta);
+    }
+    if (data.containsKey('place_name')) {
+      context.handle(_placeNameMeta,
+          placeName.isAcceptableOrUnknown(data['place_name']!, _placeNameMeta));
+    } else if (isInserting) {
+      context.missing(_placeNameMeta);
+    }
+    if (data.containsKey('url')) {
+      context.handle(
+          _urlMeta, url.isAcceptableOrUnknown(data['url']!, _urlMeta));
+    } else if (isInserting) {
+      context.missing(_urlMeta);
+    }
+    if (data.containsKey('place_type')) {
+      context.handle(_placeTypeMeta,
+          placeType.isAcceptableOrUnknown(data['place_type']!, _placeTypeMeta));
+    } else if (isInserting) {
+      context.missing(_placeTypeMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
+    } else if (isInserting) {
+      context.missing(_descriptionMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => <GeneratedColumn>{};
+  @override
+  VisitedPlaceData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return VisitedPlaceData.fromData(data, _db,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $VisitedPlaceTable createAlias(String alias) {
+    return $VisitedPlaceTable(_db, alias);
+  }
+}
+
 abstract class _$AppDataBase extends GeneratedDatabase {
   _$AppDataBase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $SearchHistoryTable searchHistory = $SearchHistoryTable(this);
   late final $FavoritePlaceTable favoritePlace = $FavoritePlaceTable(this);
+  late final $VisitedPlaceTable visitedPlace = $VisitedPlaceTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [searchHistory, favoritePlace];
+      [searchHistory, favoritePlace, visitedPlace];
 }

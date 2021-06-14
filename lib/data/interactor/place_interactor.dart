@@ -37,8 +37,6 @@ class MoorPlaceInteractor extends IPlaceInteractor {
     this._appDataBase,
   );
 
-  final Set<Place> _visitingPlaces = <Place>{};
-
   @override
   Future<Place> addNewPlace(Place place) async {
     return _placeRepository.postPlace(place);
@@ -59,7 +57,17 @@ class MoorPlaceInteractor extends IPlaceInteractor {
 
   @override
   Future<void> addToVisitingPlaces(Place place) async {
-    _visitingPlaces.add(place);
+    await _appDataBase.addToVisited(
+      VisitedPlaceCompanion.insert(
+        id: place.id ?? 0,
+        lat: place.lat ?? 0,
+        lng: place.lng ?? 0,
+        placeName: place.placeName ?? '',
+        url: place.urls.firstOrNull ?? '',
+        placeType: place.type.type.index,
+        description: place.description ?? '',
+      ),
+    );
   }
 
   @override
@@ -114,7 +122,17 @@ class MoorPlaceInteractor extends IPlaceInteractor {
 
   @override
   Future<List<Place>> getVisitPlaces() async {
-    return _visitingPlaces.toList();
+    return _appDataBase.getVisitedPlaces.then((data) => data
+        .map((e) => Place(
+              id: e.id,
+              lat: e.lat,
+              lng: e.lng,
+              placeName: e.placeName,
+              urls: [e.url],
+              placeType: SightType(ESightType.values[e.placeType]),
+              description: e.description,
+            ))
+        .toList());
   }
 
   @override
