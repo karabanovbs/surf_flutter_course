@@ -21,8 +21,11 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        Provider<IDataStorage>(
+          create: (context) => SharedPreferencesStorage(),
+        ),
         ChangeNotifierProvider(
-          create: (_) => ThemeSettingsInteractor(),
+          create: (context) => ThemeSettingsInteractor(context.read<IDataStorage>()),
         ),
         Provider<Dio>(
           create: (_) => Dio(
@@ -31,9 +34,6 @@ class App extends StatelessWidget {
         ),
         Provider<IPlaceRepository>(
           create: (context) => DioPlaceRepository(context.read<Dio>()),
-        ),
-        Provider<IDataStorage>(
-          create: (context) => SharedPreferencesStorage(),
         ),
         Provider<IFiltersRepository>(
           create: (context) => FiltersRepository(context.read<IDataStorage>()),
@@ -54,10 +54,10 @@ class App extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) =>
-          PlaceFiltersBloc(context.read<ISearchPlaceInteractor>())
-            ..add(
-              PlaceFiltersEvent.load(),
-            ),
+              PlaceFiltersBloc(context.read<ISearchPlaceInteractor>())
+                ..add(
+                  PlaceFiltersEvent.load(),
+                ),
         ),
       ],
       child: Consumer<ThemeSettingsInteractor>(
@@ -66,8 +66,9 @@ class App extends StatelessWidget {
             title: 'App title',
             theme: value.currentTheme,
             home: SplashScreen(
-              isInitialized: BlocProvider.of<PlaceFiltersBloc>(context).stream.firstWhere((
-                  _state) {
+              isInitialized: BlocProvider.of<PlaceFiltersBloc>(context)
+                  .stream
+                  .firstWhere((_state) {
                 return _state.filter != null;
               }),
             ),

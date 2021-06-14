@@ -42,4 +42,23 @@ class SharedPreferencesStorage extends IDataStorage {
       ),
     );
   }
+
+  @override
+  Future<bool?> getBool(String key) {
+    return _prefs.then(
+      (prefs) => prefs.getBool(
+        key,
+      ),
+    );
+  }
+
+  @override
+  Future<bool> setBool(String key, bool value) {
+    return _prefs.then(
+      (prefs) => prefs.setBool(
+        key,
+        value,
+      ),
+    );
+  }
 }
