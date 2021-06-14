@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/onboarding/onboarding_bloc.dart';
 import 'package:places/data/repository/filters_repository.dart';
 import 'package:places/data/repository/place_repository.dart';
+import 'package:places/data/storage/app_data_base.dart';
 import 'package:places/data/storage/storage.dart';
 import 'package:places/dio_client.dart';
 import 'package:places/ui/screen/splash_screen.dart';
@@ -25,6 +26,9 @@ class App extends StatelessWidget {
         Provider<IDataStorage>(
           create: (context) => SharedPreferencesStorage(),
         ),
+        Provider<AppDataBase>(
+          create: (context) => AppDataBase(),
+        ),
         ChangeNotifierProvider(
           create: (context) =>
               ThemeSettingsInteractor(context.read<IDataStorage>()),
@@ -44,6 +48,7 @@ class App extends StatelessWidget {
           create: (context) => InMemorySearchPlaceInteractor(
             context.read<IPlaceRepository>(),
             context.read<IFiltersRepository>(),
+            context.read<AppDataBase>(),
           ),
         ),
         Provider<IPlaceInteractor>(

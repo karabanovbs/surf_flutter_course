@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
+import 'package:moor/moor.dart';
 import 'package:places/data/model/model.dart';
 import 'package:places/data/repository/repository.dart';
+import 'package:places/data/storage/app_data_base.dart';
 import 'package:places/domain/sight_type.dart';
 
 abstract class ISearchPlaceInteractor {
@@ -27,36 +30,39 @@ abstract class ISearchPlaceInteractor {
 class InMemorySearchPlaceInteractor extends ISearchPlaceInteractor {
   final IPlaceRepository _placeRepository;
   final IFiltersRepository _filtersRepository;
-
-  final Set<String> _history = {};
-
-  // Set<SightType> _types = {};
-  // double? _radius;
+  final AppDataBase _appDataBase;
 
   InMemorySearchPlaceInteractor(
     this._placeRepository,
     this._filtersRepository,
+    this._appDataBase,
   );
 
   @override
   Future<void> clearHistory() async {
-    _history.clear();
+    await _appDataBase.clearSearchHistory();
   }
 
   @override
   Future<List<String>> getHistory() async {
-    return _history.toList();
+    return _appDataBase.getSearchHistory.then(
+      (data) => data.map((e) => e.search).toList(),
+    );
   }
 
   @override
   Future<void> removeHistory(String name) async {
-    _history.remove(name);
+    await _appDataBase.deleteSearchHistory(name);
   }
 
   @override
   Future<List<Place>> searchPlaces([String? name]) async {
     if (name != null) {
-      _history.add(name);
+      await _appDataBase.saveSearchHistory(
+        SearchHistoryCompanion(
+          search: Value(name),
+        ),
+      );
     }
 
     return _placeRepository.postFilteredPlaces(
