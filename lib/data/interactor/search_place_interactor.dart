@@ -26,12 +26,17 @@ abstract class ISearchPlaceInteractor {
 
 class InMemorySearchPlaceInteractor extends ISearchPlaceInteractor {
   final IPlaceRepository _placeRepository;
+  final IFiltersRepository _filtersRepository;
 
   final Set<String> _history = {};
-  Set<SightType> _types = {};
-  double? _radius;
 
-  InMemorySearchPlaceInteractor(this._placeRepository);
+  // Set<SightType> _types = {};
+  // double? _radius;
+
+  InMemorySearchPlaceInteractor(
+    this._placeRepository,
+    this._filtersRepository,
+  );
 
   @override
   Future<void> clearHistory() async {
@@ -59,40 +64,48 @@ class InMemorySearchPlaceInteractor extends ISearchPlaceInteractor {
         nameFilter: name,
         lng: 0,
         lat: 0,
-        radius: _radius,
-        typeFilter: _types.map((e) => e.toString()).toList(),
+        radius: await _filtersRepository.getDistance(),
+        typeFilter: (await _filtersRepository.getTypes())
+            .map((e) => e.toString())
+            .toList(),
       ),
     );
   }
 
   @override
   Future<void> addTypeFilter(SightType type) async {
-    _types.add(type);
+    var _types = await _filtersRepository.getTypes();
+    _types = (_types.toSet()..add(type)).toList();
+    await _filtersRepository.setTypes(_types);
   }
 
   @override
   Future<double?> getGeoFilters() async {
-    return _radius;
+    return _filtersRepository.getDistance();
   }
 
   @override
   Future<List<SightType>> getTypeFilters() async {
-    return _types.toList();
+    return _filtersRepository.getTypes();
   }
 
   @override
   Future<void> removeTypeFilter(SightType type) async {
-    _types.remove(type);
+    var _types = await _filtersRepository.getTypes();
+    _types = (_types.toSet()..remove(type)).toList();
+    await _filtersRepository.setTypes(_types);
   }
 
   @override
   Future<void> setGeoFilters(double? radius) async {
-    _radius = radius;
+    return _filtersRepository.setDistance(radius);
   }
 
   @override
   Future<void> cleanFilters() async {
-    _radius = null;
+    await _filtersRepository.setDistance(null);
+    var _types = await _filtersRepository.getTypes();
     _types.clear();
+    await _filtersRepository.setTypes(_types);
   }
 }
