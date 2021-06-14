@@ -1,7 +1,10 @@
 import 'package:places/data/model/model.dart';
 import 'package:places/data/repository/repository.dart';
+import 'package:places/data/storage/app_data_base.dart';
 import 'package:places/domain/sight_type.dart';
 import 'package:places/helpers/distance_helper.dart';
+import 'dart:collection';
+import 'package:collection/collection.dart';
 
 abstract class IPlaceInteractor {
   Future<List<Place>> getPlaces(int? radius, List<SightType> categories);
@@ -25,12 +28,15 @@ abstract class IPlaceInteractor {
   Future<bool> isFavoritePlace(Place place);
 }
 
-class InMemoryPlaceInteractor extends IPlaceInteractor {
+class MoorPlaceInteractor extends IPlaceInteractor {
   final IPlaceRepository _placeRepository;
+  final AppDataBase _appDataBase;
 
-  InMemoryPlaceInteractor(this._placeRepository);
+  MoorPlaceInteractor(
+    this._placeRepository,
+    this._appDataBase,
+  );
 
-  final Set<Place> _favoritePlaces = <Place>{};
   final Set<Place> _visitingPlaces = <Place>{};
 
   @override
@@ -40,7 +46,15 @@ class InMemoryPlaceInteractor extends IPlaceInteractor {
 
   @override
   Future<void> addToFavorites(Place place) async {
-    _favoritePlaces.add(place);
+    await _appDataBase.addToFavorite(FavoritePlaceCompanion.insert(
+      id: place.id ?? 0,
+      lat: place.lat ?? 0,
+      lng: place.lng ?? 0,
+      placeName: place.placeName ?? '',
+      url: place.urls.firstOrNull ?? '',
+      placeType: place.type.type.index,
+      description: place.description ?? '',
+    ));
   }
 
   @override
@@ -50,7 +64,17 @@ class InMemoryPlaceInteractor extends IPlaceInteractor {
 
   @override
   Future<List<Place>> getFavoritePlaces() async {
-    return _favoritePlaces.toList();
+    return _appDataBase.getFavoritePlaces.then((data) => data
+        .map((e) => Place(
+              id: e.id,
+              lat: e.lat,
+              lng: e.lng,
+              placeName: e.placeName,
+              urls: [e.url],
+              placeType: SightType(ESightType.values[e.placeType]),
+              description: e.description,
+            ))
+        .toList());
   }
 
   @override
@@ -95,18 +119,20 @@ class InMemoryPlaceInteractor extends IPlaceInteractor {
 
   @override
   Future<void> removeFromFavorites(Place place) async {
-    _favoritePlaces.removeWhere((element) => element.id == place.id);
+    await _appDataBase.removeFromFavorite(place.id ?? 0);
   }
 
   @override
   Future<void> addToFavoritesAll(List<Place> places) async {
-    _favoritePlaces
-      ..clear()
-      ..addAll(places);
+    await Future.wait([
+      for (var place in places) this.addToFavorites(place),
+    ]);
   }
 
   @override
   Future<bool> isFavoritePlace(Place place) async {
-    return _favoritePlaces.contains(place);
+    return await _appDataBase
+        .getFavorite(place.id ?? 0)
+        .then((value) => value != null);
   }
 }

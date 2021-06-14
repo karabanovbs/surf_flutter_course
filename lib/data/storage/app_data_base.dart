@@ -8,12 +8,15 @@ import 'package:places/data/storage/tables/tables.dart';
 
 part 'app_data_base.g.dart';
 
-@UseMoor(tables: [SearchHistory])
+@UseMoor(tables: [
+  SearchHistory,
+  FavoritePlace,
+])
 class AppDataBase extends _$AppDataBase {
   AppDataBase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 6;
 
   Future<List<SearchHistoryData>> get getSearchHistory =>
       select(searchHistory).get();
@@ -24,21 +27,57 @@ class AppDataBase extends _$AppDataBase {
   }
 
   Future<int> deleteSearchHistory(String name) {
-    return (delete(searchHistory)
-          ..where((t) => t.search.equals(name)))
-        .go();
+    return (delete(searchHistory)..where((t) => t.search.equals(name))).go();
   }
 
   Future<int> clearSearchHistory() {
     return delete(searchHistory).go();
   }
+
+  Future<List<FavoritePlaceData>> get getFavoritePlaces =>
+      select(favoritePlace).get();
+
+  Future<FavoritePlaceData?> getFavorite(int id) async {
+    return (select(favoritePlace)..where((tbl) => tbl.id.equals(id)))
+        .get()
+        .then((value) {
+      if (value.isNotEmpty) {
+        return value.first;
+      }
+      return null;
+    });
+  }
+
+  Future<int> addToFavorite(FavoritePlaceCompanion entry) async {
+    return into(favoritePlace).insert(entry);
+  }
+
+  Future<int> removeFromFavorite(int id) async {
+    return (delete(favoritePlace)..where((t) => t.id.equals(id))).go();
+  }
+
+  Future<int> clearFavorite() async {
+    return delete(favoritePlace).go();
+  }
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+        onUpgrade: (m, from, to) async {
+          if (to == 6) {
+            await m.createTable(favoritePlace);
+          }
+        },
+      );
 }
 
 LazyDatabase _openConnection() {
   final executor = LazyDatabase(() async {
     final dataDir = await paths.getApplicationDocumentsDirectory();
     final dbFile = File(p.join(dataDir.path, 'places_app.sqlite'));
-    return VmDatabase(dbFile);
+    return VmDatabase(
+      dbFile,
+      logStatements: true,
+    );
   });
   return executor;
 }
