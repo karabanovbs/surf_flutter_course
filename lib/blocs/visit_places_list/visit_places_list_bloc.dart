@@ -38,7 +38,7 @@ class VisitPlacesListBloc
 
   Stream<VisitPlacesListState> _initialMapEventToState(
       InitialVisitPlacesListState state, VisitPlacesListEvent event) async* {
-    if (event is LoadingVisitPlacesListState) {
+    if (event is FetchVisitPlacesListEvent) {
       try {
         yield LoadingVisitPlacesListState();
         final places = await _placeInteractor.getVisitPlaces();

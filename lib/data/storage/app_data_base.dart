@@ -8,15 +8,12 @@ import 'package:places/data/storage/tables/tables.dart';
 
 part 'app_data_base.g.dart';
 
-@UseMoor(tables: [
-  SearchHistory,
-  FavoritePlace,
-])
+@UseMoor(tables: [SearchHistory, FavoritePlace, VisitedPlace])
 class AppDataBase extends _$AppDataBase {
   AppDataBase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   Future<List<SearchHistoryData>> get getSearchHistory =>
       select(searchHistory).get();
@@ -60,11 +57,37 @@ class AppDataBase extends _$AppDataBase {
     return delete(favoritePlace).go();
   }
 
+  Future<List<VisitedPlaceData>> get getVisitedPlaces =>
+      select(visitedPlace).get();
+
+  Future<VisitedPlaceData?> getVisited(int id) async {
+    return (select(visitedPlace)..where((tbl) => tbl.id.equals(id)))
+        .get()
+        .then((value) {
+      if (value.isNotEmpty) {
+        return value.first;
+      }
+      return null;
+    });
+  }
+
+  Future<int> addToVisited(VisitedPlaceCompanion entry) async {
+    return into(visitedPlace).insert(entry);
+  }
+
+  Future<int> removeFromVisited(int id) async {
+    return (delete(visitedPlace)..where((t) => t.id.equals(id))).go();
+  }
+
+  Future<int> clearVisited() async {
+    return delete(visitedPlace).go();
+  }
+
   @override
   MigrationStrategy get migration => MigrationStrategy(
         onUpgrade: (m, from, to) async {
-          if (to == 6) {
-            await m.createTable(favoritePlace);
+          if (to == 7) {
+            await m.createTable(visitedPlace);
           }
         },
       );
