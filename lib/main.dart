@@ -52,12 +52,10 @@ class App extends StatelessWidget {
           ),
         ),
         Provider<IPlaceInteractor>(
-          create: (context) =>
-              InMemoryPlaceInteractor(context.read<IPlaceRepository>()),
-        ),
-        Provider<IPlaceInteractor>(
-          create: (context) =>
-              InMemoryPlaceInteractor(context.read<IPlaceRepository>()),
+          create: (context) => MoorPlaceInteractor(
+            context.read<IPlaceRepository>(),
+            context.read<AppDataBase>(),
+          ),
         ),
         BlocProvider(
           create: (context) =>

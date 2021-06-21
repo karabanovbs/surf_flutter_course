@@ -333,6 +333,8 @@ class FavoriteSightCard extends StatelessWidget {
                     height: 28,
                     child: Text(
                       sight.details!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodyText2!.copyWith(
                             color: Theme.of(context).primaryColor,
                           ),
@@ -341,6 +343,8 @@ class FavoriteSightCard extends StatelessWidget {
                 ),
                 Text(
                   sight.details!,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyText2!.copyWith(
                         color: Theme.of(context).colorScheme.secondaryVariant,
                       ),
