@@ -1,6 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 import 'package:places/data/model/model.dart';
 import 'package:places/exceptions/exceptions.dart';
+import 'package:http_parser/http_parser.dart';
 
 class PlacesFilter {
   final double? lat;
@@ -27,7 +30,7 @@ class PlacesFilter {
 }
 
 abstract class IPlaceRepository {
-  Future<Place> postPlace(Place place);
+  Future<Place> postPlace(Place place, List<Uint8List> photos);
 
   Future<List<Place>> getPlaces({
     int? count,
@@ -134,11 +137,38 @@ class DioPlaceRepository extends IPlaceRepository {
   }
 
   @override
-  Future<Place> postPlace(Place place) {
+  Future<Place> postPlace(Place place, List<Uint8List> photos) async {
+    List<String> urls = [];
+    if (photos.isNotEmpty) {
+      urls = await _dioClient
+          .post(
+        '/upload_file',
+        data: FormData.fromMap({
+          'files': [
+            for (var photo in photos)
+              MultipartFile.fromBytes(
+                photo,
+                contentType: MediaType.parse('image/jpeg'),
+              ),
+          ]
+        }),
+      )
+          .then(
+        (value) {
+          return value.headers.value('location') != null
+              ? [value.headers.value('location')!]
+              : value.data['urls'];
+        },
+      );
+    }
+
     return _dioClient
         .post(
           '/place',
-          data: place.toJson(),
+          data: {
+            ...place.toJson(),
+            'urls': urls,
+          },
         )
         .then((value) => value.data)
         .then(

@@ -22,7 +22,7 @@ class _$AddSightFormStateTearOff {
       String? description,
       double? lat,
       double? long,
-      List<String> photos = const []}) {
+      List<Uint8List> photos = const []}) {
     return _AddSightFormState(
       selectedType: selectedType,
       name: name,
@@ -44,7 +44,7 @@ mixin _$AddSightFormState {
   String? get description => throw _privateConstructorUsedError;
   double? get lat => throw _privateConstructorUsedError;
   double? get long => throw _privateConstructorUsedError;
-  List<String> get photos => throw _privateConstructorUsedError;
+  List<Uint8List> get photos => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AddSightFormStateCopyWith<AddSightFormState> get copyWith =>
@@ -62,7 +62,7 @@ abstract class $AddSightFormStateCopyWith<$Res> {
       String? description,
       double? lat,
       double? long,
-      List<String> photos});
+      List<Uint8List> photos});
 }
 
 /// @nodoc
@@ -107,7 +107,7 @@ class _$AddSightFormStateCopyWithImpl<$Res>
       photos: photos == freezed
           ? _value.photos
           : photos // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<Uint8List>,
     ));
   }
 }
@@ -125,7 +125,7 @@ abstract class _$AddSightFormStateCopyWith<$Res>
       String? description,
       double? lat,
       double? long,
-      List<String> photos});
+      List<Uint8List> photos});
 }
 
 /// @nodoc
@@ -172,7 +172,7 @@ class __$AddSightFormStateCopyWithImpl<$Res>
       photos: photos == freezed
           ? _value.photos
           : photos // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<Uint8List>,
     ));
   }
 }
@@ -201,7 +201,7 @@ class _$_AddSightFormState extends _AddSightFormState {
   final double? long;
   @JsonKey(defaultValue: const [])
   @override
-  final List<String> photos;
+  final List<Uint8List> photos;
 
   @override
   String toString() {
@@ -251,7 +251,7 @@ abstract class _AddSightFormState extends AddSightFormState {
       String? description,
       double? lat,
       double? long,
-      List<String> photos}) = _$_AddSightFormState;
+      List<Uint8List> photos}) = _$_AddSightFormState;
   _AddSightFormState._() : super._();
 
   @override
@@ -265,7 +265,7 @@ abstract class _AddSightFormState extends AddSightFormState {
   @override
   double? get long => throw _privateConstructorUsedError;
   @override
-  List<String> get photos => throw _privateConstructorUsedError;
+  List<Uint8List> get photos => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$AddSightFormStateCopyWith<_AddSightFormState> get copyWith =>

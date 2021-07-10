@@ -94,6 +94,7 @@ void main() {
             placeType: SightType.parse('temple'),
             description: 'test',
           ),
+          [],
         );
       });
     });

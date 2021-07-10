@@ -73,17 +73,19 @@ class AddSightScreen extends StatelessWidget {
                                       return SelectPhotoDialog();
                                     },
                                   );
-                                  BlocProvider.of<AddSightFormBloc>(context)
-                                      .add(AddSightFormEvent.loadPhoto());
+                                  if (result != null) {
+                                    BlocProvider.of<AddSightFormBloc>(context)
+                                        .add(AddSightFormEvent.loadPhoto(
+                                            result));
+                                  }
                                 },
                               );
                             }
 
                             return RemovablePhoto(
-                              photo: NetworkImage(_photos[index - 1]),
+                              photo: MemoryImage(_photos[index - 1]),
                               onRemove: () {
-                                BlocProvider.of<AddSightFormBloc>(context)
-                                    .add(
+                                BlocProvider.of<AddSightFormBloc>(context).add(
                                   AddSightFormEvent.removePhoto(
                                     _photos[index - 1],
                                   ),
@@ -91,8 +93,7 @@ class AddSightScreen extends StatelessWidget {
                               },
                             );
                           },
-                          separatorBuilder:
-                              (BuildContext context, int index) {
+                          separatorBuilder: (BuildContext context, int index) {
                             return SizedBox(
                               width: 16,
                             );

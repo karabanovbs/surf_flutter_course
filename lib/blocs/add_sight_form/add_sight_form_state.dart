@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:places/domain/sight_type.dart';
 
@@ -13,7 +15,7 @@ class AddSightFormState with _$AddSightFormState {
     String? description,
     double? lat,
     double? long,
-    @Default([]) List<String> photos,
+    @Default([]) List<Uint8List> photos,
   }) = _AddSightFormState;
 
   bool get canSave =>

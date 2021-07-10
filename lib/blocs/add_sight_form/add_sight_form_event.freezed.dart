@@ -16,8 +16,10 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$AddSightFormEventTearOff {
   const _$AddSightFormEventTearOff();
 
-  _LoadPhoto loadPhoto() {
-    return const _LoadPhoto();
+  _LoadPhoto loadPhoto(SelectPhotoType photo) {
+    return _LoadPhoto(
+      photo,
+    );
   }
 
   _ChangeSelectedType changeSelectedType(ESightType? selectedType) {
@@ -50,7 +52,7 @@ class _$AddSightFormEventTearOff {
     );
   }
 
-  _RemovePhoto removePhoto(String? value) {
+  _RemovePhoto removePhoto(Uint8List? value) {
     return _RemovePhoto(
       value,
     );
@@ -68,25 +70,25 @@ const $AddSightFormEvent = _$AddSightFormEventTearOff();
 mixin _$AddSightFormEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() loadPhoto,
+    required TResult Function(SelectPhotoType photo) loadPhoto,
     required TResult Function(ESightType? selectedType) changeSelectedType,
     required TResult Function(String? name) changeName,
     required TResult Function(String? description) changeDescription,
     required TResult Function(double? lat) changeLat,
     required TResult Function(double? long) changeLong,
-    required TResult Function(String? value) removePhoto,
+    required TResult Function(Uint8List? value) removePhoto,
     required TResult Function() save,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loadPhoto,
+    TResult Function(SelectPhotoType photo)? loadPhoto,
     TResult Function(ESightType? selectedType)? changeSelectedType,
     TResult Function(String? name)? changeName,
     TResult Function(String? description)? changeDescription,
     TResult Function(double? lat)? changeLat,
     TResult Function(double? long)? changeLong,
-    TResult Function(String? value)? removePhoto,
+    TResult Function(Uint8List? value)? removePhoto,
     TResult Function()? save,
     required TResult orElse(),
   }) =>
@@ -140,6 +142,7 @@ abstract class _$LoadPhotoCopyWith<$Res> {
   factory _$LoadPhotoCopyWith(
           _LoadPhoto value, $Res Function(_LoadPhoto) then) =
       __$LoadPhotoCopyWithImpl<$Res>;
+  $Res call({SelectPhotoType photo});
 }
 
 /// @nodoc
@@ -151,56 +154,80 @@ class __$LoadPhotoCopyWithImpl<$Res>
 
   @override
   _LoadPhoto get _value => super._value as _LoadPhoto;
+
+  @override
+  $Res call({
+    Object? photo = freezed,
+  }) {
+    return _then(_LoadPhoto(
+      photo == freezed
+          ? _value.photo
+          : photo // ignore: cast_nullable_to_non_nullable
+              as SelectPhotoType,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$_LoadPhoto implements _LoadPhoto {
-  const _$_LoadPhoto();
+  const _$_LoadPhoto(this.photo);
+
+  @override
+  final SelectPhotoType photo;
 
   @override
   String toString() {
-    return 'AddSightFormEvent.loadPhoto()';
+    return 'AddSightFormEvent.loadPhoto(photo: $photo)';
   }
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is _LoadPhoto);
+    return identical(this, other) ||
+        (other is _LoadPhoto &&
+            (identical(other.photo, photo) ||
+                const DeepCollectionEquality().equals(other.photo, photo)));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(photo);
+
+  @JsonKey(ignore: true)
+  @override
+  _$LoadPhotoCopyWith<_LoadPhoto> get copyWith =>
+      __$LoadPhotoCopyWithImpl<_LoadPhoto>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() loadPhoto,
+    required TResult Function(SelectPhotoType photo) loadPhoto,
     required TResult Function(ESightType? selectedType) changeSelectedType,
     required TResult Function(String? name) changeName,
     required TResult Function(String? description) changeDescription,
     required TResult Function(double? lat) changeLat,
     required TResult Function(double? long) changeLong,
-    required TResult Function(String? value) removePhoto,
+    required TResult Function(Uint8List? value) removePhoto,
     required TResult Function() save,
   }) {
-    return loadPhoto();
+    return loadPhoto(photo);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loadPhoto,
+    TResult Function(SelectPhotoType photo)? loadPhoto,
     TResult Function(ESightType? selectedType)? changeSelectedType,
     TResult Function(String? name)? changeName,
     TResult Function(String? description)? changeDescription,
     TResult Function(double? lat)? changeLat,
     TResult Function(double? long)? changeLong,
-    TResult Function(String? value)? removePhoto,
+    TResult Function(Uint8List? value)? removePhoto,
     TResult Function()? save,
     required TResult orElse(),
   }) {
     if (loadPhoto != null) {
-      return loadPhoto();
+      return loadPhoto(photo);
     }
     return orElse();
   }
@@ -241,7 +268,12 @@ class _$_LoadPhoto implements _LoadPhoto {
 }
 
 abstract class _LoadPhoto implements AddSightFormEvent {
-  const factory _LoadPhoto() = _$_LoadPhoto;
+  const factory _LoadPhoto(SelectPhotoType photo) = _$_LoadPhoto;
+
+  SelectPhotoType get photo => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  _$LoadPhotoCopyWith<_LoadPhoto> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -310,13 +342,13 @@ class _$_ChangeSelectedType implements _ChangeSelectedType {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() loadPhoto,
+    required TResult Function(SelectPhotoType photo) loadPhoto,
     required TResult Function(ESightType? selectedType) changeSelectedType,
     required TResult Function(String? name) changeName,
     required TResult Function(String? description) changeDescription,
     required TResult Function(double? lat) changeLat,
     required TResult Function(double? long) changeLong,
-    required TResult Function(String? value) removePhoto,
+    required TResult Function(Uint8List? value) removePhoto,
     required TResult Function() save,
   }) {
     return changeSelectedType(selectedType);
@@ -325,13 +357,13 @@ class _$_ChangeSelectedType implements _ChangeSelectedType {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loadPhoto,
+    TResult Function(SelectPhotoType photo)? loadPhoto,
     TResult Function(ESightType? selectedType)? changeSelectedType,
     TResult Function(String? name)? changeName,
     TResult Function(String? description)? changeDescription,
     TResult Function(double? lat)? changeLat,
     TResult Function(double? long)? changeLong,
-    TResult Function(String? value)? removePhoto,
+    TResult Function(Uint8List? value)? removePhoto,
     TResult Function()? save,
     required TResult orElse(),
   }) {
@@ -451,13 +483,13 @@ class _$_ChangeName implements _ChangeName {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() loadPhoto,
+    required TResult Function(SelectPhotoType photo) loadPhoto,
     required TResult Function(ESightType? selectedType) changeSelectedType,
     required TResult Function(String? name) changeName,
     required TResult Function(String? description) changeDescription,
     required TResult Function(double? lat) changeLat,
     required TResult Function(double? long) changeLong,
-    required TResult Function(String? value) removePhoto,
+    required TResult Function(Uint8List? value) removePhoto,
     required TResult Function() save,
   }) {
     return changeName(name);
@@ -466,13 +498,13 @@ class _$_ChangeName implements _ChangeName {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loadPhoto,
+    TResult Function(SelectPhotoType photo)? loadPhoto,
     TResult Function(ESightType? selectedType)? changeSelectedType,
     TResult Function(String? name)? changeName,
     TResult Function(String? description)? changeDescription,
     TResult Function(double? lat)? changeLat,
     TResult Function(double? long)? changeLong,
-    TResult Function(String? value)? removePhoto,
+    TResult Function(Uint8List? value)? removePhoto,
     TResult Function()? save,
     required TResult orElse(),
   }) {
@@ -592,13 +624,13 @@ class _$_ChangeDescription implements _ChangeDescription {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() loadPhoto,
+    required TResult Function(SelectPhotoType photo) loadPhoto,
     required TResult Function(ESightType? selectedType) changeSelectedType,
     required TResult Function(String? name) changeName,
     required TResult Function(String? description) changeDescription,
     required TResult Function(double? lat) changeLat,
     required TResult Function(double? long) changeLong,
-    required TResult Function(String? value) removePhoto,
+    required TResult Function(Uint8List? value) removePhoto,
     required TResult Function() save,
   }) {
     return changeDescription(description);
@@ -607,13 +639,13 @@ class _$_ChangeDescription implements _ChangeDescription {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loadPhoto,
+    TResult Function(SelectPhotoType photo)? loadPhoto,
     TResult Function(ESightType? selectedType)? changeSelectedType,
     TResult Function(String? name)? changeName,
     TResult Function(String? description)? changeDescription,
     TResult Function(double? lat)? changeLat,
     TResult Function(double? long)? changeLong,
-    TResult Function(String? value)? removePhoto,
+    TResult Function(Uint8List? value)? removePhoto,
     TResult Function()? save,
     required TResult orElse(),
   }) {
@@ -731,13 +763,13 @@ class _$_ChangeLat implements _ChangeLat {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() loadPhoto,
+    required TResult Function(SelectPhotoType photo) loadPhoto,
     required TResult Function(ESightType? selectedType) changeSelectedType,
     required TResult Function(String? name) changeName,
     required TResult Function(String? description) changeDescription,
     required TResult Function(double? lat) changeLat,
     required TResult Function(double? long) changeLong,
-    required TResult Function(String? value) removePhoto,
+    required TResult Function(Uint8List? value) removePhoto,
     required TResult Function() save,
   }) {
     return changeLat(lat);
@@ -746,13 +778,13 @@ class _$_ChangeLat implements _ChangeLat {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loadPhoto,
+    TResult Function(SelectPhotoType photo)? loadPhoto,
     TResult Function(ESightType? selectedType)? changeSelectedType,
     TResult Function(String? name)? changeName,
     TResult Function(String? description)? changeDescription,
     TResult Function(double? lat)? changeLat,
     TResult Function(double? long)? changeLong,
-    TResult Function(String? value)? removePhoto,
+    TResult Function(Uint8List? value)? removePhoto,
     TResult Function()? save,
     required TResult orElse(),
   }) {
@@ -871,13 +903,13 @@ class _$_ChangeLong implements _ChangeLong {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() loadPhoto,
+    required TResult Function(SelectPhotoType photo) loadPhoto,
     required TResult Function(ESightType? selectedType) changeSelectedType,
     required TResult Function(String? name) changeName,
     required TResult Function(String? description) changeDescription,
     required TResult Function(double? lat) changeLat,
     required TResult Function(double? long) changeLong,
-    required TResult Function(String? value) removePhoto,
+    required TResult Function(Uint8List? value) removePhoto,
     required TResult Function() save,
   }) {
     return changeLong(long);
@@ -886,13 +918,13 @@ class _$_ChangeLong implements _ChangeLong {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loadPhoto,
+    TResult Function(SelectPhotoType photo)? loadPhoto,
     TResult Function(ESightType? selectedType)? changeSelectedType,
     TResult Function(String? name)? changeName,
     TResult Function(String? description)? changeDescription,
     TResult Function(double? lat)? changeLat,
     TResult Function(double? long)? changeLong,
-    TResult Function(String? value)? removePhoto,
+    TResult Function(Uint8List? value)? removePhoto,
     TResult Function()? save,
     required TResult orElse(),
   }) {
@@ -951,7 +983,7 @@ abstract class _$RemovePhotoCopyWith<$Res> {
   factory _$RemovePhotoCopyWith(
           _RemovePhoto value, $Res Function(_RemovePhoto) then) =
       __$RemovePhotoCopyWithImpl<$Res>;
-  $Res call({String? value});
+  $Res call({Uint8List? value});
 }
 
 /// @nodoc
@@ -973,7 +1005,7 @@ class __$RemovePhotoCopyWithImpl<$Res>
       value == freezed
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as Uint8List?,
     ));
   }
 }
@@ -984,7 +1016,7 @@ class _$_RemovePhoto implements _RemovePhoto {
   const _$_RemovePhoto(this.value);
 
   @override
-  final String? value;
+  final Uint8List? value;
 
   @override
   String toString() {
@@ -1011,13 +1043,13 @@ class _$_RemovePhoto implements _RemovePhoto {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() loadPhoto,
+    required TResult Function(SelectPhotoType photo) loadPhoto,
     required TResult Function(ESightType? selectedType) changeSelectedType,
     required TResult Function(String? name) changeName,
     required TResult Function(String? description) changeDescription,
     required TResult Function(double? lat) changeLat,
     required TResult Function(double? long) changeLong,
-    required TResult Function(String? value) removePhoto,
+    required TResult Function(Uint8List? value) removePhoto,
     required TResult Function() save,
   }) {
     return removePhoto(value);
@@ -1026,13 +1058,13 @@ class _$_RemovePhoto implements _RemovePhoto {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loadPhoto,
+    TResult Function(SelectPhotoType photo)? loadPhoto,
     TResult Function(ESightType? selectedType)? changeSelectedType,
     TResult Function(String? name)? changeName,
     TResult Function(String? description)? changeDescription,
     TResult Function(double? lat)? changeLat,
     TResult Function(double? long)? changeLong,
-    TResult Function(String? value)? removePhoto,
+    TResult Function(Uint8List? value)? removePhoto,
     TResult Function()? save,
     required TResult orElse(),
   }) {
@@ -1078,9 +1110,9 @@ class _$_RemovePhoto implements _RemovePhoto {
 }
 
 abstract class _RemovePhoto implements AddSightFormEvent {
-  const factory _RemovePhoto(String? value) = _$_RemovePhoto;
+  const factory _RemovePhoto(Uint8List? value) = _$_RemovePhoto;
 
-  String? get value => throw _privateConstructorUsedError;
+  Uint8List? get value => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$RemovePhotoCopyWith<_RemovePhoto> get copyWith =>
       throw _privateConstructorUsedError;
@@ -1123,13 +1155,13 @@ class _$_Save implements _Save {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() loadPhoto,
+    required TResult Function(SelectPhotoType photo) loadPhoto,
     required TResult Function(ESightType? selectedType) changeSelectedType,
     required TResult Function(String? name) changeName,
     required TResult Function(String? description) changeDescription,
     required TResult Function(double? lat) changeLat,
     required TResult Function(double? long) changeLong,
-    required TResult Function(String? value) removePhoto,
+    required TResult Function(Uint8List? value) removePhoto,
     required TResult Function() save,
   }) {
     return save();
@@ -1138,13 +1170,13 @@ class _$_Save implements _Save {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loadPhoto,
+    TResult Function(SelectPhotoType photo)? loadPhoto,
     TResult Function(ESightType? selectedType)? changeSelectedType,
     TResult Function(String? name)? changeName,
     TResult Function(String? description)? changeDescription,
     TResult Function(double? lat)? changeLat,
     TResult Function(double? long)? changeLong,
-    TResult Function(String? value)? removePhoto,
+    TResult Function(Uint8List? value)? removePhoto,
     TResult Function()? save,
     required TResult orElse(),
   }) {
