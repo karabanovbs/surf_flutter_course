@@ -2,10 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/blocs/current_geo/current_geo_bloc.dart';
 import 'package:places/blocs/sight_favorite/sight_favorite_bloc.dart';
 import 'package:places/blocs/sight_list/sight_list_bloc.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/data/service/geo_location_service.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/res/text_constants.dart';
 import 'package:places/ui/screen/add_sight_screen/add_sight_route.dart';
@@ -16,6 +18,7 @@ import 'package:places/ui/screen/sight_search_screen.dart';
 import 'package:places/ui/screen/visiting_screen.dart';
 import 'package:places/ui/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 
 /// Constants
 ///   AppBar
@@ -39,8 +42,20 @@ class SightListScreen extends StatelessWidget {
     return MultiProvider(
       providers: [
         BlocProvider(
-          create: (context) => SightListBloc(context.read<IPlaceInteractor>())
-            ..add(
+          create: (context) =>
+              CurrentGeoBloc(context.read<GeoLocationService>())
+                ..add(
+                  CurrentGeoEvent.detect(),
+                ),
+        ),
+        BlocProvider(
+          create: (context) => SightListBloc(
+            context.read<IPlaceInteractor>(),
+            BlocProvider.of<CurrentGeoBloc>(context)
+                .stream
+                .startWith(BlocProvider.of<CurrentGeoBloc>(context).state)
+                .shareValue(),
+          )..add(
               SightListEvent.loadPlaces(),
             ),
         )
@@ -137,50 +152,8 @@ class SightListScreen extends StatelessWidget {
                 right: 0,
                 left: 0,
                 child: Center(
-                  child: TextButton(
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all(StadiumBorder()),
-                      padding: MaterialStateProperty.all(EdgeInsets.zero),
-                    ),
-                    child: Ink(
-                      decoration: ShapeDecoration(
-                        shape: StadiumBorder(),
-                        gradient: LinearGradient(
-                          colors: [
-                            Color(0xFFFCDD3D),
-                            Color(0xFF4CAF50),
-                          ],
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 22, vertical: 15),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(
-                              width: 14,
-                              height: 14,
-                              child: PlusIcon(),
-                            ),
-                            SizedBox(
-                              width: 14,
-                            ),
-                            Text(
-                              sightListAddNewLbl.toUpperCase(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .background,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                  child: AddPlaceButton(
+                    label: sightListAddNewLbl.toUpperCase(),
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(

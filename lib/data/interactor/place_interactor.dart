@@ -9,7 +9,11 @@ import 'dart:collection';
 import 'package:collection/collection.dart';
 
 abstract class IPlaceInteractor {
-  Future<List<Place>> getPlaces(int? radius, List<SightType> categories);
+  Future<List<Place>> getPlaces(
+    GeoPoint? currentGeo,
+    int? radius,
+    List<SightType> categories,
+  );
 
   Future<Place> getPlaceDetails(int id);
 
@@ -93,13 +97,13 @@ class MoorPlaceInteractor extends IPlaceInteractor {
   }
 
   @override
-  Future<List<Place>> getPlaces(int? radius, List<SightType> categories) async {
-    var currentGeo = GeoPoint(latitude: 0, longitude: 0);
+  Future<List<Place>> getPlaces(
+      GeoPoint? currentGeo, int? radius, List<SightType> categories) async {
     return (await _placeRepository.getPlaces())
         .where((element) =>
             categories.contains(element.placeType) || categories.isEmpty)
         .where(
-          (element) => radius != null
+          (element) => currentGeo != null && radius != null
               ? arePointsBetween(
                   GeoPoint(
                       latitude: element.lat ?? 0, longitude: element.lat ?? 0),
@@ -111,14 +115,16 @@ class MoorPlaceInteractor extends IPlaceInteractor {
         )
         .toList()
           ..sort(
-            (a, b) => (distanceInKmBetweenEarthCoordinates(
-                    GeoPoint(latitude: a.lat ?? 0, longitude: a.lat ?? 0),
-                    currentGeo)
-                .compareTo(
-              distanceInKmBetweenEarthCoordinates(
-                  GeoPoint(latitude: b.lat ?? 0, longitude: b.lng ?? 0),
-                  currentGeo),
-            )),
+            (a, b) => currentGeo != null
+                ? (distanceInKmBetweenEarthCoordinates(
+                        GeoPoint(latitude: a.lat ?? 0, longitude: a.lat ?? 0),
+                        currentGeo)
+                    .compareTo(
+                    distanceInKmBetweenEarthCoordinates(
+                        GeoPoint(latitude: b.lat ?? 0, longitude: b.lng ?? 0),
+                        currentGeo),
+                  ))
+                : 0,
           );
   }
 

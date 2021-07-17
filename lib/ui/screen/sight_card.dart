@@ -148,6 +148,7 @@ class SightCard extends StatelessWidget {
   final void Function() onPressed;
   final void Function() onLike;
   final bool liked;
+  final void Function()? onNavigation;
 
   const SightCard({
     Key? key,
@@ -155,6 +156,7 @@ class SightCard extends StatelessWidget {
     required this.onPressed,
     required this.onLike,
     required this.liked,
+    this.onNavigation,
   }) : super(key: key);
 
   @override
@@ -180,35 +182,73 @@ class SightCard extends StatelessWidget {
           ),
         )
       ],
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      content: Row(
         children: [
-          /// sight name
-          FractionallySizedBox(
-            widthFactor: 0.5,
-            child: Container(
-              margin: const EdgeInsets.only(bottom: 2),
-              child: Text(
-                sight.name,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.headline4!.copyWith(
-                      color: Theme.of(context).colorScheme.secondary,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                /// sight name
+                FractionallySizedBox(
+                  widthFactor: 0.5,
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 2),
+                    child: Text(
+                      sight.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.headline4!.copyWith(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                     ),
-              ),
+                  ),
+                ),
+
+                /// sight description
+                Text(
+                  sight.details!,
+                  style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                        color: Theme.of(context).colorScheme.secondaryVariant,
+                      ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
           ),
-
-          /// sight description
-          Text(
-            sight.details!,
-            style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                  color: Theme.of(context).colorScheme.secondaryVariant,
+          if (onNavigation != null)
+            SizedBox(
+              height: 40,
+              width: 40,
+              child: ElevatedButton(
+                onPressed: onNavigation,
+                style: ButtonStyle(
+                    elevation: MaterialStateProperty.all(0),
+                    backgroundColor: MaterialStateProperty.all(
+                        Theme.of(context).primaryColor),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    padding: MaterialStateProperty.all(
+                      const EdgeInsets.all(0),
+                    )),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 24,
+                        width: 24,
+                        child: GoIcon(),
+                      ),
+                    ],
+                  ),
                 ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
+              ),
+            )
         ],
       ),
       onPressed: onPressed,

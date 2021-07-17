@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/onboarding/onboarding_bloc.dart';
 import 'package:places/data/repository/filters_repository.dart';
 import 'package:places/data/repository/place_repository.dart';
+import 'package:places/data/service/geo_location_service.dart';
 import 'package:places/data/service/media_picker_service.dart';
 import 'package:places/data/storage/app_data_base.dart';
 import 'package:places/data/storage/storage.dart';
@@ -60,6 +61,9 @@ class App extends StatelessWidget {
             context.read<IPlaceRepository>(),
             context.read<AppDataBase>(),
           ),
+        ),
+        Provider<GeoLocationService>(
+          create: (context) => GeoLocationService(),
         ),
         BlocProvider(
           create: (context) =>
