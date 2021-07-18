@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:map_launcher/map_launcher.dart';
+import 'package:places/blocs/navigate_to_place/navigate_to_place_bloc.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/drawing/drawing.dart';
@@ -20,87 +23,98 @@ class SightDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var sightId = sight.id;
-    return Scaffold(
-      body: FutureBuilder(
-        future: sightId != null
-            ? context.read<IPlaceInteractor>().getPlaceDetails(sightId)
-            : Future<Place>.error(ArgumentError()),
-        builder: (BuildContext context, AsyncSnapshot<Place> snapshot) {
-          final sight = snapshot.data ?? this.sight;
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => NavigateToPlaceBloc(
+            context.read<IPlaceInteractor>(),
+          ),
+        ),
+      ],
+      child: Scaffold(
+        body: FutureBuilder(
+          future: sightId != null
+              ? context.read<IPlaceInteractor>().getPlaceDetails(sightId)
+              : Future<Place>.error(ArgumentError()),
+          builder: (BuildContext context, AsyncSnapshot<Place> snapshot) {
+            final sight = snapshot.data ?? this.sight;
 
-          return Container(
-            child: CustomScrollView(
-              controller: scrollController,
-              slivers: [
-                SliverAppBar(
-                  toolbarHeight: 64,
-                  leadingWidth: 64,
-                  pinned: true,
-                  leading: Container(),
+            return Container(
+              child: CustomScrollView(
+                controller: scrollController,
+                slivers: [
+                  SliverAppBar(
+                    toolbarHeight: 64,
+                    leadingWidth: 64,
+                    pinned: true,
+                    leading: Container(),
 
-                  title: Center(
-                    child: Container(
-                      width: 40,
-                      height: 4,
-                      decoration: ShapeDecoration(
-                        color: Theme.of(context).colorScheme.background,
-                        shape: StadiumBorder(),
-                      ),
-                    ),
-                  ),
-
-                  /// back button
-                  actions: [
-                    Container(
-                      padding: const EdgeInsets.all(16),
+                    title: Center(
                       child: Container(
                         width: 40,
-                        height: 40,
-                        child: ElevatedButton(
-                          child: Center(
-                            child: SizedBox(
-                              height: 12,
-                              child: IconWrapper(
-                                color:
-                                    Theme.of(context).colorScheme.onBackground,
-                                child: DeleteIcon(),
-                              ),
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).maybePop();
-                          },
-                          style: ButtonStyle(
-                            padding: MaterialStateProperty.all(EdgeInsets.zero),
-                            shape: MaterialStateProperty.all(
-                              CircleBorder(),
-                            ),
-                            backgroundColor: MaterialStateProperty.all(
-                                Theme.of(context).backgroundColor),
-                          ),
+                        height: 4,
+                        decoration: ShapeDecoration(
+                          color: Theme.of(context).colorScheme.background,
+                          shape: StadiumBorder(),
                         ),
                       ),
-                    )
-                  ],
-                  backgroundColor:
-                      Theme.of(context).backgroundColor.withOpacity(0),
-                  elevation: 0,
-                  expandedHeight: 360,
-                  flexibleSpace: FlexibleSpaceBar(
-                    collapseMode: CollapseMode.pin,
-                    background: _buildGallery(context, sight),
+                    ),
+
+                    /// back button
+                    actions: [
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          child: ElevatedButton(
+                            child: Center(
+                              child: SizedBox(
+                                height: 12,
+                                child: IconWrapper(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
+                                  child: DeleteIcon(),
+                                ),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).maybePop();
+                            },
+                            style: ButtonStyle(
+                              padding:
+                                  MaterialStateProperty.all(EdgeInsets.zero),
+                              shape: MaterialStateProperty.all(
+                                CircleBorder(),
+                              ),
+                              backgroundColor: MaterialStateProperty.all(
+                                  Theme.of(context).backgroundColor),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                    backgroundColor:
+                        Theme.of(context).backgroundColor.withOpacity(0),
+                    elevation: 0,
+                    expandedHeight: 360,
+                    flexibleSpace: FlexibleSpaceBar(
+                      collapseMode: CollapseMode.pin,
+                      background: _buildGallery(context, sight),
+                    ),
                   ),
-                ),
-                SliverToBoxAdapter(
-                  child: _buildDescription(context, sight),
-                ),
-                SliverToBoxAdapter(
-                  child: _buildControls(context, sight),
-                ),
-              ],
-            ),
-          );
-        },
+                  SliverToBoxAdapter(
+                    child: _buildDescription(context, sight),
+                  ),
+                  SliverToBoxAdapter(
+                    child: _buildControls(context, sight),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -164,39 +178,75 @@ class SightDetails extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          ElevatedButton(
-            onPressed: () {
-              print('start navigation');
+          BlocListener<NavigateToPlaceBloc, NavigateToPlaceState>(
+            listener: (context, navigateToPlaceState) {
+              navigateToPlaceState.maybeMap(
+                mapSelection: (value) async {
+                  try {
+                    var placeName = sight.placeName;
+                    var _currentPlaceLat = sight.lat;
+                    var _currentPlaceLon = sight.lon;
+
+                    if (placeName != null &&
+                        _currentPlaceLat != null &&
+                        _currentPlaceLon != null) {
+                      final coords = Coords(_currentPlaceLat, _currentPlaceLon);
+                      final title = placeName;
+                      final availableMaps = await MapLauncher.installedMaps;
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return MapSelection(
+                            availableMaps: availableMaps,
+                            title: title,
+                            place: coords,
+                          );
+                        },
+                      );
+                    }
+                  } catch (e) {
+                    print(e);
+                  }
+                },
+                orElse: () {},
+              );
             },
-            style: ButtonStyle(
-              elevation: MaterialStateProperty.all(0),
-              backgroundColor:
-                  MaterialStateProperty.all(Theme.of(context).primaryColor),
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+            child: ElevatedButton(
+              onPressed: () {
+                BlocProvider.of<NavigateToPlaceBloc>(context).add(
+                  NavigateToPlaceEvent.navigate(sight),
+                );
+              },
+              style: ButtonStyle(
+                elevation: MaterialStateProperty.all(0),
+                backgroundColor:
+                    MaterialStateProperty.all(Theme.of(context).primaryColor),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
-            ),
-            child: Container(
-              height: 48,
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 24,
-                      width: 24,
-                      margin: const EdgeInsets.only(right: 10),
-                      child: GoIcon(),
-                    ),
-                    Text(
-                      'построить маршрут'.toUpperCase(),
-                      style: Theme.of(context).textTheme.button!.copyWith(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
-                    ),
-                  ],
+              child: Container(
+                height: 48,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 24,
+                        width: 24,
+                        margin: const EdgeInsets.only(right: 10),
+                        child: GoIcon(),
+                      ),
+                      Text(
+                        'построить маршрут'.toUpperCase(),
+                        style: Theme.of(context).textTheme.button!.copyWith(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

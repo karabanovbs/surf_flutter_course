@@ -6,7 +6,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        // https://github.com/mattermoran/map_launcher/issues/60#issuecomment-808872944
+        classpath 'com.android.tools.build:gradle:3.3.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }

@@ -1,16 +1,13 @@
-part of 'visit_places_list_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:places/data/model/model.dart';
 
-@immutable
-abstract class VisitPlacesListState {}
+part 'visit_places_list_state.freezed.dart';
 
-class InitialVisitPlacesListState extends VisitPlacesListState {}
-
-class LoadingVisitPlacesListState extends VisitPlacesListState {}
-
-class SuccessVisitPlacesListState extends VisitPlacesListState {
-  final List<Place> places;
-
-  SuccessVisitPlacesListState(this.places);
+@freezed
+class VisitPlacesListState with _$VisitPlacesListState {
+    const factory VisitPlacesListState.init() = _Init;
+    const factory VisitPlacesListState.loading() = _Loading;
+    const factory VisitPlacesListState.failure() = _Failure;
+    const factory VisitPlacesListState.loaded(List<Place> places) = _Loaded;
 }
 
-class FailureVisitPlacesListState extends VisitPlacesListState {}

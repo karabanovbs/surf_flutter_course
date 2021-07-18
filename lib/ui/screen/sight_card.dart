@@ -367,20 +367,20 @@ class FavoriteSightCard extends StatelessWidget {
                         color: Theme.of(context).colorScheme.secondary,
                       ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2),
-                  child: SizedBox(
-                    height: 28,
-                    child: Text(
-                      sight.details!,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                            color: Theme.of(context).primaryColor,
-                          ),
-                    ),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(vertical: 2),
+                //   child: SizedBox(
+                //     height: 28,
+                //     child: Text(
+                //       sight.details!,
+                //       maxLines: 1,
+                //       overflow: TextOverflow.ellipsis,
+                //       style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                //             color: Theme.of(context).primaryColor,
+                //           ),
+                //     ),
+                //   ),
+                // ),
                 Text(
                   sight.details!,
                   maxLines: 3,
@@ -401,11 +401,13 @@ class FavoriteSightCard extends StatelessWidget {
 class FavoriteHistorySightCard extends StatelessWidget {
   final Sight sight;
   final void Function() onPressed;
+  final void Function() onRemove;
 
   const FavoriteHistorySightCard({
     Key? key,
     required this.sight,
     required this.onPressed,
+    required this.onRemove,
   }) : super(key: key);
 
   @override
@@ -423,20 +425,24 @@ class FavoriteHistorySightCard extends StatelessWidget {
                   color: Theme.of(context).colorScheme.secondary,
                 ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2),
-            child: SizedBox(
-              height: 28,
-              child: Text(
-                sight.details!,
-                style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                      color: Theme.of(context).colorScheme.secondaryVariant,
-                    ),
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(vertical: 2),
+          //   child: SizedBox(
+          //     height: 28,
+          //     child: Text(
+          //       sight.details!,
+          //       maxLines: 3,
+          //       overflow: TextOverflow.ellipsis,
+          //       style: Theme.of(context).textTheme.bodyText2!.copyWith(
+          //             color: Theme.of(context).colorScheme.secondaryVariant,
+          //           ),
+          //     ),
+          //   ),
+          // ),
           Text(
             sight.details!,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.bodyText2!.copyWith(
                   color: Theme.of(context).colorScheme.secondaryVariant,
                 ),
@@ -465,9 +471,7 @@ class FavoriteHistorySightCard extends StatelessWidget {
           height: 24,
           width: 24,
           child: TextButton(
-            onPressed: () {
-              print('tap close');
-            },
+            onPressed: onRemove,
             style: ButtonStyle(
               shape: MaterialStateProperty.all(CircleBorder()),
               padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
