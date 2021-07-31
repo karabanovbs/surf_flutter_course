@@ -37,7 +37,7 @@ class _VisitingScreenState extends State<VisitingScreen> {
         BlocProvider(
           create: (context) => VisitPlacesListBloc(
             context.read<IPlaceInteractor>(),
-          )..add(FetchVisitPlacesListEvent()),
+          )..add(VisitPlacesListEvent.fetch()),
         )
       ],
       child: DefaultTabController(
@@ -146,12 +146,13 @@ class _VisitingScreenState extends State<VisitingScreen> {
               ),
               BlocBuilder<VisitPlacesListBloc, VisitPlacesListState>(
                 builder: (context, visitPlacesListState) {
-                  if (visitPlacesListState is SuccessVisitPlacesListState) {
-                    return _TabCardsList(
-                      sights: visitPlacesListState.places,
+                  return visitPlacesListState.maybeMap(
+                    loaded: (_state) => _TabCardsList(
+                      sights: _state.places,
                       cardBuilder: (sight) {
                         return FavoriteHistorySightCard(
                           sight: sight,
+                          onRemove: () {},
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
@@ -163,10 +164,8 @@ class _VisitingScreenState extends State<VisitingScreen> {
                           },
                         );
                       },
-                    );
-                  }
-                  return Center(
-                    child: AppLoader(),
+                    ),
+                    orElse: () => AppLoader(),
                   );
                 },
               )

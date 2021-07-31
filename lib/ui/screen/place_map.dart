@@ -4,7 +4,9 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:places/blocs/current_geo/current_geo_bloc.dart';
+import 'package:places/blocs/navigate_to_place/navigate_to_place_bloc.dart';
 import 'package:places/blocs/sight_favorite/sight_favorite_bloc.dart';
 import 'package:places/blocs/sight_list/sight_list_bloc.dart';
 import 'package:places/data/interactor/place_interactor.dart';
@@ -34,6 +36,11 @@ class PlaceMap extends StatelessWidget {
                 ..add(
                   CurrentGeoEvent.detect(),
                 ),
+        ),
+        BlocProvider(
+          create: (context) => NavigateToPlaceBloc(
+            context.read<IPlaceInteractor>(),
+          ),
         ),
         BlocProvider(
           create: (context) => SightListBloc(
@@ -392,74 +399,121 @@ class _PlacesMapState extends State<PlacesMap> {
                     )..add(
                         SightFavoriteEvent.checkFavorite(),
                       ),
-                    child: BlocBuilder<SightFavoriteBloc, SightFavoriteState>(
-                        builder: (BuildContext context, sightFavoriteState) {
-                      return SightCard(
-                        onNavigation: () {
-                          print('start navigation');
-                        },
-                        liked: sightFavoriteState.map(
-                          regular: (value) => false,
-                          favorite: (value) => true,
-                        ),
-                        onPressed: () {
-                          final id = _currentPlace!.id;
+                    child: BlocBuilder<CurrentGeoBloc, CurrentGeoState>(
+                        builder: (context, currentGeoState) {
+                      return BlocBuilder<SightFavoriteBloc, SightFavoriteState>(
+                          builder: (BuildContext context, sightFavoriteState) {
+                        return BlocListener<NavigateToPlaceBloc,
+                            NavigateToPlaceState>(
+                          listener: (context, navigateToPlaceState) {
+                            navigateToPlaceState.maybeMap(
+                              mapSelection: (value) async {
+                                try {
+                                  var placeName = _currentPlace?.placeName;
+                                  var _currentPlaceLat = _currentPlace?.lat;
+                                  var _currentPlaceLon = _currentPlace?.lon;
 
-                          if (id != null) {
-                            // [HeroController] works only with [PageRoute]
-                            Navigator.of(context).push(
-                              PageRouteBuilder(
-                                opaque: false,
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) {
-                                  return BottomSheet(
-                                    backgroundColor: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface
-                                        .withOpacity(0.5),
-                                    onClosing: () {
-                                      Navigator.of(context).maybePop();
-                                    },
-                                    builder: (context) {
-                                      return DraggableScrollableSheet(
-                                        initialChildSize: 0.9,
-                                        builder: (context, _controller) {
-                                          return ClipRRect(
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                              topLeft:
-                                                  const Radius.circular(12),
-                                              topRight:
-                                                  const Radius.circular(12),
-                                            ),
-                                            child: SightDetails(
-                                              sight: _currentPlace!,
-                                              scrollController: _controller,
-                                            ),
+                                  if (placeName != null &&
+                                      _currentPlaceLat != null &&
+                                      _currentPlaceLon != null) {
+                                    final coords = Coords(
+                                        _currentPlaceLat, _currentPlaceLon);
+                                    final title = placeName;
+                                    final availableMaps =
+                                        await MapLauncher.installedMaps;
+                                    showModalBottomSheet(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return MapSelection(
+                                          availableMaps: availableMaps,
+                                          title: title,
+                                          place: coords,
+                                        );
+                                      },
+                                    );
+                                  }
+                                } catch (e) {
+                                  print(e);
+                                }
+                              },
+                              orElse: () {},
+                            );
+                          },
+                          child: SightCard(
+                            onNavigation: () async {
+                              if (_currentPlace != null) {
+                                BlocProvider.of<NavigateToPlaceBloc>(context)
+                                    .add(
+                                  NavigateToPlaceEvent.navigate(_currentPlace!),
+                                );
+                              }
+                            },
+                            liked: sightFavoriteState.map(
+                              regular: (value) => false,
+                              favorite: (value) => true,
+                            ),
+                            onPressed: () {
+                              final id = _currentPlace!.id;
+
+                              if (id != null) {
+                                // [HeroController] works only with [PageRoute]
+                                Navigator.of(context).push(
+                                  PageRouteBuilder(
+                                    opaque: false,
+                                    pageBuilder: (context, animation,
+                                        secondaryAnimation) {
+                                      return BottomSheet(
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withOpacity(0.5),
+                                        onClosing: () {
+                                          Navigator.of(context).maybePop();
+                                        },
+                                        builder: (context) {
+                                          return DraggableScrollableSheet(
+                                            initialChildSize: 0.9,
+                                            builder: (context, _controller) {
+                                              return ClipRRect(
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topLeft:
+                                                      const Radius.circular(12),
+                                                  topRight:
+                                                      const Radius.circular(12),
+                                                ),
+                                                child: SightDetails(
+                                                  sight: _currentPlace!,
+                                                  scrollController: _controller,
+                                                ),
+                                              );
+                                            },
                                           );
                                         },
                                       );
                                     },
-                                  );
-                                },
-                              ),
-                            );
-                          }
-                        },
-                        sight: _currentPlace!,
-                        onLike: () async {
-                          sightFavoriteState.map(
-                            regular: (value) =>
-                                BlocProvider.of<SightFavoriteBloc>(context).add(
-                              SightFavoriteEvent.addToFavorites(),
-                            ),
-                            favorite: (value) =>
-                                BlocProvider.of<SightFavoriteBloc>(context).add(
-                              SightFavoriteEvent.removeFromFavorites(),
-                            ),
-                          );
-                        },
-                      );
+                                  ),
+                                );
+                              }
+                            },
+                            sight: _currentPlace!,
+                            onLike: () async {
+                              sightFavoriteState.map(
+                                regular: (value) =>
+                                    BlocProvider.of<SightFavoriteBloc>(context)
+                                        .add(
+                                  SightFavoriteEvent.addToFavorites(),
+                                ),
+                                favorite: (value) =>
+                                    BlocProvider.of<SightFavoriteBloc>(context)
+                                        .add(
+                                  SightFavoriteEvent.removeFromFavorites(),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      });
                     }),
                   ),
                 ),

@@ -14,3 +14,4 @@ export 'animated_splash_logo.dart';
 export 'animated_visiting_tab_bar.dart';
 export 'app_loader.dart';
 export 'add_place_button.dart';
+export 'map_selection.dart';

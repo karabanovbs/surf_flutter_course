@@ -1,6 +1,10 @@
-part of 'visit_places_list_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-@immutable
-abstract class VisitPlacesListEvent {}
+part 'visit_places_list_event.freezed.dart';
 
-class FetchVisitPlacesListEvent extends VisitPlacesListEvent {}
+@freezed
+class VisitPlacesListEvent with _$VisitPlacesListEvent {
+    const factory VisitPlacesListEvent.fetch() = _Fetch;
+    const factory VisitPlacesListEvent.remove() = _Remove;
+}
+

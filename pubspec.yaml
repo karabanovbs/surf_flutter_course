@@ -25,6 +25,7 @@ dependencies:
   image_picker: ^0.8.0+3
   geolocator: ^7.2.0+1
   yandex_mapkit: ^1.0.1
+  map_launcher: ^2.1.1
 
 dev_dependencies:
   flutter_test:
