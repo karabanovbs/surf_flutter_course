@@ -11,6 +11,7 @@ import 'package:places/data/model/place.dart';
 import 'package:places/domain/sight.dart';
 import 'package:places/drawing/drawing.dart';
 import 'package:places/res/text_constants.dart';
+import 'package:places/ui/screen/place_map.dart';
 import 'package:places/ui/screen/settings_screen.dart';
 import 'package:places/ui/screen/sight_card.dart';
 import 'package:places/ui/screen/sight_details.dart';
@@ -337,6 +338,15 @@ class AppBottomNavBar extends StatelessWidget {
             );
             break;
           case 1:
+            Navigator.of(context).pushReplacement(
+              PageRouteBuilder(
+                pageBuilder: (BuildContext context, Animation<double> animation,
+                    Animation<double> secondaryAnimation) {
+                  return PlaceMap();
+                },
+              ),
+            );
+            break;
             break;
           case 2:
             Navigator.of(context).pushReplacement(

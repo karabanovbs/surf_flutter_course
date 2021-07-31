@@ -14,6 +14,7 @@ class SettingsScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0,
         centerTitle: true,
+        toolbarHeight: 60,
         title: Text(
           settingsScreenTitle,
           style: TextStyle(

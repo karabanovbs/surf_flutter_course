@@ -1,7 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:places/blocs/current_geo/current_geo_bloc.dart';
 import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/helpers/distance_helper.dart';
+import 'package:rxdart/rxdart.dart';
 import 'sight_list_event.dart';
 import 'sight_list_state.dart';
 
@@ -10,9 +13,12 @@ export 'sight_list_state.dart';
 
 class SightListBloc extends Bloc<SightListEvent, SightListState> {
   final IPlaceInteractor _interactor;
+  final ValueStream<CurrentGeoState> _currentGeo;
 
-  SightListBloc(this._interactor)
-      : super(
+  SightListBloc(
+    this._interactor,
+    this._currentGeo,
+  ) : super(
           SightListState.init(),
         );
 
@@ -41,9 +47,17 @@ class SightListBloc extends Bloc<SightListEvent, SightListState> {
   Stream<SightListState> _loadPlaces() async* {
     try {
       yield SightListState.loading();
-      var sights = await _interactor.getPlaces(null, []);
+      var sights = await _interactor.getPlaces(
+        _currentGeo.valueOrNull?.maybeMap(
+          location: (value) => value.currentGeo,
+          orElse: () => null,
+        ),
+        10,
+        [],
+      );
       yield SightListState.loaded(sights);
-    } catch (_) {
+    } catch (e) {
+      print(e);
       yield SightListState.failure();
     }
   }

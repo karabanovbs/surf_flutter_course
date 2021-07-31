@@ -16,22 +16,22 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$PlaceFiltersEventTearOff {
   const _$PlaceFiltersEventTearOff();
 
-  _load load() {
-    return const _load();
+  _Load load() {
+    return const _Load();
   }
 
-  _invertType invertType(SightType type) {
-    return _invertType(
+  _InvertType invertType(SightType type) {
+    return _InvertType(
       type,
     );
   }
 
-  _clear clear() {
-    return const _clear();
+  _Clear clear() {
+    return const _Clear();
   }
 
-  _changeDistance changeDistance(double distance) {
-    return _changeDistance(
+  _ChangeDistance changeDistance(double distance) {
+    return _ChangeDistance(
       distance,
     );
   }
@@ -61,18 +61,18 @@ mixin _$PlaceFiltersEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_load value) load,
-    required TResult Function(_invertType value) invertType,
-    required TResult Function(_clear value) clear,
-    required TResult Function(_changeDistance value) changeDistance,
+    required TResult Function(_Load value) load,
+    required TResult Function(_InvertType value) invertType,
+    required TResult Function(_Clear value) clear,
+    required TResult Function(_ChangeDistance value) changeDistance,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_load value)? load,
-    TResult Function(_invertType value)? invertType,
-    TResult Function(_clear value)? clear,
-    TResult Function(_changeDistance value)? changeDistance,
+    TResult Function(_Load value)? load,
+    TResult Function(_InvertType value)? invertType,
+    TResult Function(_Clear value)? clear,
+    TResult Function(_ChangeDistance value)? changeDistance,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -96,25 +96,25 @@ class _$PlaceFiltersEventCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$loadCopyWith<$Res> {
-  factory _$loadCopyWith(_load value, $Res Function(_load) then) =
-      __$loadCopyWithImpl<$Res>;
+abstract class _$LoadCopyWith<$Res> {
+  factory _$LoadCopyWith(_Load value, $Res Function(_Load) then) =
+      __$LoadCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$loadCopyWithImpl<$Res> extends _$PlaceFiltersEventCopyWithImpl<$Res>
-    implements _$loadCopyWith<$Res> {
-  __$loadCopyWithImpl(_load _value, $Res Function(_load) _then)
-      : super(_value, (v) => _then(v as _load));
+class __$LoadCopyWithImpl<$Res> extends _$PlaceFiltersEventCopyWithImpl<$Res>
+    implements _$LoadCopyWith<$Res> {
+  __$LoadCopyWithImpl(_Load _value, $Res Function(_Load) _then)
+      : super(_value, (v) => _then(v as _Load));
 
   @override
-  _load get _value => super._value as _load;
+  _Load get _value => super._value as _Load;
 }
 
 /// @nodoc
 
-class _$_load implements _load {
-  const _$_load();
+class _$_Load implements _Load {
+  const _$_Load();
 
   @override
   String toString() {
@@ -123,7 +123,7 @@ class _$_load implements _load {
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is _load);
+    return identical(this, other) || (other is _Load);
   }
 
   @override
@@ -158,10 +158,10 @@ class _$_load implements _load {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_load value) load,
-    required TResult Function(_invertType value) invertType,
-    required TResult Function(_clear value) clear,
-    required TResult Function(_changeDistance value) changeDistance,
+    required TResult Function(_Load value) load,
+    required TResult Function(_InvertType value) invertType,
+    required TResult Function(_Clear value) clear,
+    required TResult Function(_ChangeDistance value) changeDistance,
   }) {
     return load(this);
   }
@@ -169,10 +169,10 @@ class _$_load implements _load {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_load value)? load,
-    TResult Function(_invertType value)? invertType,
-    TResult Function(_clear value)? clear,
-    TResult Function(_changeDistance value)? changeDistance,
+    TResult Function(_Load value)? load,
+    TResult Function(_InvertType value)? invertType,
+    TResult Function(_Clear value)? clear,
+    TResult Function(_ChangeDistance value)? changeDistance,
     required TResult orElse(),
   }) {
     if (load != null) {
@@ -182,34 +182,34 @@ class _$_load implements _load {
   }
 }
 
-abstract class _load implements PlaceFiltersEvent {
-  const factory _load() = _$_load;
+abstract class _Load implements PlaceFiltersEvent {
+  const factory _Load() = _$_Load;
 }
 
 /// @nodoc
-abstract class _$invertTypeCopyWith<$Res> {
-  factory _$invertTypeCopyWith(
-          _invertType value, $Res Function(_invertType) then) =
-      __$invertTypeCopyWithImpl<$Res>;
+abstract class _$InvertTypeCopyWith<$Res> {
+  factory _$InvertTypeCopyWith(
+          _InvertType value, $Res Function(_InvertType) then) =
+      __$InvertTypeCopyWithImpl<$Res>;
   $Res call({SightType type});
 }
 
 /// @nodoc
-class __$invertTypeCopyWithImpl<$Res>
+class __$InvertTypeCopyWithImpl<$Res>
     extends _$PlaceFiltersEventCopyWithImpl<$Res>
-    implements _$invertTypeCopyWith<$Res> {
-  __$invertTypeCopyWithImpl(
-      _invertType _value, $Res Function(_invertType) _then)
-      : super(_value, (v) => _then(v as _invertType));
+    implements _$InvertTypeCopyWith<$Res> {
+  __$InvertTypeCopyWithImpl(
+      _InvertType _value, $Res Function(_InvertType) _then)
+      : super(_value, (v) => _then(v as _InvertType));
 
   @override
-  _invertType get _value => super._value as _invertType;
+  _InvertType get _value => super._value as _InvertType;
 
   @override
   $Res call({
     Object? type = freezed,
   }) {
-    return _then(_invertType(
+    return _then(_InvertType(
       type == freezed
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -220,8 +220,8 @@ class __$invertTypeCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_invertType implements _invertType {
-  const _$_invertType(this.type);
+class _$_InvertType implements _InvertType {
+  const _$_InvertType(this.type);
 
   @override
   final SightType type;
@@ -234,7 +234,7 @@ class _$_invertType implements _invertType {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _invertType &&
+        (other is _InvertType &&
             (identical(other.type, type) ||
                 const DeepCollectionEquality().equals(other.type, type)));
   }
@@ -245,8 +245,8 @@ class _$_invertType implements _invertType {
 
   @JsonKey(ignore: true)
   @override
-  _$invertTypeCopyWith<_invertType> get copyWith =>
-      __$invertTypeCopyWithImpl<_invertType>(this, _$identity);
+  _$InvertTypeCopyWith<_InvertType> get copyWith =>
+      __$InvertTypeCopyWithImpl<_InvertType>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -277,10 +277,10 @@ class _$_invertType implements _invertType {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_load value) load,
-    required TResult Function(_invertType value) invertType,
-    required TResult Function(_clear value) clear,
-    required TResult Function(_changeDistance value) changeDistance,
+    required TResult Function(_Load value) load,
+    required TResult Function(_InvertType value) invertType,
+    required TResult Function(_Clear value) clear,
+    required TResult Function(_ChangeDistance value) changeDistance,
   }) {
     return invertType(this);
   }
@@ -288,10 +288,10 @@ class _$_invertType implements _invertType {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_load value)? load,
-    TResult Function(_invertType value)? invertType,
-    TResult Function(_clear value)? clear,
-    TResult Function(_changeDistance value)? changeDistance,
+    TResult Function(_Load value)? load,
+    TResult Function(_InvertType value)? invertType,
+    TResult Function(_Clear value)? clear,
+    TResult Function(_ChangeDistance value)? changeDistance,
     required TResult orElse(),
   }) {
     if (invertType != null) {
@@ -301,35 +301,35 @@ class _$_invertType implements _invertType {
   }
 }
 
-abstract class _invertType implements PlaceFiltersEvent {
-  const factory _invertType(SightType type) = _$_invertType;
+abstract class _InvertType implements PlaceFiltersEvent {
+  const factory _InvertType(SightType type) = _$_InvertType;
 
   SightType get type => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  _$invertTypeCopyWith<_invertType> get copyWith =>
+  _$InvertTypeCopyWith<_InvertType> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$clearCopyWith<$Res> {
-  factory _$clearCopyWith(_clear value, $Res Function(_clear) then) =
-      __$clearCopyWithImpl<$Res>;
+abstract class _$ClearCopyWith<$Res> {
+  factory _$ClearCopyWith(_Clear value, $Res Function(_Clear) then) =
+      __$ClearCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$clearCopyWithImpl<$Res> extends _$PlaceFiltersEventCopyWithImpl<$Res>
-    implements _$clearCopyWith<$Res> {
-  __$clearCopyWithImpl(_clear _value, $Res Function(_clear) _then)
-      : super(_value, (v) => _then(v as _clear));
+class __$ClearCopyWithImpl<$Res> extends _$PlaceFiltersEventCopyWithImpl<$Res>
+    implements _$ClearCopyWith<$Res> {
+  __$ClearCopyWithImpl(_Clear _value, $Res Function(_Clear) _then)
+      : super(_value, (v) => _then(v as _Clear));
 
   @override
-  _clear get _value => super._value as _clear;
+  _Clear get _value => super._value as _Clear;
 }
 
 /// @nodoc
 
-class _$_clear implements _clear {
-  const _$_clear();
+class _$_Clear implements _Clear {
+  const _$_Clear();
 
   @override
   String toString() {
@@ -338,7 +338,7 @@ class _$_clear implements _clear {
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is _clear);
+    return identical(this, other) || (other is _Clear);
   }
 
   @override
@@ -373,10 +373,10 @@ class _$_clear implements _clear {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_load value) load,
-    required TResult Function(_invertType value) invertType,
-    required TResult Function(_clear value) clear,
-    required TResult Function(_changeDistance value) changeDistance,
+    required TResult Function(_Load value) load,
+    required TResult Function(_InvertType value) invertType,
+    required TResult Function(_Clear value) clear,
+    required TResult Function(_ChangeDistance value) changeDistance,
   }) {
     return clear(this);
   }
@@ -384,10 +384,10 @@ class _$_clear implements _clear {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_load value)? load,
-    TResult Function(_invertType value)? invertType,
-    TResult Function(_clear value)? clear,
-    TResult Function(_changeDistance value)? changeDistance,
+    TResult Function(_Load value)? load,
+    TResult Function(_InvertType value)? invertType,
+    TResult Function(_Clear value)? clear,
+    TResult Function(_ChangeDistance value)? changeDistance,
     required TResult orElse(),
   }) {
     if (clear != null) {
@@ -397,34 +397,34 @@ class _$_clear implements _clear {
   }
 }
 
-abstract class _clear implements PlaceFiltersEvent {
-  const factory _clear() = _$_clear;
+abstract class _Clear implements PlaceFiltersEvent {
+  const factory _Clear() = _$_Clear;
 }
 
 /// @nodoc
-abstract class _$changeDistanceCopyWith<$Res> {
-  factory _$changeDistanceCopyWith(
-          _changeDistance value, $Res Function(_changeDistance) then) =
-      __$changeDistanceCopyWithImpl<$Res>;
+abstract class _$ChangeDistanceCopyWith<$Res> {
+  factory _$ChangeDistanceCopyWith(
+          _ChangeDistance value, $Res Function(_ChangeDistance) then) =
+      __$ChangeDistanceCopyWithImpl<$Res>;
   $Res call({double distance});
 }
 
 /// @nodoc
-class __$changeDistanceCopyWithImpl<$Res>
+class __$ChangeDistanceCopyWithImpl<$Res>
     extends _$PlaceFiltersEventCopyWithImpl<$Res>
-    implements _$changeDistanceCopyWith<$Res> {
-  __$changeDistanceCopyWithImpl(
-      _changeDistance _value, $Res Function(_changeDistance) _then)
-      : super(_value, (v) => _then(v as _changeDistance));
+    implements _$ChangeDistanceCopyWith<$Res> {
+  __$ChangeDistanceCopyWithImpl(
+      _ChangeDistance _value, $Res Function(_ChangeDistance) _then)
+      : super(_value, (v) => _then(v as _ChangeDistance));
 
   @override
-  _changeDistance get _value => super._value as _changeDistance;
+  _ChangeDistance get _value => super._value as _ChangeDistance;
 
   @override
   $Res call({
     Object? distance = freezed,
   }) {
-    return _then(_changeDistance(
+    return _then(_ChangeDistance(
       distance == freezed
           ? _value.distance
           : distance // ignore: cast_nullable_to_non_nullable
@@ -435,8 +435,8 @@ class __$changeDistanceCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_changeDistance implements _changeDistance {
-  const _$_changeDistance(this.distance);
+class _$_ChangeDistance implements _ChangeDistance {
+  const _$_ChangeDistance(this.distance);
 
   @override
   final double distance;
@@ -449,7 +449,7 @@ class _$_changeDistance implements _changeDistance {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _changeDistance &&
+        (other is _ChangeDistance &&
             (identical(other.distance, distance) ||
                 const DeepCollectionEquality()
                     .equals(other.distance, distance)));
@@ -461,8 +461,8 @@ class _$_changeDistance implements _changeDistance {
 
   @JsonKey(ignore: true)
   @override
-  _$changeDistanceCopyWith<_changeDistance> get copyWith =>
-      __$changeDistanceCopyWithImpl<_changeDistance>(this, _$identity);
+  _$ChangeDistanceCopyWith<_ChangeDistance> get copyWith =>
+      __$ChangeDistanceCopyWithImpl<_ChangeDistance>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -493,10 +493,10 @@ class _$_changeDistance implements _changeDistance {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_load value) load,
-    required TResult Function(_invertType value) invertType,
-    required TResult Function(_clear value) clear,
-    required TResult Function(_changeDistance value) changeDistance,
+    required TResult Function(_Load value) load,
+    required TResult Function(_InvertType value) invertType,
+    required TResult Function(_Clear value) clear,
+    required TResult Function(_ChangeDistance value) changeDistance,
   }) {
     return changeDistance(this);
   }
@@ -504,10 +504,10 @@ class _$_changeDistance implements _changeDistance {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_load value)? load,
-    TResult Function(_invertType value)? invertType,
-    TResult Function(_clear value)? clear,
-    TResult Function(_changeDistance value)? changeDistance,
+    TResult Function(_Load value)? load,
+    TResult Function(_InvertType value)? invertType,
+    TResult Function(_Clear value)? clear,
+    TResult Function(_ChangeDistance value)? changeDistance,
     required TResult orElse(),
   }) {
     if (changeDistance != null) {
@@ -517,11 +517,11 @@ class _$_changeDistance implements _changeDistance {
   }
 }
 
-abstract class _changeDistance implements PlaceFiltersEvent {
-  const factory _changeDistance(double distance) = _$_changeDistance;
+abstract class _ChangeDistance implements PlaceFiltersEvent {
+  const factory _ChangeDistance(double distance) = _$_ChangeDistance;
 
   double get distance => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  _$changeDistanceCopyWith<_changeDistance> get copyWith =>
+  _$ChangeDistanceCopyWith<_ChangeDistance> get copyWith =>
       throw _privateConstructorUsedError;
 }

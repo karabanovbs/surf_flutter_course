@@ -23,6 +23,8 @@ dependencies:
   path_provider: ^2.0.2
   path: ^1.8.0
   image_picker: ^0.8.0+3
+  geolocator: ^7.2.0+1
+  yandex_mapkit: ^1.0.1
 
 dev_dependencies:
   flutter_test:
