@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:places/data/model/model.dart';
 import 'package:places/data/repository/repository.dart';
 import 'package:places/data/storage/app_data_base.dart';
@@ -23,7 +25,7 @@ abstract class IPlaceInteractor {
 
   Future<void> addToVisitingPlaces(Place place);
 
-  Future<Place> addNewPlace(Place place);
+  Future<Place> addNewPlace(Place place, List<Uint8List> photos);
 
   Future<bool> isFavoritePlace(Place place);
 }
@@ -38,8 +40,8 @@ class MoorPlaceInteractor extends IPlaceInteractor {
   );
 
   @override
-  Future<Place> addNewPlace(Place place) async {
-    return _placeRepository.postPlace(place);
+  Future<Place> addNewPlace(Place place, List<Uint8List> photos) async {
+    return _placeRepository.postPlace(place, photos);
   }
 
   @override

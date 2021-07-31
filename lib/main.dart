@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/blocs/onboarding/onboarding_bloc.dart';
 import 'package:places/data/repository/filters_repository.dart';
 import 'package:places/data/repository/place_repository.dart';
+import 'package:places/data/service/media_picker_service.dart';
 import 'package:places/data/storage/app_data_base.dart';
 import 'package:places/data/storage/storage.dart';
 import 'package:places/dio_client.dart';
@@ -25,6 +26,9 @@ class App extends StatelessWidget {
       providers: [
         Provider<IDataStorage>(
           create: (context) => SharedPreferencesStorage(),
+        ),
+        Provider<IMediaPickerService>(
+          create: (context) => DefaultMediaPickerService(),
         ),
         Provider<AppDataBase>(
           create: (context) => AppDataBase(),
