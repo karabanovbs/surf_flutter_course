@@ -8,7 +8,8 @@ import 'package:places/blocs/sight_list/sight_list_bloc.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/service/geo_location_service.dart';
-import 'package:places/drawing/drawing.dart';
+import 'package:places/environment/build_type.dart';
+import 'package:places/environment/environment.dart';
 import 'package:places/res/text_constants.dart';
 import 'package:places/ui/screen/add_sight_screen/add_sight_route.dart';
 import 'package:places/ui/screen/filters_screen.dart';
@@ -70,29 +71,31 @@ class SightListScreen extends StatelessWidget {
                   SliverPersistentHeader(
                     pinned: true,
                     floating: true,
-                    delegate: SliverSearchAppbar(SearchBar(
-                      readonly: true,
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return SightSearchScreen();
-                            },
-                          ),
-                        );
-                      },
-                      action: SearchBarFiltersActonButton(
+                    delegate: SliverSearchAppbar(
+                      SearchBar(
+                        readonly: true,
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) {
-                                return FiltersScreen();
+                                return SightSearchScreen();
                               },
                             ),
                           );
                         },
+                        action: SearchBarFiltersActonButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return FiltersScreen();
+                                },
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    )),
+                    ),
                   ),
                   SliverPadding(
                     padding: const EdgeInsets.only(
@@ -203,7 +206,9 @@ class SliverSearchAppbar extends SliverPersistentHeaderDelegate {
                 ),
                 child: Center(
                   child: Text(
-                    sightListScreenTitle,
+                    Environment.instance.buildType == BuildType.dev
+                        ? sightListScreenDebugTitle
+                        : sightListScreenTitle,
                     style: TextStyleTween(
                       begin: Theme.of(context).textTheme.headline1,
                       end: Theme.of(context).textTheme.headline3,
