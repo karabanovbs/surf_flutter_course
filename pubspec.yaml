@@ -34,6 +34,13 @@ dev_dependencies:
   svg_to_path_generator: ^1.0.1+2
   freezed: ^0.14.2
   moor_generator: ^4.3.1
+  flutter_launcher_icons: ^0.9.1
+
+flutter_icons:
+  image_path: res/icons/dev.png
+  android: true
+  ios: false
+
 
 flutter:
   uses-material-design: true
@@ -63,3 +70,4 @@ flutter:
   assets:
     - res/
     - res/images/
+    - res/icons/
