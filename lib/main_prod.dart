@@ -17,7 +17,7 @@ void _defineEnvironment({
 }) {
   Environment.init(
     buildConfig,
-    BuildType.dev,
+    BuildType.prod,
   );
 }
 

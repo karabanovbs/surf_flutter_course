@@ -27,6 +27,7 @@ const String sightTypeOther = 'Другое';
 /// SightList
 
 const String sightListScreenTitle = 'Список интересных мест';
+const String sightListScreenDebugTitle = 'Debug сброка приложения';
 const String sightListAddNewLbl = 'Новое место';
 
 /// SightSearch
